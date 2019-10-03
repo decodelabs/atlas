@@ -32,6 +32,32 @@ class Context implements FacadeTarget
     }
 
     /**
+     * Open a STDIN Channel
+     */
+    public function openInputStream(): Channel
+    {
+        return new Stream(STDIN, 'r');
+    }
+
+    /**
+     * Open a STDOUT Channel
+     */
+    public function openOutputStream(): Channel
+    {
+        return new Stream(STDOUT, 'w');
+    }
+
+    /**
+     * Open a STDERR Channel
+     */
+    public function openErrorStream(): Channel
+    {
+        return new Stream(STDERR, 'w');
+    }
+
+
+
+    /**
      * Create a new buffer Channel
      */
     public function newBuffer(?string $buffer=null): Buffer
