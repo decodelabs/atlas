@@ -15,6 +15,8 @@ class Buffer implements Channel
 
     protected $buffer;
     protected $open = true;
+    protected $readable = true;
+    protected $writable = true;
 
     /**
      * Init with stream path
@@ -50,11 +52,20 @@ class Buffer implements Channel
     }
 
     /**
+     * Set as readable
+     */
+    public function setReadable(bool $flag): Channel
+    {
+        $this->readable = $flag;
+        return $this;
+    }
+
+    /**
      * Is the resource still accessible?
      */
     public function isReadable(): bool
     {
-        return $this->open;
+        return $this->open && $this->readable;
     }
 
     /**
@@ -95,12 +106,22 @@ class Buffer implements Channel
         return $output;
     }
 
+
+    /**
+     * Set as writable
+     */
+    public function setWritable(bool $flag): Channel
+    {
+        $this->writable = $flag;
+        return $this;
+    }
+
     /**
      * Is the resource still writable?
      */
     public function isWritable(): bool
     {
-        return $this->open;
+        return $this->open && $this->writable;
     }
 
     /**
