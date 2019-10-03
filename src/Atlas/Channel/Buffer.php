@@ -159,4 +159,12 @@ class Buffer implements Channel
         $this->open = false;
         return $this;
     }
+
+    /**
+     * Convert to string
+     */
+    public function __toString(): string
+    {
+        return $this->buffer;
+    }
 }
