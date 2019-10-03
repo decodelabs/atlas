@@ -11,6 +11,7 @@ use DecodeLabs\Veneer\FacadeTargetTrait;
 
 use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Stream;
+use DecodeLabs\Atlas\Channel\Buffer;
 
 class Context implements FacadeTarget
 {
@@ -28,5 +29,13 @@ class Context implements FacadeTarget
         }
 
         return new Stream($path, $mode);
+    }
+
+    /**
+     * Create a new buffer Channel
+     */
+    public function newBuffer(?string $buffer=null): Buffer
+    {
+        return new Buffer($buffer);
     }
 }
