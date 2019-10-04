@@ -15,7 +15,7 @@ use DecodeLabs\Glitch\Inspectable;
 use DecodeLabs\Glitch\Dumper\Entity;
 use DecodeLabs\Glitch\Dumper\Inspector;
 
-class Local implements Mutex //, Inspectable
+class Local implements Mutex, Inspectable
 {
     use MutexTrait {
         MutexTrait::__construct as private __mutexConstruct;
@@ -52,5 +52,22 @@ class Local implements Mutex //, Inspectable
     protected function releaseLock(): void
     {
         $this->file->unlock()->close()->delete();
+    }
+
+
+    /**
+     * Inspect for Glitch
+     */
+    public function glitchInspect(Entity $entity, Inspector $inspector): void
+    {
+        $entity
+            ->setProperties([
+                '*name' => $inspector($this->name),
+                '*file' => $inspector($this->file)
+            ])
+            ->setMetaList([
+                'counter' => $inspector($this->counter),
+                'locked' => $this->isLocked()
+            ]);
     }
 }

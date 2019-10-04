@@ -440,7 +440,7 @@ class Local implements Dir, Inspectable
     public function glitchInspect(Entity $entity, Inspector $inspector): void
     {
         $entity
-            ->setDefinition($this->path)
+            ->setDefinition(Glitch::normalizePath($this->path))
             ->setMetaList([
                 'exists' => $inspector($this->exists()),
                 'permissions' => $this->getPermissionsOct(),

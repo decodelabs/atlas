@@ -528,7 +528,7 @@ class Local extends Stream implements File, Inspectable
     public function glitchInspect(Entity $entity, Inspector $inspector): void
     {
         $entity
-            ->setDefinition($this->path)
+            ->setDefinition(Glitch::normalizePath($this->path))
             ->setMetaList([
                 'resource' => $inspector($this->resource),
                 'exists' => $inspector($this->exists()),
