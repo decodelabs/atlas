@@ -19,27 +19,39 @@ interface Dir extends Node
     public function setGroup(int $group, bool $recursive=false): Dir;
 
     public function scan(callable $filter=null): Generator;
+    public function list(callable $filter=null): array;
     public function scanNames(callable $filter=null): Generator;
+    public function listNames(callable $filter=null): array;
     public function countContents(callable $filter=null): int;
 
     public function scanFiles(callable $filter=null): Generator;
+    public function listFiles(callable $filter=null): array;
     public function scanFileNames(callable $filter=null): Generator;
+    public function listFileNames(callable $filter=null): array;
     public function countFiles(callable $filter=null): int;
 
     public function scanDirs(callable $filter=null): Generator;
+    public function listDirs(callable $filter=null): array;
     public function scanDirNames(callable $filter=null): Generator;
+    public function listDirNames(callable $filter=null): array;
     public function countDirs(callable $filter=null): int;
 
     public function scanRecursive(callable $filter=null): Generator;
+    public function listRecursive(callable $filter=null): array;
     public function scanNamesRecursive(callable $filter=null): Generator;
+    public function listNamesRecursive(callable $filter=null): array;
     public function countContentsRecursive(callable $filter=null): int;
 
     public function scanFilesRecursive(callable $filter=null): Generator;
+    public function listFilesRecursive(callable $filter=null): array;
     public function scanFileNamesRecursive(callable $filter=null): Generator;
+    public function listFileNamesRecursive(callable $filter=null): array;
     public function countFilesRecursive(callable $filter=null): int;
 
     public function scanDirsRecursive(callable $filter=null): Generator;
+    public function listDirsRecursive(callable $filter=null): array;
     public function scanDirNamesRecursive(callable $filter=null): Generator;
+    public function listDirNamesRecursive(callable $filter=null): array;
     public function countDirsRecursive(callable $filter=null): int;
 
     public function getChild(string $name): ?Node;

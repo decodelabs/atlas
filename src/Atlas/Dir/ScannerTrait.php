@@ -25,11 +25,27 @@ trait ScannerTrait
     }
 
     /**
+     * List all children as File or Dir objects
+     */
+    public function list(callable $filter=null): array
+    {
+        return iterator_to_array($this->scan($filter));
+    }
+
+    /**
      * Scan all children as names
      */
     public function scanNames(callable $filter=null): Generator
     {
         return $this->scanRaw(true, true, $filter, false);
+    }
+
+    /**
+     * List all children as names
+     */
+    public function listNames(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanNames($filter));
     }
 
     /**
@@ -50,11 +66,27 @@ trait ScannerTrait
     }
 
     /**
+     * List all files as File objects
+     */
+    public function listFiles(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanFiles($filter));
+    }
+
+    /**
      * Scan all files as names
      */
     public function scanFileNames(callable $filter=null): Generator
     {
         return $this->scanRaw(true, false, $filter, false);
+    }
+
+    /**
+     * List all files as names
+     */
+    public function listFileNames(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanFileNames($filter));
     }
 
     /**
@@ -75,11 +107,27 @@ trait ScannerTrait
     }
 
     /**
+     * List all dirs as Dir objects
+     */
+    public function listDirs(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanDirs($filter));
+    }
+
+    /**
      * Scan all dirs as names
      */
     public function scanDirNames(callable $filter=null): Generator
     {
         return $this->scanRaw(false, true, $filter, false);
+    }
+
+    /**
+     * List all dirs as names
+     */
+    public function listDirNames(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanDirNames($filter));
     }
 
     /**
@@ -155,11 +203,27 @@ trait ScannerTrait
     }
 
     /**
+     * List all children recursively as File or Dir objects
+     */
+    public function listRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanRecursive($filter));
+    }
+
+    /**
      * Scan all children recursively as names
      */
     public function scanNamesRecursive(callable $filter=null): Generator
     {
         return $this->scanRawRecursive(true, true, $filter, false);
+    }
+
+    /**
+     * List all children recursively as names
+     */
+    public function listNamesRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanNamesRecursive($filter));
     }
 
     /**
@@ -180,11 +244,27 @@ trait ScannerTrait
     }
 
     /**
+     * List all files recursively as File objects
+     */
+    public function listFilesRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanFilesRecursive($filter));
+    }
+
+    /**
      * Scan all files recursively as names
      */
     public function scanFileNamesRecursive(callable $filter=null): Generator
     {
         return $this->scanRawRecursive(true, false, $filter, false);
+    }
+
+    /**
+     * List all files recursively as names
+     */
+    public function listFileNamesRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanFileNamesRecursive($filter));
     }
 
     /**
@@ -205,11 +285,27 @@ trait ScannerTrait
     }
 
     /**
+     * List all dirs recursively as Dir objects
+     */
+    public function listDirsRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanDirsRecursive($filter));
+    }
+
+    /**
      * Scan all dirs recursively as names
      */
     public function scanDirNamesRecursive(callable $filter=null): Generator
     {
         return $this->scanRawRecursive(false, true, $filter, false);
+    }
+
+    /**
+     * List all dirs recursively as names
+     */
+    public function listDirNamesRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanDirNamesRecursive($filter));
     }
 
     /**

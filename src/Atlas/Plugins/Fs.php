@@ -278,11 +278,27 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * List all children as File or Dir objects
+     */
+    public function list(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->list($filter);
+    }
+
+    /**
      * Scan all children as names
      */
     public function scanNames(string $path, callable $filter=null): Generator
     {
         return $this->dir($path)->scanNames($filter);
+    }
+
+    /**
+     * List all children as names
+     */
+    public function listNames(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listNames($filter);
     }
 
     /**
@@ -303,11 +319,27 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * List all files as File objects
+     */
+    public function listFiles(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFiles($filter);
+    }
+
+    /**
      * Scan all files as names
      */
     public function scanFileNames(string $path, callable $filter=null): Generator
     {
         return $this->dir($path)->scanFileNames($filter);
+    }
+
+    /**
+     * List all files as names
+     */
+    public function listFileNames(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFileNames($filter);
     }
 
     /**
@@ -328,11 +360,27 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * List all dirs as Dir objects
+     */
+    public function listDirs(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirs($filter);
+    }
+
+    /**
      * Scan all dirs as names
      */
     public function scanDirNames(string $path, callable $filter=null): Generator
     {
         return $this->dir($path)->scanDirNames($filter);
+    }
+
+    /**
+     * List all dirs as names
+     */
+    public function listDirNames(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirNames($filter);
     }
 
     /**
@@ -353,11 +401,27 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * List all children recursively as File or Dir objects
+     */
+    public function listRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listRecursive($filter);
+    }
+
+    /**
      * Scan all children recursively as names
      */
     public function scanNamesRecursive(string $path, callable $filter=null): Generator
     {
         return $this->dir($path)->scanNamesRecursive($filter);
+    }
+
+    /**
+     * List all children recursively as names
+     */
+    public function listNamesRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listNamesRecursive($filter);
     }
 
     /**
@@ -378,11 +442,27 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * List all files recursively as File objects
+     */
+    public function listFilesRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFilesRecursive($filter);
+    }
+
+    /**
      * Scan all files recursively as names
      */
     public function scanFileNamesRecursive(string $path, callable $filter=null): Generator
     {
         return $this->dir($path)->scanFileNamesRecursive($filter);
+    }
+
+    /**
+     * List all files recursively as names
+     */
+    public function listFileNamesRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFileNamesRecursive($filter);
     }
 
     /**
@@ -403,11 +483,27 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * List all dirs recursively as Dir objects
+     */
+    public function listDirsRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirsRecursive($filter);
+    }
+
+    /**
      * Scan all dirs recursively as names
      */
     public function scanDirNamesRecursive(string $path, callable $filter=null): Generator
     {
         return $this->dir($path)->scanDirNamesRecursive($filter);
+    }
+
+    /**
+     * List all dirs recursively as names
+     */
+    public function listDirNamesRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirNamesRecursive($filter);
     }
 
     /**
