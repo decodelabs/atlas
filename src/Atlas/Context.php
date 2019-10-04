@@ -69,25 +69,54 @@ class Context implements FacadeTarget
     /**
      * Open a STDIN Channel
      */
-    public function openInputStream(): Channel
+    public function openCliInputStream(): Channel
     {
-        return new Stream(STDIN, 'r');
+        if (!defined('STDIN')) {
+            throw Glitch::ERuntime('STDIN is only available on the CLI SAPI');
+        }
+
+        return new Stream(\STDIN, 'r');
     }
 
     /**
      * Open a STDOUT Channel
      */
-    public function openOutputStream(): Channel
+    public function openCliOutputStream(): Channel
     {
-        return new Stream(STDOUT, 'w');
+        if (!defined('STDOUT')) {
+            throw Glitch::ERuntime('STDOUT is only available on the CLI SAPI');
+        }
+
+        return new Stream(\STDOUT, 'w');
     }
 
     /**
      * Open a STDERR Channel
      */
-    public function openErrorStream(): Channel
+    public function openCliErrorStream(): Channel
     {
-        return new Stream(STDERR, 'w');
+        if (!defined('STDERR')) {
+            throw Glitch::ERuntime('STDERR is only available on the CLI SAPI');
+        }
+
+        return new Stream(\STDERR, 'w');
+    }
+
+
+    /**
+     * Open HTTP input Channel
+     */
+    public function openHttpInputStream(): Channel
+    {
+        return new Stream('php://input', 'r');
+    }
+
+    /**
+     * Open HTTP output Channel
+     */
+    public function openHttpOutputStream(): Channel
+    {
+        return new Stream('php://output', 'w');
     }
 
 
@@ -107,5 +136,35 @@ class Context implements FacadeTarget
     public function newMutex(string $name, string $dir): LocalMutex
     {
         return new LocalMutex($name, $dir);
+    }
+
+
+    /**
+     * New IO Broker
+     */
+    public function newBroker(): Broker
+    {
+        return new Broker();
+    }
+
+    /**
+     * Create STD IO Broker
+     */
+    public function newCliBroker(): Broker
+    {
+        return $this->newBroker()
+            ->addInputChannel($this->openCliInputStream())
+            ->addOutputChannel($this->openCliOutputStream())
+            ->addErrorChannel($this->openCliErrorStream());
+    }
+
+    /**
+     * Create HTTP IO Broker
+     */
+    public function newHttpBroker(): Broker
+    {
+        return $this->newBroker()
+            ->addInputChannel($this->openHttpInputStream())
+            ->addOutputChannel($this->openHttpOutputStream());
     }
 }

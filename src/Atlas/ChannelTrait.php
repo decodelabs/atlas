@@ -6,6 +6,8 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
+use DecodeLabs\Atlas\Channel\Buffer;
+
 trait ChannelTrait
 {
     /**
@@ -44,8 +46,14 @@ trait ChannelTrait
         $this->checkReadable();
         $data = null;
 
-        while (!$this->eof()) {
-            $data .= $this->read(8192);
+        while (!$this->isAtEnd()) {
+            $chunk = $this->read(8192);
+
+            if ($chunk === null) {
+                break;
+            }
+
+            $data .= $chunk;
         }
 
         return $data;
@@ -54,12 +62,18 @@ trait ChannelTrait
     /**
      * Transfer available data to a write instance
      */
-    public function writeTo(Channel $writer): Channel
+    public function readTo(Channel $writer): Channel
     {
         $this->checkReadable();
 
-        while (!$this->eof()) {
-            $writer->write($this->read(8192));
+        while (!$this->isAtEnd()) {
+            $chunk = $this->read(8192);
+
+            if ($chunk === null) {
+                break;
+            }
+
+            $writer->write($chunk);
         }
 
         return $this;
@@ -92,17 +106,15 @@ trait ChannelTrait
      */
     public function writeLine(?string $data=''): int
     {
-        return $this->write($data."\r\n");
+        return $this->write($data.PHP_EOL);
     }
 
     /**
      * Pluck and write $length bytes from buffer
      */
-    public function writeBuffer(string &$buffer, int $length): int
+    public function writeBuffer(Buffer $buffer, int $length): int
     {
-        $result = $this->write($buffer, $length);
-        $buffer = substr($buffer, $result);
-        return $result;
+        return $this->write($buffer->read($length), $length);
     }
 
     /**

@@ -152,7 +152,7 @@ class Local extends Stream implements File, Inspectable
         }
 
         $this->truncate();
-        $data->writeTo($this);
+        $data->readTo($this);
         $this->unlock();
 
         if ($closeAfter) {

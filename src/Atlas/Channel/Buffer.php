@@ -78,6 +78,10 @@ class Buffer implements Channel
         $output = substr($this->buffer, 0, $length);
         $this->buffer = substr($this->buffer, $length);
 
+        if (!strlen($output)) {
+            $output = null;
+        }
+
         return $output;
     }
 
