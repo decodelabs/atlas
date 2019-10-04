@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Channel;
+use DecodeLabs\Atlas\Channel\Buffer;
 use DecodeLabs\Atlas\Node;
 
 interface File extends Node, Channel
 {
     public function getSize(): ?int;
-    public function getHash(string $type, bool $raw=false): ?string;
+    public function getHash(string $type): ?string;
+    public function getRawHash(string $type): ?string;
 
     public function putContents($data): File;
     public function getContents(): string;

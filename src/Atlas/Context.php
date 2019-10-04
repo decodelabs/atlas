@@ -8,6 +8,9 @@ namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Veneer\FacadeTarget;
 use DecodeLabs\Veneer\FacadeTargetTrait;
+use DecodeLabs\Veneer\FacadePluginAccessTarget;
+use DecodeLabs\Veneer\FacadePluginAccessTargetTrait;
+use DecodeLabs\Veneer\FacadePlugin;
 
 use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Stream;
@@ -18,6 +21,35 @@ class Context implements FacadeTarget
     use FacadeTargetTrait;
 
     const FACADE = 'Atlas';
+
+    const PLUGINS = [
+        'fs'
+    ];
+
+
+    /**
+     * Stub to get empty plugin list to avoid broken targets
+     */
+    public function getFacadePluginNames(): array
+    {
+        return static::PLUGINS;
+    }
+
+
+    /**
+     * Load factory plugins
+     */
+    public function loadFacadePlugin(string $name): FacadePlugin
+    {
+        if (!in_array($name, self::PLUGINS)) {
+            throw Glitch::EInvalidArgument($name.' is not a recognised facade plugin');
+        }
+
+        $class = '\\DecodeLabs\\Atlas\\Plugins\\'.ucfirst($name);
+        return new $class($this);
+    }
+
+
 
     /**
      * Open a stream Channel

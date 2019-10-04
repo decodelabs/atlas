@@ -16,11 +16,17 @@ interface Node
     public function hasChanged(int $timeout=30): bool;
 
     public function getPermissions(): ?int;
+    public function getPermissionsOct(): ?string;
+    public function getPermissionsString(): ?string;
     public function getOwner(): ?int;
     public function getGroup(): ?int;
 
-    public function copyTo(string $destination): Node;
+    public function getParent(): ?Dir;
+
+    public function copy(string $path): Node;
+    public function copyTo(string $destinationDir, string $newName=null): Node;
     public function renameTo(string $newName): Node;
-    public function moveTo(string $destination, string $newName=null): Node;
+    public function move(string $path): Node;
+    public function moveTo(string $destinationDir, string $newName=null): Node;
     public function delete(): void;
 }

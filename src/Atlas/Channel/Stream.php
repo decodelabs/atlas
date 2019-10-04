@@ -203,5 +203,7 @@ class Stream implements Channel
         $this->mode = null;
         $this->readable = null;
         $this->writable = null;
+
+        return $this;
     }
 }

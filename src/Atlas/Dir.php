@@ -42,7 +42,6 @@ interface Dir extends Node
     public function scanDirNamesRecursive(callable $filter=null): Generator;
     public function countDirsRecursive(callable $filter=null): int;
 
-    public function getParent(): ?Dir;
     public function getChild(string $name): ?Node;
     public function hasChild(string $name): bool;
     public function deleteChild(string $name): Node;
