@@ -16,6 +16,9 @@ use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Stream;
 use DecodeLabs\Atlas\Channel\Buffer;
 
+use DecodeLabs\Atlas\Mutex;
+use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
+
 class Context implements FacadeTarget
 {
     use FacadeTargetTrait;
@@ -95,5 +98,14 @@ class Context implements FacadeTarget
     public function newBuffer(?string $buffer=null): Buffer
     {
         return new Buffer($buffer);
+    }
+
+
+    /**
+     * Create a new local Mutex
+     */
+    public function newMutex(string $name, string $dir): LocalMutex
+    {
+        return new LocalMutex($name, $dir);
     }
 }

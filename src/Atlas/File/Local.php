@@ -331,11 +331,12 @@ class Local extends Stream implements File, Inspectable
             throw Glitch::EIo('Cannot lock file, file not open', null, $this);
         }
 
-        if ($nonBlocking) {
-            return flock($this->resource, LOCK_EX | LOCK_NB);
-        } else {
-            return flock($this->resource, LOCK_EX);
-        }
+        return flock(
+            $this->resource,
+            $nonBlocking ?
+                LOCK_EX | LOCK_NB :
+                LOCK_EX
+        );
     }
 
     /**
