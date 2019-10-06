@@ -226,6 +226,8 @@ class Broker implements Channel
                 return $line;
             }
         }
+
+        return null;
     }
 
     /**
