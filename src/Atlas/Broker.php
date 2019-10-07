@@ -304,23 +304,27 @@ class Broker implements Channel
      */
     public function write(?string $data, int $length=null): int
     {
-        if ($length !== null) {
-            $data = substr($data, $length);
-        }
-
-        $output = strlen($data);
-
-        if (!$output) {
+        if ($length === 0) {
             return 0;
+        } elseif ($length === null) {
+            $length = strlen($data);
         }
 
         foreach ($this->output as $channel) {
-            if ($channel->isWritable()) {
-                $channel->write($data, $length);
+            if (!$channel->isWritable()) {
+                continue;
+            }
+
+            for ($written = 0; $written < $length; $written += $result) {
+                $result = $channel->write(substr($data, $written), $length - $written);
+
+                if ($result === null) {
+                    throw Glitch::EOverflow('Could not write buffer to output', null, $data);
+                }
             }
         }
 
-        return $output;
+        return $length;
     }
 
     /**
@@ -359,23 +363,27 @@ class Broker implements Channel
      */
     public function writeError(?string $data, int $length=null): int
     {
-        if ($length !== null) {
-            $data = substr($data, $length);
-        }
-
-        $output = strlen($data);
-
-        if (!$output) {
+        if ($length === 0) {
             return 0;
+        } elseif ($length === null) {
+            $length = strlen($data);
         }
 
         foreach ($this->error as $channel) {
-            if ($channel->isWritable()) {
-                $channel->write($data, $length);
+            if (!$channel->isWritable()) {
+                continue;
+            }
+
+            for ($written = 0; $written < $length; $written += $result) {
+                $result = $channel->write(substr($data, $written), $length - $written);
+
+                if ($result === null) {
+                    throw Glitch::EOverflow('Could not write buffer to output', null, $data);
+                }
             }
         }
 
-        return $output;
+        return $length;
     }
 
     /**
