@@ -13,7 +13,7 @@ interface Io extends Binding
     public function getIoMode(): string;
     public function getIoResource();
 
-    public function getTimeoutDuration(): ?DateInterval;
+    public function getTimeout(): ?float;
     public function getTimeoutHandler(): ?callable;
     public function triggerTimeout($targetResource): Io;
 }
