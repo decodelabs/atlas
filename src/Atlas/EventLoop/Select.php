@@ -172,7 +172,7 @@ class Select implements EventLoop
                 if ($time - $lastCycle > 1) {
                     $lastCycle = $time;
 
-                    if (false === $this->cycleHandler->invoke($this)) {
+                    if (false === ($this->cycleHandler)($this)) {
                         $this->stop();
                     }
                 }

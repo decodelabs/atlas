@@ -107,19 +107,28 @@ class Event implements EventLoop
             return;
         }
 
-        $this->cycleHandlerEvent = $this->_registerEvent(
+        $this->cycleHandlerEvent = $this->registerEvent(
             null,
             EventLib::TIMEOUT | EventLib::PERSIST,
-            1000,
+            1,
             function () {
                 if (!$this->cycleHandler) {
                     return;
                 }
 
-                if (false === ($this->cycleHandler)($this)) {
+                try {
+                    $res = ($this->cycleHandler)($this);
+                } catch (\Throwable $e) {
+                    $this->stop();
+                    throw $e;
+                }
+
+                if ($res === false) {
                     $this->stop();
                     return;
                 }
+
+                $this->registerCycleHandler($this->cycleHandler);
             }
         );
     }
@@ -143,7 +152,7 @@ class Event implements EventLoop
                         $binding->trigger($target);
                     }
                 } catch (\Throwable $e) {
-                    $binding->eventLoop->stop();
+                    $this->stop();
                     throw $e;
                 }
 
@@ -187,7 +196,7 @@ class Event implements EventLoop
                         $binding->trigger($target);
                     }
                 } catch (\Throwable $e) {
-                    $binding->eventLoop->stop();
+                    $this->stop();
                     throw $e;
                 }
 
@@ -232,7 +241,7 @@ class Event implements EventLoop
                     try {
                         $binding->trigger($number);
                     } catch (\Throwable $e) {
-                        $binding->eventLoop->stop();
+                        $this->stop();
                         throw $e;
                     }
 
@@ -283,7 +292,7 @@ class Event implements EventLoop
                 try {
                     $binding->trigger(null);
                 } catch (\Throwable $e) {
-                    $binding->eventLoop->stop();
+                    $this->stop();
                     throw $e;
                 }
 
