@@ -78,7 +78,7 @@ class Select implements EventLoop
                 $time = microtime(true);
 
                 foreach ($this->timers as $id => $binding) {
-                    if ($binding->isFrozen) {
+                    if ($binding->frozen) {
                         continue;
                     }
 
@@ -205,7 +205,7 @@ class Select implements EventLoop
     /**
      * Generate resource maps for select()
      */
-    private function _generateMaps()
+    private function generateMaps()
     {
         $this->socketMap = $this->streamMap = [
             self::RESOURCE => [

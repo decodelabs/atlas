@@ -9,11 +9,11 @@ namespace DecodeLabs\Atlas\EventLoop\Binding;
 use DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas\EventLoop\Binding;
 use DecodeLabs\Atlas\EventLoop\BindingTrait;
-use DecodeLabs\Atlas\EventLoop\Binding\Io;
+use DecodeLabs\Atlas\EventLoop\Binding\Io as IoBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\IoTrait;
 use DecodeLabs\Atlas\Channel\Stream as StreamChannel;
 
-class Stream implements Binding, Io
+class Stream implements IoBinding
 {
     use BindingTrait {
         __construct as __traitConstruct;
@@ -26,7 +26,7 @@ class Stream implements Binding, Io
     /**
      * Init with timer information
      */
-    public function __construct(EventLoop $eventLoop, bool $persistent, StreamChannel $stream, string $ioMode, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null)
+    public function __construct(EventLoop $eventLoop, bool $persistent, StreamChannel $stream, string $ioMode, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null)
     {
         $this->stream = $stream;
         $this->streamId = spl_object_id($stream);
@@ -91,10 +91,10 @@ class Stream implements Binding, Io
     /**
      * Trigger timeout event callback
      */
-    public function triggerTimeout($resource)
+    public function triggerTimeout($resource): IoBinding
     {
         if ($this->frozen) {
-            return;
+            return $this;
         }
 
         if ($this->timeoutHandler) {

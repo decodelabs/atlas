@@ -46,6 +46,14 @@ class Broker implements Channel
         return $this;
     }
 
+    /**
+     * Get list of input channels
+     */
+    public function getInputChannels(): array
+    {
+        return $this->input;
+    }
+
 
     /**
      * Add channel on output endpoint
@@ -75,6 +83,14 @@ class Broker implements Channel
         $id = spl_object_id($channel);
         unset($this->output[$id]);
         return $this;
+    }
+
+    /**
+     * Get list of output channels
+     */
+    public function getOutputChannels(): array
+    {
+        return $this->output;
     }
 
 
@@ -107,6 +123,15 @@ class Broker implements Channel
         unset($this->error[$id]);
         return $this;
     }
+
+    /**
+     * Get list of error channels
+     */
+    public function getErrorChannels(): array
+    {
+        return $this->error;
+    }
+
 
 
     /**

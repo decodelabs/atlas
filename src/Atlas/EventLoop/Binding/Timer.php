@@ -24,7 +24,7 @@ class Timer implements Binding
     public function __construct(EventLoop $eventLoop, string $id, bool $persistent, float $duration, callable $callback)
     {
         $this->__traitConstruct($eventLoop, $id, $persistent, $callback);
-        $this->duration = $float;
+        $this->duration = $duration;
     }
 
     /**

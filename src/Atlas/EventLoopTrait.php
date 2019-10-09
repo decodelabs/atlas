@@ -122,80 +122,80 @@ trait EventLoopTrait
     /**
      * Bind to socket read event
      */
-    public function bindSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, true, $socket, 'r', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to socket read event, frozen
      */
-    public function bindFrozenSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, true, $socket, 'r', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single socket read event
      */
-    public function bindSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, false, $socket, 'r', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single socket read event, frozen
      */
-    public function bindFrozenSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, false, $socket, 'r', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to socket write event
      */
-    public function bindSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, true, $socket, 'w', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to socket write event, frozen
      */
-    public function bindFrozenSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, true, $socket, 'w', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single socket write event
      */
-    public function bindSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, false, $socket, 'w', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single socket read event, frozen
      */
-    public function bindFrozenSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, false, $socket, 'w', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
@@ -541,80 +541,80 @@ trait EventLoopTrait
     /**
      * Bind to stream read event
      */
-    public function bindStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, true, $stream, 'r', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to stream read event, frozen
      */
-    public function bindFrozenStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, true, $stream, 'r', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single stream read event
      */
-    public function bindStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, false, $stream, 'r', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single stream read event, frozen
      */
-    public function bindFrozenStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $socket, 'r', $callback, $timeout, $timeoutCallback
+            $this, false, $stream, 'r', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to socket write event
      */
-    public function bindStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, true, $stream, 'w', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to socket write event, frozen
      */
-    public function bindFrozenStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, true, $stream, 'w', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single socket write event
      */
-    public function bindStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, false, $stream, 'w', $callback, $timeout, $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single socket read event, frozen
      */
-    public function bindFrozenStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutCallback=null): EventLoop
+    public function bindFrozenStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $socket, 'w', $callback, $timeout, $timeoutCallback
+            $this, false, $stream, 'w', $callback, $timeout, $timeoutHandler
         ), true);
     }
 
@@ -1340,7 +1340,7 @@ trait EventLoopTrait
     /**
      * Unfreeze timer binding by id
      */
-    public function unfreezeTimer($id): EventLoop
+    public function unfreezeTimer($binding): EventLoop
     {
         if (!$binding instanceof TimerBinding) {
             $orig = $binding;
@@ -1370,7 +1370,7 @@ trait EventLoopTrait
     /**
      * Remove a timer binding by id or object
      */
-    public function removeTimer($id): EventLoop
+    public function removeTimer($binding): EventLoop
     {
         if (!$binding instanceof TimerBinding) {
             $orig = $binding;
@@ -1382,7 +1382,7 @@ trait EventLoopTrait
 
         $id = $binding->getId();
         $this->unregisterTimerBinding($binding);
-        unset($this->signals[$id]);
+        unset($this->timers[$id]);
 
         return $this;
     }
