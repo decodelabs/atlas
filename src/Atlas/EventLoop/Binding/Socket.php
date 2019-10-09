@@ -66,7 +66,7 @@ class Socket implements IoBinding
      */
     public function getIoResource()
     {
-        return $this->socket->getSocketDescriptor();
+        return $this->socket->getResource();
     }
 
     /**

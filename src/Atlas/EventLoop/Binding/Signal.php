@@ -21,12 +21,12 @@ class Signal implements Binding
     /**
      * Init with timer information
      */
-    public function __construct(EventLoop $eventLoop, string $id, bool $persistent, array $signals, callable $callback)
+    public function __construct(EventLoop $eventLoop, string $id, bool $persistent, $signals, callable $callback)
     {
         $this->__traitConstruct($eventLoop, $id, $persistent, $callback);
         $this->resource = [];
 
-        foreach ($signals as $signal) {
+        foreach ((array)$signals as $signal) {
             $signal = Systemic::$process->newSignal($signal);
             $number = $signal->getNumber();
             $this->signals[$number] = $signal;
@@ -70,7 +70,7 @@ class Signal implements Binding
     /**
      * Trigger event callback
      */
-    public function trigger(int $number): Binding
+    public function trigger($number): Binding
     {
         if ($this->frozen) {
             return $this;

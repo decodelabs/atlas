@@ -101,11 +101,12 @@ trait EventLoopTrait
 
 
     /**
-     * Register generic callback for each cycle
+     * Register 1sec timed callback for testing run conditions
      */
     public function setCycleHandler(?callable $callback=null): EventLoop
     {
         $this->cycleHandler = $callback;
+        $this->registerCycleHandler($callback);
         return $this;
     }
 
@@ -115,6 +116,13 @@ trait EventLoopTrait
     public function getCycleHandler(): ?callable
     {
         return $this->cycleHandler;
+    }
+
+    /**
+     * Add cycle handler to event loop
+     */
+    protected function registerCycleHandler(?callable $callback): void
+    {
     }
 
 
