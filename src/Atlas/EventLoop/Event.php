@@ -136,10 +136,15 @@ class Event implements EventLoop
             $this->getIoEventFlags($binding),
             $this->getTimeout($binding),
             function ($target, $flags, SocketBinding $binding) {
-                if ($flags & EventLib::TIMEOUT) {
-                    $binding->triggerTimeout($target);
-                } else {
-                    $binding->trigger($target);
+                try {
+                    if ($flags & EventLib::TIMEOUT) {
+                        $binding->triggerTimeout($target);
+                    } else {
+                        $binding->trigger($target);
+                    }
+                } catch (\Throwable $e) {
+                    $binding->eventLoop->stop();
+                    throw $e;
                 }
 
                 if (!$binding->persistent) {
@@ -175,10 +180,15 @@ class Event implements EventLoop
             $this->getIoEventFlags($binding),
             $this->getTimeout($binding),
             function ($target, $flags, StreamBinding $binding) {
-                if ($flags & EventLib::TIMEOUT) {
-                    $binding->triggerTimeout($target);
-                } else {
-                    $binding->trigger($target);
+                try {
+                    if ($flags & EventLib::TIMEOUT) {
+                        $binding->triggerTimeout($target);
+                    } else {
+                        $binding->trigger($target);
+                    }
+                } catch (\Throwable $e) {
+                    $binding->eventLoop->stop();
+                    throw $e;
                 }
 
                 if (!$binding->persistent) {
@@ -219,7 +229,13 @@ class Event implements EventLoop
                 $flags,
                 null,
                 function ($number, SignalBinding $binding) {
-                    $binding->trigger($number);
+                    try {
+                        $binding->trigger($number);
+                    } catch (\Throwable $e) {
+                        $binding->eventLoop->stop();
+                        throw $e;
+                    }
+
                     $this->unregisterSignalBinding($binding);
 
                     if ($binding->persistent) {
@@ -264,7 +280,13 @@ class Event implements EventLoop
             $flags,
             $binding->duration,
             function (TimerBinding $binding) {
-                $binding->trigger(null);
+                try {
+                    $binding->trigger(null);
+                } catch (\Throwable $e) {
+                    $binding->eventLoop->stop();
+                    throw $e;
+                }
+
                 $this->unregisterTimerBinding($binding);
 
                 if ($binding->persistent) {
