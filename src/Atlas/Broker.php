@@ -54,6 +54,18 @@ class Broker implements Channel
         return $this->input;
     }
 
+    /**
+     * Get first input channel
+     */
+    public function getFirstInputChannel(): ?Channel
+    {
+        foreach ($this->input as $channel) {
+            return $channel;
+        }
+
+        return null;
+    }
+
 
     /**
      * Add channel on output endpoint
@@ -93,6 +105,18 @@ class Broker implements Channel
         return $this->output;
     }
 
+    /**
+     * Get first output channel
+     */
+    public function getFirstOutputChannel(): ?Channel
+    {
+        foreach ($this->output as $channel) {
+            return $channel;
+        }
+
+        return null;
+    }
+
 
     /**
      * Add channel on error endpoint
@@ -130,6 +154,18 @@ class Broker implements Channel
     public function getErrorChannels(): array
     {
         return $this->error;
+    }
+
+    /**
+     * Get first error channel
+     */
+    public function getFirstErrorChannel(): ?Channel
+    {
+        foreach ($this->error as $channel) {
+            return $channel;
+        }
+
+        return null;
     }
 
 
