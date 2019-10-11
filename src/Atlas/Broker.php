@@ -46,6 +46,26 @@ class Broker implements Channel
         return $this;
     }
 
+    /**
+     * Get list of input channels
+     */
+    public function getInputChannels(): array
+    {
+        return $this->input;
+    }
+
+    /**
+     * Get first input channel
+     */
+    public function getFirstInputChannel(): ?Channel
+    {
+        foreach ($this->input as $channel) {
+            return $channel;
+        }
+
+        return null;
+    }
+
 
     /**
      * Add channel on output endpoint
@@ -75,6 +95,26 @@ class Broker implements Channel
         $id = spl_object_id($channel);
         unset($this->output[$id]);
         return $this;
+    }
+
+    /**
+     * Get list of output channels
+     */
+    public function getOutputChannels(): array
+    {
+        return $this->output;
+    }
+
+    /**
+     * Get first output channel
+     */
+    public function getFirstOutputChannel(): ?Channel
+    {
+        foreach ($this->output as $channel) {
+            return $channel;
+        }
+
+        return null;
     }
 
 
@@ -107,6 +147,27 @@ class Broker implements Channel
         unset($this->error[$id]);
         return $this;
     }
+
+    /**
+     * Get list of error channels
+     */
+    public function getErrorChannels(): array
+    {
+        return $this->error;
+    }
+
+    /**
+     * Get first error channel
+     */
+    public function getFirstErrorChannel(): ?Channel
+    {
+        foreach ($this->error as $channel) {
+            return $channel;
+        }
+
+        return null;
+    }
+
 
 
     /**
@@ -304,23 +365,27 @@ class Broker implements Channel
      */
     public function write(?string $data, int $length=null): int
     {
-        if ($length !== null) {
-            $data = substr($data, $length);
-        }
-
-        $output = strlen($data);
-
-        if (!$output) {
+        if ($length === 0) {
             return 0;
+        } elseif ($length === null) {
+            $length = strlen($data);
         }
 
         foreach ($this->output as $channel) {
-            if ($channel->isWritable()) {
-                $channel->write($data, $length);
+            if (!$channel->isWritable()) {
+                continue;
+            }
+
+            for ($written = 0; $written < $length; $written += $result) {
+                $result = $channel->write(substr($data, $written), $length - $written);
+
+                if ($result === null) {
+                    throw Glitch::EOverflow('Could not write buffer to output', null, $data);
+                }
             }
         }
 
-        return $output;
+        return $length;
     }
 
     /**
@@ -359,23 +424,27 @@ class Broker implements Channel
      */
     public function writeError(?string $data, int $length=null): int
     {
-        if ($length !== null) {
-            $data = substr($data, $length);
-        }
-
-        $output = strlen($data);
-
-        if (!$output) {
+        if ($length === 0) {
             return 0;
+        } elseif ($length === null) {
+            $length = strlen($data);
         }
 
         foreach ($this->error as $channel) {
-            if ($channel->isWritable()) {
-                $channel->write($data, $length);
+            if (!$channel->isWritable()) {
+                continue;
+            }
+
+            for ($written = 0; $written < $length; $written += $result) {
+                $result = $channel->write(substr($data, $written), $length - $written);
+
+                if ($result === null) {
+                    throw Glitch::EOverflow('Could not write buffer to output', null, $data);
+                }
             }
         }
 
-        return $output;
+        return $length;
     }
 
     /**
