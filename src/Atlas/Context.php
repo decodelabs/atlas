@@ -19,6 +19,10 @@ use DecodeLabs\Atlas\Channel\Buffer;
 use DecodeLabs\Atlas\Mutex;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
 
+use DecodeLabs\Atlas\EventLoop;
+use DecodeLabs\Atlas\EventLoop\Event as LibEventLoop;
+use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
+
 class Context implements FacadeTarget
 {
     use FacadeTargetTrait;
@@ -166,5 +170,18 @@ class Context implements FacadeTarget
         return $this->newBroker()
             ->addInputChannel($this->openHttpInputStream())
             ->addOutputChannel($this->openHttpOutputStream());
+    }
+
+
+    /**
+     * Create an event loop
+     */
+    public function newEventLoop(): EventLoop
+    {
+        if (extension_loaded('event')) {
+            return new LibEventLoop();
+        } else {
+            return new SelectEventLoop();
+        }
     }
 }
