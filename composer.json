@@ -30,6 +30,6 @@
         }
     },
     "suggest": {
-        "ext-event": "Faster and more reliable event loops",
+        "ext-event": "Faster and more reliable event loops"
     }
 }
