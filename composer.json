@@ -28,5 +28,8 @@
         "branch-alias": {
             "dev-develop": "0.x-dev"
         }
+    },
+    "suggest": {
+        "ext-event": "Faster and more reliable event loops",
     }
 }
