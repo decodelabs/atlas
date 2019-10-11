@@ -19,6 +19,7 @@ trait EventLoopTrait
 {
     protected $listening = false;
     protected $cycleHandler;
+    protected $cycles = 0;
 
     protected $sockets = [];
     protected $streams = [];

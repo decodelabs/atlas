@@ -117,7 +117,7 @@ class Event implements EventLoop
                 }
 
                 try {
-                    $res = ($this->cycleHandler)($this);
+                    $res = ($this->cycleHandler)(++$this->cycles, $this);
                 } catch (\Throwable $e) {
                     $this->stop();
                     throw $e;
