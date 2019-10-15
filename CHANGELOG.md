@@ -1,3 +1,7 @@
+## v0.6.1 (2019-10-16)
+* Added PHPStan support
+* Bugfixes and updates from max level PHPStan scan
+
 ## v0.6.0 (2019-10-11)
 * Added event loop system
 * Added receiver proxy Channel
