@@ -22,6 +22,9 @@
         "phpstan/extension-installer": "^1.0",
         "decodelabs/phpstan-decodelabs": "^0.1"
     },
+    "suggest": {
+        "ext-event": "Faster and more reliable event loops"
+    },
     "autoload": {
         "psr-4": {
             "DecodeLabs\\Atlas\\": "src/Atlas"
@@ -34,8 +37,5 @@
         "branch-alias": {
             "dev-develop": "0.x-dev"
         }
-    },
-    "suggest": {
-        "ext-event": "Faster and more reliable event loops"
     }
 }
