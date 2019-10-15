@@ -11,7 +11,8 @@ use DecodeLabs\Atlas\EventLoop\Binding;
 use DecodeLabs\Atlas\EventLoop\BindingTrait;
 use DecodeLabs\Atlas\EventLoop\Binding\Io as IoBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\IoTrait;
-use DecodeLabs\Atlas\Channel\Socket as SocketChannel;
+
+use DecodeLabs\Atlas\Socket as SocketChannel;
 
 class Socket implements IoBinding
 {

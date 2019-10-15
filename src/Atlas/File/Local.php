@@ -10,6 +10,7 @@ use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
 
 use DecodeLabs\Atlas\File;
+use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 
@@ -19,6 +20,7 @@ use DecodeLabs\Atlas\Channel\Buffer;
 
 use Generator;
 
+use DecodeLabs\Glitch;
 use DecodeLabs\Glitch\Inspectable;
 use DecodeLabs\Glitch\Dumper\Entity;
 use DecodeLabs\Glitch\Dumper\Inspector;
@@ -32,6 +34,7 @@ class Local extends Stream implements File, Inspectable
      */
     public function __construct(string $path, string $mode=null)
     {
+        parent::__construct($path, null);
         $this->path = $path;
 
         if ($mode !== null) {
@@ -93,7 +96,11 @@ class Local extends Stream implements File, Inspectable
             return null;
         }
 
-        return filesize($this->path);
+        if (false === ($output = filesize($this->path))) {
+            return null;
+        }
+
+        return $output;
     }
 
     /**
@@ -105,7 +112,7 @@ class Local extends Stream implements File, Inspectable
             return null;
         }
 
-        return hash_file($type, $this->path, $raw);
+        return hash_file($type, $this->path);
     }
 
     /**
@@ -130,7 +137,7 @@ class Local extends Stream implements File, Inspectable
         $closeData = $closeAfter = false;
 
         if (!$data instanceof Channel) {
-            $file = new File('php://temp', 'w+');
+            $file = new LocalFile('php://temp', 'w+');
             $file->write((string)$data);
             $file->setPosition(0);
             $data = $file;
@@ -265,45 +272,6 @@ class Local extends Stream implements File, Inspectable
         return is_link($this->path);
     }
 
-
-    /**
-     * Set permissions on file
-     */
-    public function setPermissions(int $mode): File
-    {
-        if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set permissions, file does not exist', null, $this);
-        }
-
-        chmod($this->path, $mode);
-        return $this;
-    }
-
-    /**
-     * Set owner of file
-     */
-    public function setOwner(int $owner): File
-    {
-        if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set owner, file does not exist', null, $this);
-        }
-
-        chown($this->path, $owner);
-        return $this;
-    }
-
-    /**
-     * Set group of file
-     */
-    public function setGroup(int $group): File
-    {
-        if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set owner, file does not exist', null, $this);
-        }
-
-        chgrp($this->path, $group);
-        return $this;
-    }
 
 
     /**
@@ -497,13 +465,11 @@ class Local extends Stream implements File, Inspectable
             throw Glitch::EIo('Cannot flush file, file not open', null, $this);
         }
 
-        $output = fflush($this->resource);
-
-        if ($output === false) {
+        if (false === fflush($this->resource)) {
             throw Glitch::EIo('Failed to flush file', null, $this);
         }
 
-        return $output;
+        return $this;
     }
 
     /**

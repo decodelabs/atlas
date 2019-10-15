@@ -10,6 +10,8 @@ use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Stream;
 use DecodeLabs\Atlas\Channel\Buffer;
 
+use DecodeLabs\Glitch;
+
 class Broker implements Channel
 {
     protected $input = [];
@@ -365,7 +367,7 @@ class Broker implements Channel
      */
     public function write(?string $data, int $length=null): int
     {
-        if ($length === 0) {
+        if ($length === 0 || $data === null) {
             return 0;
         } elseif ($length === null) {
             $length = strlen($data);
@@ -424,7 +426,7 @@ class Broker implements Channel
      */
     public function writeError(?string $data, int $length=null): int
     {
-        if ($length === 0) {
+        if ($length === 0 || $data === null) {
             return 0;
         } elseif ($length === null) {
             $length = strlen($data);

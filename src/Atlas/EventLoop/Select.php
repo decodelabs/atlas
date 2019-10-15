@@ -63,8 +63,14 @@ class Select implements EventLoop
         $this->generateMaps();
 
         $this->startSignalHandlers();
+        $this->breakLoop = false;
 
         while (!$this->breakLoop) {
+            $socketCount = count($this->sockets);
+            $streamCount = count($this->streams);
+            $signalCount = count($this->signals);
+            $timerCount = count($this->timers);
+
             if ($this->generateMaps) {
                 $this->generateMaps();
             }
@@ -173,13 +179,20 @@ class Select implements EventLoop
                     $lastCycle = $time;
 
                     if (false === ($this->cycleHandler)(++$this->cycles, $this)) {
-                        $this->stop();
+                        $this->breakLoop = true;
                     }
                 }
             }
 
             if (!$hasHandler) {
-                $this->stop();
+                $this->breakLoop = true;
+            } elseif (
+                $socketCount !== count($this->sockets) ||
+                $streamCount !== count($this->streams) ||
+                $signalCount !== count($this->signals) ||
+                $timerCount !== count($this->timers)
+            ) {
+                $this->generateMaps = true;
             }
 
             usleep(30000);
@@ -290,7 +303,7 @@ class Select implements EventLoop
      */
     public function freezeBinding(Binding $binding): EventLoop
     {
-        $binding->frozen = true;
+        $binding->markFrozen(true);
         return $this;
     }
 
@@ -299,7 +312,7 @@ class Select implements EventLoop
      */
     public function unfreezeBinding(Binding $binding): EventLoop
     {
-        $binding->frozen = false;
+        $binding->markFrozen(false);
         return $this;
     }
 

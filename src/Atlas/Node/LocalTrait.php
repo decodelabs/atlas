@@ -11,6 +11,8 @@ use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 
+use DecodeLabs\Glitch;
+
 trait LocalTrait
 {
     protected $path;
@@ -49,7 +51,11 @@ trait LocalTrait
             return null;
         }
 
-        return filemtime($this->path);
+        if (false === ($output = filemtime($this->path))) {
+            $output = null;
+        }
+
+        return $output;
     }
 
     /**
@@ -64,6 +70,21 @@ trait LocalTrait
         return time() - $this->getLastModified() < $seconds;
     }
 
+
+
+    /**
+     * Set permissions on file
+     */
+    public function setPermissions(int $mode): Node
+    {
+        if (!$this->exists()) {
+            throw Glitch::ENotFound('Cannot set permissions, file does not exist', null, $this);
+        }
+
+        chmod($this->path, $mode);
+        return $this;
+    }
+
     /**
      * Get permissions of node
      */
@@ -73,7 +94,11 @@ trait LocalTrait
             return null;
         }
 
-        return fileperms($this->getPath());
+        if (false === ($output = fileperms($this->getPath()))) {
+            $output = null;
+        }
+
+        return $output;
     }
 
     /**
@@ -156,6 +181,20 @@ trait LocalTrait
         return $info;
     }
 
+
+    /**
+     * Set owner of file
+     */
+    public function setOwner(int $owner): Node
+    {
+        if (!$this->exists()) {
+            throw Glitch::ENotFound('Cannot set owner, file does not exist', null, $this);
+        }
+
+        chown($this->path, $owner);
+        return $this;
+    }
+
     /**
      * Get owner of node
      */
@@ -165,7 +204,24 @@ trait LocalTrait
             return null;
         }
 
-        return fileowner($this->getPath());
+        if (false === ($output = fileowner($this->getPath()))) {
+            $output = null;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Set group of file
+     */
+    public function setGroup(int $group): Node
+    {
+        if (!$this->exists()) {
+            throw Glitch::ENotFound('Cannot set owner, file does not exist', null, $this);
+        }
+
+        chgrp($this->path, $group);
+        return $this;
     }
 
     /**
@@ -177,7 +233,11 @@ trait LocalTrait
             return null;
         }
 
-        return filegroup($this->getPath());
+        if (false === ($output = filegroup($this->getPath()))) {
+            $output = null;
+        }
+
+        return $output;
     }
 
 
@@ -232,7 +292,7 @@ trait LocalTrait
         }
 
         if ($newName == '' || $newName === '..' || $newName === '.' || strstr($newName, '/')) {
-            throw Glitch::EInvalidArgument('New name is invalid: '.$name, null, $this);
+            throw Glitch::EInvalidArgument('New name is invalid: '.$newName, null, $this);
         }
 
         return $newName;

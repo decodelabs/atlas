@@ -14,9 +14,9 @@ interface Dir extends Node
     public function ensureExists(int $permissions=null): Dir;
     public function isEmpty(): bool;
 
-    public function setPermissions(int $mode, bool $recursive=false): Dir;
-    public function setOwner(int $owner, bool $recursive=false): Dir;
-    public function setGroup(int $group, bool $recursive=false): Dir;
+    public function setPermissionsRecursive(int $mode): Dir;
+    public function setOwnerRecursive(int $owner): Dir;
+    public function setGroupRecursive(int $group): Dir;
 
     public function scan(callable $filter=null): Generator;
     public function list(callable $filter=null): array;
@@ -60,13 +60,15 @@ interface Dir extends Node
 
     public function createDir(string $name, int $permissions=null): Dir;
     public function hasDir(string $name): bool;
-    public function getDir(string $name, bool $ifExists=false): ?Dir;
+    public function getDir(string $name): Dir;
+    public function getDirIfExists(string $name): ?Dir;
     public function deleteDir(string $name): Dir;
 
     public function createFile(string $name, string $content): File;
     public function openFile(string $name, string $mode): File;
     public function hasFile(string $name): bool;
-    public function getFile(string $name, bool $ifExists=false): ?File;
+    public function getFile(string $name): File;
+    public function getFileIfExists(string $name): ?File;
     public function deleteFile(string $name): Dir;
 
     public function emptyOut(): Dir;

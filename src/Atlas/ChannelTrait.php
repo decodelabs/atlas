@@ -8,6 +8,8 @@ namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Channel\Buffer;
 
+use DecodeLabs\Glitch;
+
 trait ChannelTrait
 {
     /**

@@ -47,6 +47,22 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Set file permissions on file or dir recursively
+     */
+    public function setPermissionsRecursive(string $path, int $permissions): Node
+    {
+        $node = $this->get($path);
+
+        if ($node instanceof Dir) {
+            $node->setPermissionsRecursive($permissions);
+        } else {
+            $node->setPermissions($permissions);
+        }
+
+        return $node;
+    }
+
+    /**
      * Set owner for file or dir
      */
     public function setOwner(string $path, int $owner): Node
@@ -67,7 +83,7 @@ class Fs implements FacadePlugin
      */
     public function copy(string $path, string $destinationPath): Node
     {
-        return $this->get($path)->copyAs($destinationPath);
+        return $this->get($path)->copy($destinationPath);
     }
 
     /**
@@ -91,7 +107,7 @@ class Fs implements FacadePlugin
      */
     public function move(string $path, string $destinationPath): Node
     {
-        return $this->get($path)->moveAs($destinationPath);
+        return $this->get($path)->move($destinationPath);
     }
 
     /**
@@ -149,7 +165,9 @@ class Fs implements FacadePlugin
      */
     public function setFilePermissions(string $path, int $permissions): File
     {
-        return $this->file($path)->setPermissions($permissions);
+        $file = $this->file($path);
+        $file->setPermissions($permissions);
+        return $file;
     }
 
     /**
@@ -157,7 +175,9 @@ class Fs implements FacadePlugin
      */
     public function setFileOwner(string $path, int $owner): File
     {
-        return $this->file($path)->setOwner($owner);
+        $file = $this->file($path);
+        $file->setOwner($owner);
+        return $file;
     }
 
     /**
@@ -165,7 +185,9 @@ class Fs implements FacadePlugin
      */
     public function setFileGroup(string $path, int $group): File
     {
-        return $this->file($path)->setGroup($group);
+        $file = $this->file($path);
+        $file->setGroup($group);
+        return $file;
     }
 
     /**
@@ -173,7 +195,9 @@ class Fs implements FacadePlugin
      */
     public function copyFile(string $path, string $destinationPath): File
     {
-        return $this->file($path)->copyAs($destinationPath);
+        $file = $this->file($path);
+        $file->copy($destinationPath);
+        return $file;
     }
 
     /**
@@ -181,7 +205,9 @@ class Fs implements FacadePlugin
      */
     public function copyFileTo(string $path, string $destinationDir, string $newName=null): File
     {
-        return $this->file($path)->copyTo($destinationDir, $newName);
+        $file = $this->file($path);
+        $file->copyTo($destinationDir, $newName);
+        return $file;
     }
 
     /**
@@ -189,7 +215,9 @@ class Fs implements FacadePlugin
      */
     public function renameFile(string $path, string $newName): File
     {
-        return $this->file($path)->renameTo($newName);
+        $file = $this->file($path);
+        $file->renameTo($newName);
+        return $file;
     }
 
     /**
@@ -197,7 +225,9 @@ class Fs implements FacadePlugin
      */
     public function moveFile(string $path, string $destinationPath): File
     {
-        return $this->file($path)->moveAs($destinationPath);
+        $file = $this->file($path);
+        $file->move($destinationPath);
+        return $file;
     }
 
     /**
@@ -205,7 +235,9 @@ class Fs implements FacadePlugin
      */
     public function moveFileTo(string $path, string $destinationDir, string $newName=null): File
     {
-        return $this->file($path)->moveTo($destinationDir, $newName);
+        $file = $this->file($path);
+        $file->moveTo($destinationDir, $newName);
+        return $file;
     }
 
     /**
@@ -245,25 +277,61 @@ class Fs implements FacadePlugin
     /**
      * Set permissions on dir
      */
-    public function setDirPermissions(string $path, int $permissions, bool $recursive=false): Dir
+    public function setDirPermissions(string $path, int $permissions): Dir
     {
-        return $this->dir($path)->setPermissions($permissions, $recursive);
+        $dir = $this->dir($path);
+        $dir->setPermissions($permissions);
+        return $dir;
+    }
+
+    /**
+     * Set permissions on dir recursively
+     */
+    public function setDirPermissionsRecursive(string $path, int $permissions): Dir
+    {
+        $dir = $this->dir($path);
+        $dir->setPermissionsRecursive($permissions);
+        return $dir;
     }
 
     /**
      * Set owner of dir
      */
-    public function setDirOwner(string $path, int $owner, bool $recursive): Dir
+    public function setDirOwner(string $path, int $owner): Dir
     {
-        return $this->dir($path)->setOwner($owner, $recursive);
+        $dir = $this->dir($path);
+        $dir->setOwner($owner);
+        return $dir;
+    }
+
+    /**
+     * Set owner of dir recursively
+     */
+    public function setDirOwnerRecursive(string $path, int $owner): Dir
+    {
+        $dir = $this->dir($path);
+        $dir->setOwnerRecursive($owner);
+        return $dir;
     }
 
     /**
      * Set group of dir
      */
-    public function setDirGroup(string $path, int $group, bool $recursive): Dir
+    public function setDirGroup(string $path, int $group): Dir
     {
-        return $this->dir($path)->setGroup($group, $recursive);
+        $dir = $this->dir($path);
+        $dir->setGroup($group);
+        return $dir;
+    }
+
+    /**
+     * Set group of dir recursively
+     */
+    public function setDirGroupRecursive(string $path, int $group): Dir
+    {
+        $dir = $this->dir($path);
+        $dir->setGroupRecursive($group);
+        return $dir;
     }
 
 
@@ -524,7 +592,9 @@ class Fs implements FacadePlugin
      */
     public function copyDir(string $path, string $destinationPath): Dir
     {
-        return $this->dir($path)->copyAs($destinationPath);
+        $dir = $this->dir($path);
+        $dir->copy($destinationPath);
+        return $dir;
     }
 
     /**
@@ -532,7 +602,9 @@ class Fs implements FacadePlugin
      */
     public function copyDirTo(string $path, string $destinationDir, string $newName=null): Dir
     {
-        return $this->dir($path)->copyTo($destinationDir, $newName);
+        $dir = $this->dir($path);
+        $dir->copyTo($destinationDir, $newName);
+        return $dir;
     }
 
     /**
@@ -540,7 +612,9 @@ class Fs implements FacadePlugin
      */
     public function renameDir(string $path, string $newName): Dir
     {
-        return $this->dir($path)->renameTo($newName);
+        $dir = $this->dir($path);
+        $dir->renameTo($newName);
+        return $dir;
     }
 
     /**
@@ -548,7 +622,9 @@ class Fs implements FacadePlugin
      */
     public function moveDir(string $path, string $destinationPath): Dir
     {
-        return $this->dir($path)->moveAs($destinationPath);
+        $dir = $this->dir($path);
+        $dir->move($destinationPath);
+        return $dir;
     }
 
     /**
@@ -556,7 +632,9 @@ class Fs implements FacadePlugin
      */
     public function moveDirTo(string $path, string $destinationDir, string $newName=null): Dir
     {
-        return $this->dir($path)->moveTo($destinationDir, $newName);
+        $dir = $this->dir($path);
+        $dir->moveTo($destinationDir, $newName);
+        return $dir;
     }
 
     /**
