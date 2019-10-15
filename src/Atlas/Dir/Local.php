@@ -24,6 +24,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FilesystemIterator;
 
+use DecodeLabs\Glitch;
 use DecodeLabs\Glitch\Inspectable;
 use DecodeLabs\Glitch\Dumper\Entity;
 use DecodeLabs\Glitch\Dumper\Inspector;
@@ -101,7 +102,7 @@ class Local implements Dir, Inspectable
     /**
      * Set permission on dir and children if $recursive
      */
-    public function setPermissions(int $mode, bool $recursive=false): Dir
+    public function setPermissionsRecursive(int $mode): Dir
     {
         if (!$this->exists()) {
             throw Glitch::ENotFound('Cannot set permissions, dir does not exist', null, $this);
@@ -109,13 +110,11 @@ class Local implements Dir, Inspectable
 
         chmod($this->path, $mode);
 
-        if ($recursive) {
-            foreach ($this->scanRaw(true, true) as $item) {
-                if ($item instanceof Dir) {
-                    $item->setPermissions($mode, true);
-                } else {
-                    $item->setPermissions($mode);
-                }
+        foreach ($this->scanRaw(true, true) as $item) {
+            if ($item instanceof Dir) {
+                $item->setPermissionsRecursive($mode);
+            } else {
+                $item->setPermissions($mode);
             }
         }
 
@@ -125,7 +124,7 @@ class Local implements Dir, Inspectable
     /**
      * Set owner on dir and children if $recursive
      */
-    public function setOwner(int $owner, bool $recursive=false): Dir
+    public function setOwnerRecursive(int $owner): Dir
     {
         if (!$this->exists()) {
             throw Glitch::ENotFound('Cannot set owner, dir does not exist', null, $this);
@@ -133,13 +132,11 @@ class Local implements Dir, Inspectable
 
         chown($this->path, $owner);
 
-        if ($recursive) {
-            foreach ($this->scanRaw(true, true) as $item) {
-                if ($item instanceof Dir) {
-                    $item->setOwner($owner, true);
-                } else {
-                    $item->setOwner($owner);
-                }
+        foreach ($this->scanRaw(true, true) as $item) {
+            if ($item instanceof Dir) {
+                $item->setOwnerRecursive($owner);
+            } else {
+                $item->setOwner($owner);
             }
         }
 
@@ -149,7 +146,7 @@ class Local implements Dir, Inspectable
     /**
      * Set group on dir and children if $recursive
      */
-    public function setGroup(int $group, bool $recursive=false): Dir
+    public function setGroupRecursive(int $group): Dir
     {
         if (!$this->exists()) {
             throw Glitch::ENotFound('Cannot set group, dir does not exist', null, $this);
@@ -157,13 +154,11 @@ class Local implements Dir, Inspectable
 
         chgrp($this->path, $group);
 
-        if ($recursive) {
-            foreach ($this->scanRaw(true, true) as $item) {
-                if ($item instanceof Dir) {
-                    $item->setGroup($group, true);
-                } else {
-                    $item->setGroup($group);
-                }
+        foreach ($this->scanRaw(true, true) as $item) {
+            if ($item instanceof Dir) {
+                $item->setGroupRecursive($group);
+            } else {
+                $item->setGroup($group);
             }
         }
 
@@ -210,7 +205,7 @@ class Local implements Dir, Inspectable
         if (is_dir($path)) {
             return new self($path);
         } elseif (is_file($path) || is_link($path)) {
-            return new File($path);
+            return new LocalFile($path);
         }
 
         return null;
@@ -230,7 +225,7 @@ class Local implements Dir, Inspectable
      */
     public function deleteChild(string $name): Node
     {
-        if ($child = $this->getChild($child)) {
+        if ($child = $this->getChild($name)) {
             $child->delete();
         }
 
@@ -257,11 +252,19 @@ class Local implements Dir, Inspectable
     /**
      * Get a child dir
      */
-    public function getDir(string $name, bool $ifExists=false): ?Dir
+    public function getDir(string $name): Dir
+    {
+        return new self($this->path.'/'.ltrim($name, '/'));
+    }
+
+    /**
+     * Get a child dir if it exists
+     */
+    public function getDirIfExists(string $name): ?Dir
     {
         $output = new self($this->path.'/'.ltrim($name, '/'));
 
-        if ($ifExists && !$output->exists()) {
+        if (!$output->exists()) {
             $output = null;
         }
 
@@ -273,7 +276,7 @@ class Local implements Dir, Inspectable
      */
     public function deleteDir(string $name): Dir
     {
-        if ($dir = $this->getDir($name, true)) {
+        if ($dir = $this->getDirIfExists($name)) {
             $dir->delete();
         }
 
@@ -308,11 +311,19 @@ class Local implements Dir, Inspectable
     /**
      * Get a child file
      */
-    public function getFile(string $name, bool $ifExists=false): ?File
+    public function getFile(string $name): File
+    {
+        return $this->wrapFile($this->path.'/'.ltrim($name, '/'));
+    }
+
+    /**
+     * Get a child file if it exists
+     */
+    public function getFileIfExists(string $name): ?File
     {
         $output = $this->wrapFile($this->path.'/'.ltrim($name, '/'));
 
-        if ($ifExists && !$output->exists()) {
+        if (!$output->exists()) {
             $output = null;
         }
 
@@ -324,7 +335,7 @@ class Local implements Dir, Inspectable
      */
     public function deleteFile(string $name): Dir
     {
-        if ($file = $this->getFile($name, true)) {
+        if ($file = $this->getFileIfExists($name)) {
             $file->delete();
         }
 
@@ -353,7 +364,7 @@ class Local implements Dir, Inspectable
             throw Glitch::ENotFound('Source dir does not exist', null, $this);
         }
 
-        (new Dir(dirname($path)))->ensureExists();
+        (new Local(dirname($path)))->ensureExists();
 
         if (file_exists($path)) {
             throw Glitch::EIo('Destination file already exists', null, $path);
@@ -443,7 +454,6 @@ class Local implements Dir, Inspectable
             ->setDefinition(Glitch::normalizePath($this->path))
             ->setMetaList([
                 'exists' => $inspector($this->exists()),
-                'permissions' => $this->getPermissionsOct(),
                 'permissions' => $this->getPermissionsOct().' : '.$this->getPermissionsString()
             ]);
     }

@@ -16,6 +16,8 @@ use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
 
+use DecodeLabs\Glitch;
+
 use EventBase as EventLibBase;
 use Event as EventLib;
 
@@ -66,12 +68,12 @@ class Event implements EventLoop
      */
     public function freezeBinding(Binding $binding): EventLoop
     {
-        if ($binding->frozen) {
+        if ($binding->isFrozen()) {
             return $this;
         }
 
         $this->{'unregister'.$binding->getType().'Binding'}($binding);
-        $binding->frozen = true;
+        $binding->markFrozen(true);
 
         return $this;
     }
@@ -81,12 +83,12 @@ class Event implements EventLoop
      */
     public function unfreezeBinding(Binding $binding): EventLoop
     {
-        if (!$binding->frozen) {
+        if (!$binding->isFrozen()) {
             return $this;
         }
 
         $this->{'register'.$binding->getType().'Binding'}($binding);
-        $binding->frozen = false;
+        $binding->markFrozen(false);
 
         return $this;
     }
@@ -359,7 +361,7 @@ class Event implements EventLoop
      */
     protected function getIoEventFlags(IoBinding $binding): int
     {
-        switch ($binding->ioMode) {
+        switch ($type = $binding->getIoMode()) {
             case 'r':
                 $flags = EventLib::READ;
                 break;
@@ -370,11 +372,11 @@ class Event implements EventLoop
 
             default:
                 throw Glitch::EInvalidArgument(
-                    'Unknown event type: '.$type
+                    'Unknown event io type: '.$type
                 );
         }
 
-        if ($binding->persistent) {
+        if ($binding->isPersistent()) {
             $flags |= EventLib::PERSIST;
         }
 
@@ -387,7 +389,7 @@ class Event implements EventLoop
     protected function getTimeout(Binding $binding): ?float
     {
         if ($binding instanceof IoBinding) {
-            return $binding->timeout;
+            return $binding->getTimeout();
         } else {
             return null;
         }

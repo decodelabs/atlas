@@ -112,6 +112,15 @@ trait BindingTrait
     }
 
     /**
+     * Actually mark this binding as frozen - should only be used internally
+     */
+    public function markFrozen(bool $frozen): Binding
+    {
+        $this->frozen = $frozen;
+        return $this;
+    }
+
+    /**
      * Has this binding been frozen?
      */
     public function isFrozen(): bool

@@ -10,6 +10,8 @@ use DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas\EventLoop\Binding;
 use DecodeLabs\Atlas\EventLoop\BindingTrait;
 
+use DecodeLabs\Systemic;
+
 class Signal implements Binding
 {
     use BindingTrait {

@@ -9,6 +9,8 @@ namespace DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\ChannelTrait;
 
+use DecodeLabs\Glitch;
+
 class Stream implements Channel
 {
     use ChannelTrait;
@@ -21,8 +23,12 @@ class Stream implements Channel
     /**
      * Init with stream path
      */
-    public function __construct($path, string $mode='a+')
+    public function __construct($path, ?string $mode='a+')
     {
+        if ($mode === null) {
+            return;
+        }
+
         if (is_resource($path)) {
             $this->resource = $path;
             $this->mode = stream_get_meta_data($this->resource)['mode'];
@@ -169,10 +175,16 @@ class Stream implements Channel
         $this->checkWritable();
 
         if ($length !== null) {
-            return fwrite($this->resource, (string)$data, $length);
+            $output = fwrite($this->resource, (string)$data, $length);
         } else {
-            return fwrite($this->resource, (string)$data);
+            $output = fwrite($this->resource, (string)$data);
         }
+
+        if ($output === false) {
+            throw Glitch::Eio('Unable to write to stream', null, $this);
+        }
+
+        return $output;
     }
 
     /**

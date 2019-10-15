@@ -15,10 +15,13 @@ interface Node
     public function getLastModified(): ?int;
     public function hasChanged(int $timeout=30): bool;
 
+    public function setPermissions(int $mode): Node;
     public function getPermissions(): ?int;
     public function getPermissionsOct(): ?string;
     public function getPermissionsString(): ?string;
+    public function setOwner(int $owner): Node;
     public function getOwner(): ?int;
+    public function setGroup(int $group): Node;
     public function getGroup(): ?int;
 
     public function getParent(): ?Dir;

@@ -348,7 +348,7 @@ trait ScannerTrait
                 $output = $item->getPathname();
 
                 if ($wrap) {
-                    $output = new $this->wrapFile($output);
+                    $output = $this->wrapFile($output);
                 }
             } else {
                 continue;

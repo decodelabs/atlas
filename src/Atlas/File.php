@@ -25,10 +25,6 @@ interface File extends Node, Channel
     public function isLink(): bool;
     public function getIoMode(): ?string;
 
-    public function setPermissions(int $mode): File;
-    public function setOwner(int $owner): File;
-    public function setGroup(int $group): File;
-
     public function lock(bool $nonBlocking=false): bool;
     public function lockExclusive(bool $nonBlocking=false): bool;
     public function unlock(): File;

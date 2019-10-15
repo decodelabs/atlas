@@ -23,6 +23,8 @@ use DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas\EventLoop\Event as LibEventLoop;
 use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
 
+use DecodeLabs\Glitch;
+
 class Context implements FacadeTarget
 {
     use FacadeTargetTrait;

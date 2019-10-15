@@ -15,6 +15,9 @@ use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
 
+use DecodeLabs\Glitch;
+use DecodeLabs\Systemic;
+
 trait EventLoopTrait
 {
     protected $listening = false;
@@ -635,7 +638,7 @@ trait EventLoopTrait
         $id = $binding->getId();
 
         if (isset($this->streams[$id])) {
-            $this->removeStream($binding);
+            $this->removeStreamBinding($binding);
         }
 
         $this->streams[$id] = $binding;
@@ -966,7 +969,7 @@ trait EventLoopTrait
      */
     protected function getStreamId(Stream $stream): string
     {
-        return spl_object_id($stream);
+        return (string)spl_object_id($stream);
     }
 
 
@@ -1319,7 +1322,7 @@ trait EventLoopTrait
     /**
      * Freeze timer binding by id
      */
-    public function freezeTimer($id): EventLoop
+    public function freezeTimer($binding): EventLoop
     {
         if (!$binding instanceof TimerBinding) {
             $orig = $binding;
