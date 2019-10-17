@@ -18,4 +18,4 @@ before_script:
     - yes '' | pecl install event
 
 script:
-  - vendor/bin/phpstan analyse --no-interaction --no-progress
+    - vendor/bin/phpstan analyse --no-interaction --no-progress
