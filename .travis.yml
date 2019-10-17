@@ -3,7 +3,8 @@ php:
     #- '7.2'
     - '7.3'
 install:
-    - sudo pecl install event
     - composer install
+before_script:
+    - sudo pecl install event
 script:
   - vendor/bin/phpstan analyse --no-interaction --no-progress
