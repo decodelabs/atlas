@@ -1,8 +1,11 @@
 # Atlas
 
-Easy filesystem and io functions for PHP
+[![Latest Version](https://img.shields.io/packagist/v/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
+[![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
+[![Build Status](https://img.shields.io/travis/decodelabs/atlas/develop.svg?style=flat-square)](https://travis-ci.org/decodelabs/atlas)
+[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat-square)](https://github.com/phpstan/phpstan)
 
-[![Build Status](https://travis-ci.org/decodelabs/atlas.svg?branch=develop)](https://travis-ci.org/decodelabs/atlas)
+Easy filesystem and io functions for PHP
 
 ## Installation
 
