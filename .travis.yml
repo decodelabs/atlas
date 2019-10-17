@@ -8,10 +8,11 @@ cache:
         - $HOME/.composer/cache/files
 
 before_install:
+    - sudo apt-get update
     - sudo apt-get install libevent-dev
-    
+
 install:
-    - composer install
+    - composer install --prefer-dist
 
 before_script:
     - yes '' | pecl install event

@@ -2,6 +2,8 @@
 
 Easy filesystem and io functions for PHP
 
+[![Build Status](https://travis-ci.org/decodelabs/atlas.svg?branch=develop)](https://travis-ci.org/decodelabs/atlas)
+
 ## Installation
 
 Install via Composer:
