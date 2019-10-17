@@ -4,6 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 [![Build Status](https://img.shields.io/travis/decodelabs/atlas/develop.svg?style=flat-square)](https://travis-ci.org/decodelabs/atlas)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat-square)](https://github.com/phpstan/phpstan)
+[![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 
 Easy filesystem and io functions for PHP
 
