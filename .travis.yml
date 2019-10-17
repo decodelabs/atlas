@@ -5,6 +5,6 @@ php:
 install:
     - composer install
 before_script:
-    - pecl install event
+    - yes '' | pecl install event
 script:
   - vendor/bin/phpstan analyse --no-interaction --no-progress
