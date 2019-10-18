@@ -484,6 +484,15 @@ class Local extends Stream implements File, Inspectable
     }
 
     /**
+     * Seek and read
+     */
+    public function readFrom(int $position, int $length): ?string
+    {
+        $this->setPosition($position);
+        return $this->read($length);
+    }
+
+    /**
      * Ensure all data is written to file
      */
     public function flush(): File

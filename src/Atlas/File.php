@@ -32,6 +32,8 @@ interface File extends Node, Channel
     public function setPosition(int $position): File;
     public function movePosition(int $position, bool $fromEnd=false): File;
     public function getPosition(): int;
+    public function readFrom(int $position, int $length): ?string;
+
     public function flush(): File;
     public function truncate(int $size=0): File;
 }
