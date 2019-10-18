@@ -11,6 +11,11 @@ interface Node
     public function getPath(): string;
     public function getName(): string;
     public function exists(): bool;
+
+    public function isLink(): bool;
+    public function getLinkTarget(): ?Node;
+    public function createLink(string $path): Node;
+
     public function clearStatCache(): Node;
     public function getLastModified(): ?int;
     public function hasChanged(int $timeout=30): bool;

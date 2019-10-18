@@ -33,6 +33,80 @@ trait LocalTrait
         return $this->path;
     }
 
+
+    /**
+     * Normalize dots in a path
+     */
+    protected function normalizePath(string $path): string
+    {
+        $root = ($path[0] === '/') ? '/' : '';
+        $parts = explode('/', trim($path, '/'));
+        $output = [];
+
+        foreach ($parts as $part) {
+            if (($part == '.') || strlen($part) === 0) {
+                continue;
+            }
+
+            if ($part == '..') {
+                array_pop($output);
+            } else {
+                $output[] = $part;
+            }
+        }
+
+        return $root.implode('/', $output);
+    }
+
+
+    /**
+     * Is this a symbolic link?
+     */
+    public function isLink(): bool
+    {
+        return is_link($this->path);
+    }
+
+    /**
+     * Get item pointed to by link
+     */
+    public function getLinkTarget(): ?Node
+    {
+        if (!$this->isLink()) {
+            return null;
+        }
+
+        $path = readlink($this->path);
+
+        if (substr($path, 0, 1) == '.') {
+            $path = dirname($this->path).'/'.$path;
+        }
+
+        return new self($this->normalizePath($path));
+    }
+
+    /**
+     * Create a symlink to this node
+     */
+    public function createLink(string $path): Node
+    {
+        if (!$this->exists()) {
+            throw Glitch::ENotFound('Source node does not exist', null, $this);
+        }
+
+        if (file_exists($path)) {
+            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
+        }
+
+        (new LocalDir(dirname($path)))->ensureExists();
+
+        if (!symlink($this->path, $path)) {
+            throw Glitch::EIo('Unable to copy symlink: '.$path);
+        }
+
+        return new self($path);
+    }
+
     /**
      * Clear stat cache for file / dir
      */
@@ -251,6 +325,25 @@ trait LocalTrait
         }
 
         return new LocalDir($path);
+    }
+
+
+    /**
+     * Copy symlink
+     */
+    protected function copySymlink(string $path): Node
+    {
+        (new LocalDir(dirname($path)))->ensureExists();
+
+        if (!$target = $this->getLinkTarget()) {
+            throw Glitch::EIo('Unable to follow symlink target: '.$this->getPath());
+        }
+
+        if (!symlink($target->getPath(), $path)) {
+            throw Glitch::EIo('Unable to copy symlink: '.$path);
+        }
+
+        return new self($path);
     }
 
 

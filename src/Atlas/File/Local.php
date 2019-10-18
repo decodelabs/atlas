@@ -334,6 +334,14 @@ class Local extends Stream implements File, Inspectable
             return $this;
         }
 
+        if ($this->isLink()) {
+            if (file_exists($path)) {
+                throw Glitch::EAlreadyExists('Destination file already exists', null, $this);
+            }
+
+            return $this->copySymlink($path);
+        }
+
         $target = new self($path, 'w');
         $closeAfter = false;
 
@@ -370,11 +378,11 @@ class Local extends Stream implements File, Inspectable
             throw Glitch::ENotFound('Source file does not exist', null, $this);
         }
 
-        (new LocalDir(dirname($path)))->ensureExists();
-
         if (file_exists($path)) {
-            throw Glitch::EIo('Destination file already exists', null, $path);
+            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
         }
+
+        (new LocalDir(dirname($path)))->ensureExists();
 
         if (!rename($this->path, $path)) {
             throw Glitch::EIo('Unable to rename file', null, $this);
