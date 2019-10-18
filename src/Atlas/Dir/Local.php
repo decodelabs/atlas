@@ -76,6 +76,25 @@ class Local implements Dir, Inspectable
         return $this;
     }
 
+
+    /**
+     * Is this a file?
+     */
+    public function isFile(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Is this a dir?
+     */
+    public function isDir(): bool
+    {
+        return true;
+    }
+
+
+
     /**
      * Does this dir contain anything?
      */

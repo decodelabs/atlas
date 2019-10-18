@@ -12,6 +12,9 @@ interface Node
     public function getName(): string;
     public function exists(): bool;
 
+    public function isFile(): bool;
+    public function isDir(): bool;
+
     public function isLink(): bool;
     public function getLinkTarget(): ?Node;
     public function createLink(string $path): Node;

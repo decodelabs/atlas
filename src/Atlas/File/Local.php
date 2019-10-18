@@ -62,6 +62,25 @@ class Local extends Stream implements File, Inspectable
         return file_exists($this->path) || is_link($this->path);
     }
 
+
+
+    /**
+     * Is this a file?
+     */
+    public function isFile(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Is this a dir?
+     */
+    public function isDir(): bool
+    {
+        return false;
+    }
+
+
     /**
      * Is the resource still accessible?
      */
