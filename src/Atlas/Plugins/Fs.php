@@ -31,6 +31,18 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Get existing node, return file or dir depending on what's on disk
+     */
+    public function getExisting(string $path): ?Node
+    {
+        if (is_dir($path)) {
+            return $this->existingDir($path);
+        } else {
+            return $this->existingFile($path);
+        }
+    }
+
+    /**
      * Check if modified time is within $seconds
      */
     public function hasChanged(string $path, int $seconds=30): bool
@@ -134,6 +146,24 @@ class Fs implements FacadePlugin
     public function file(string $path, string $mode=null): File
     {
         return new LocalFile($path, $mode);
+    }
+
+    /**
+     * Load existing file from $path, open if $mode is set
+     */
+    public function existingFile(string $path, string $mode=null): ?File
+    {
+        $file = new LocalFile($path);
+
+        if (!$file->exists()) {
+            return null;
+        }
+
+        if ($mode !== null) {
+            $file->open($mode);
+        }
+
+        return $file;
     }
 
     /**
@@ -256,6 +286,20 @@ class Fs implements FacadePlugin
     public function dir(string $path): Dir
     {
         return new LocalDir($path);
+    }
+
+    /**
+     * Load existing dir from path
+     */
+    public function existingDir(string $path): ?Dir
+    {
+        $dir = new LocalDir($path);
+
+        if (!$dir->exists()) {
+            return null;
+        }
+
+        return $dir;
     }
 
     /**

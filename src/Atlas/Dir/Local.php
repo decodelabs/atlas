@@ -272,7 +272,7 @@ class Local implements Dir, Inspectable
     /**
      * Get a child dir if it exists
      */
-    public function getDirIfExists(string $name): ?Dir
+    public function getExistingDir(string $name): ?Dir
     {
         $output = new self($this->path.'/'.ltrim($name, '/'));
 
@@ -288,7 +288,7 @@ class Local implements Dir, Inspectable
      */
     public function deleteDir(string $name): Dir
     {
-        if ($dir = $this->getDirIfExists($name)) {
+        if ($dir = $this->getExistingDir($name)) {
             $dir->delete();
         }
 
@@ -331,7 +331,7 @@ class Local implements Dir, Inspectable
     /**
      * Get a child file if it exists
      */
-    public function getFileIfExists(string $name): ?File
+    public function getExistingFile(string $name): ?File
     {
         $output = $this->wrapFile($this->path.'/'.ltrim($name, '/'));
 
@@ -347,7 +347,7 @@ class Local implements Dir, Inspectable
      */
     public function deleteFile(string $name): Dir
     {
-        if ($file = $this->getFileIfExists($name)) {
+        if ($file = $this->getExistingFile($name)) {
             $file->delete();
         }
 

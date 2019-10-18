@@ -61,14 +61,14 @@ interface Dir extends Node
     public function createDir(string $name, int $permissions=null): Dir;
     public function hasDir(string $name): bool;
     public function getDir(string $name): Dir;
-    public function getDirIfExists(string $name): ?Dir;
+    public function getExistingDir(string $name): ?Dir;
     public function deleteDir(string $name): Dir;
 
     public function createFile(string $name, string $content): File;
     public function openFile(string $name, string $mode): File;
     public function hasFile(string $name): bool;
     public function getFile(string $name): File;
-    public function getFileIfExists(string $name): ?File;
+    public function getExistingFile(string $name): ?File;
     public function deleteFile(string $name): Dir;
 
     public function emptyOut(): Dir;
