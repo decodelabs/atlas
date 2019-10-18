@@ -22,6 +22,8 @@ interface Dir extends Node
     public function list(callable $filter=null): array;
     public function scanNames(callable $filter=null): Generator;
     public function listNames(callable $filter=null): array;
+    public function scanPaths(callable $filter=null): Generator;
+    public function listPaths(callable $filter=null): array;
     public function countContents(callable $filter=null): int;
 
     public function scanFiles(callable $filter=null): Generator;

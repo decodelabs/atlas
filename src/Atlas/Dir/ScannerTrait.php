@@ -403,7 +403,7 @@ trait ScannerTrait
      */
     public function listDirPathsRecursive(callable $filter=null): array
     {
-        return iterator_to_array($this->scanDirPathRecursive($filter));
+        return iterator_to_array($this->scanDirPathsRecursive($filter));
     }
 
 
