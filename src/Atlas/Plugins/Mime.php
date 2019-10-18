@@ -15,7 +15,12 @@ class Mime implements FacadePlugin
      */
     public function detect(string $path, string $default='application/octet-stream'): string
     {
-        $extension = pathinfo($path, \PATHINFO_EXTENSION);
+        if (preg_match('#[^a-zA-Z0-9]#', $path)) {
+            $extension = pathinfo($path, \PATHINFO_EXTENSION);
+        } else {
+            $extension = $path;
+        }
+
 
         if (empty($extension) || !isset(self::TYPES[$extension])) {
             return $default;
