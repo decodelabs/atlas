@@ -30,7 +30,7 @@ class Fs implements FacadePlugin
     /**
      * Create a new temp file
      */
-    public function createTempFile(string $data): File
+    public function createTempFile(?string $data): File
     {
         $file = $this->newTempFile();
         $file->write($data);
@@ -48,7 +48,7 @@ class Fs implements FacadePlugin
     /**
      * Create a new memory file with data
      */
-    public function createMemoryFile(string $data): MemoryFile
+    public function createMemoryFile(?string $data): MemoryFile
     {
         $file = $this->newMemoryFile();
         $file->write($data);
