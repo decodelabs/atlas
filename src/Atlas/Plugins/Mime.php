@@ -16,6 +16,7 @@ class Mime implements FacadePlugin
     public function detect(string $path, string $default='application/octet-stream'): string
     {
         $extension = pathinfo($path, \PATHINFO_EXTENSION);
+        dd($extension);
 
         if (empty($extension) || !isset(self::TYPES[$extension])) {
             return $default;
@@ -85,10 +86,18 @@ class Mime implements FacadePlugin
             }
         }
 
+        foreach (self::EXTRA_TYPES as $key => $value) {
+            $output[$key] = '    \''.$key.'\' => \''.$value.'\'';
+        }
+
         return '['."\n".implode(",\n", $output)."\n".']';
     }
 
     const MIME_LIST = 'http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types';
+
+    const EXTRA_TYPES = [
+        'php' => 'application/x-php'
+    ];
 
 
     const TYPES = [
@@ -893,7 +902,7 @@ class Mime implements FacadePlugin
         'uvvg' => 'image/vnd.dece.graphic',
         'djvu' => 'image/vnd.djvu',
         'djv' => 'image/vnd.djvu',
-        //'sub' => 'image/vnd.dvb.subtitle',
+        'sub' => 'image/vnd.dvb.subtitle',
         'dwg' => 'image/vnd.dwg',
         'dxf' => 'image/vnd.dxf',
         'fbs' => 'image/vnd.fastbidsheet',
@@ -985,7 +994,6 @@ class Mime implements FacadePlugin
         'dcurl' => 'text/vnd.curl.dcurl',
         'mcurl' => 'text/vnd.curl.mcurl',
         'scurl' => 'text/vnd.curl.scurl',
-        'sub' => 'text/vnd.dvb.subtitle',
         'fly' => 'text/vnd.fly',
         'flx' => 'text/vnd.fmi.flexstor',
         'gv' => 'text/vnd.graphviz',
@@ -1075,6 +1083,7 @@ class Mime implements FacadePlugin
         'avi' => 'video/x-msvideo',
         'movie' => 'video/x-sgi-movie',
         'smv' => 'video/x-smv',
-        'ice' => 'x-conference/x-cooltalk'
+        'ice' => 'x-conference/x-cooltalk',
+        'php' => 'application/x-php'
     ];
 }
