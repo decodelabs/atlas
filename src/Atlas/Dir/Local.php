@@ -455,7 +455,7 @@ class Local implements Dir, Inspectable
                 }
             } else {
                 // File
-                $item->copyTo($destination->getPath().'/'.$subPath)
+                $item->copy($destination->getPath().'/'.$subPath)
                     ->setPermissions($item->getPermissions());
             }
         }
