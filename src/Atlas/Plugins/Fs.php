@@ -339,7 +339,7 @@ class Fs implements FacadePlugin
      */
     public function hasDirChangedIn(string $path, string $timeout): bool
     {
-        return $this->file($path)->hasChangedIn($timeout);
+        return $this->dir($path)->hasChangedIn($timeout);
     }
 
     /**
