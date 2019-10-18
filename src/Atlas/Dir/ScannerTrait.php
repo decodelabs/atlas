@@ -37,7 +37,7 @@ trait ScannerTrait
      */
     public function scanNames(callable $filter=null): Generator
     {
-        return $this->scanRaw(true, true, $filter, false);
+        return $this->scanRaw(true, true, $filter, null);
     }
 
     /**
@@ -46,6 +46,22 @@ trait ScannerTrait
     public function listNames(callable $filter=null): array
     {
         return iterator_to_array($this->scanNames($filter));
+    }
+
+    /**
+     * Scan all children as paths
+     */
+    public function scanPaths(callable $filter=null): Generator
+    {
+        return $this->scanRaw(true, true, $filter, false);
+    }
+
+    /**
+     * List all children as paths
+     */
+    public function listPaths(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanPaths($filter));
     }
 
     /**
@@ -78,7 +94,7 @@ trait ScannerTrait
      */
     public function scanFileNames(callable $filter=null): Generator
     {
-        return $this->scanRaw(true, false, $filter, false);
+        return $this->scanRaw(true, false, $filter, null);
     }
 
     /**
@@ -88,6 +104,24 @@ trait ScannerTrait
     {
         return iterator_to_array($this->scanFileNames($filter));
     }
+
+    /**
+     * Scan all files as paths
+     */
+    public function scanFilePaths(callable $filter=null): Generator
+    {
+        return $this->scanRaw(true, false, $filter, false);
+    }
+
+    /**
+     * List all files as paths
+     */
+    public function listFilePaths(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanFilePaths($filter));
+    }
+
+
 
     /**
      * Count all files
@@ -119,7 +153,7 @@ trait ScannerTrait
      */
     public function scanDirNames(callable $filter=null): Generator
     {
-        return $this->scanRaw(false, true, $filter, false);
+        return $this->scanRaw(false, true, $filter, null);
     }
 
     /**
@@ -128,6 +162,22 @@ trait ScannerTrait
     public function listDirNames(callable $filter=null): array
     {
         return iterator_to_array($this->scanDirNames($filter));
+    }
+
+    /**
+     * Scan all dirs as paths
+     */
+    public function scanDirPaths(callable $filter=null): Generator
+    {
+        return $this->scanRaw(false, true, $filter, false);
+    }
+
+    /**
+     * List all dirs as paths
+     */
+    public function listDirPaths(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanDirPaths($filter));
     }
 
     /**
@@ -215,7 +265,7 @@ trait ScannerTrait
      */
     public function scanNamesRecursive(callable $filter=null): Generator
     {
-        return $this->scanRawRecursive(true, true, $filter, false);
+        return $this->scanRawRecursive(true, true, $filter, null);
     }
 
     /**
@@ -224,6 +274,22 @@ trait ScannerTrait
     public function listNamesRecursive(callable $filter=null): array
     {
         return iterator_to_array($this->scanNamesRecursive($filter));
+    }
+
+    /**
+     * Scan all children recursively as paths
+     */
+    public function scanPathsRecursive(callable $filter=null): Generator
+    {
+        return $this->scanRawRecursive(true, true, $filter, false);
+    }
+
+    /**
+     * List all children recursively as paths
+     */
+    public function listPathsRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanPathsRecursive($filter));
     }
 
     /**
@@ -256,7 +322,7 @@ trait ScannerTrait
      */
     public function scanFileNamesRecursive(callable $filter=null): Generator
     {
-        return $this->scanRawRecursive(true, false, $filter, false);
+        return $this->scanRawRecursive(true, false, $filter, null);
     }
 
     /**
@@ -265,6 +331,22 @@ trait ScannerTrait
     public function listFileNamesRecursive(callable $filter=null): array
     {
         return iterator_to_array($this->scanFileNamesRecursive($filter));
+    }
+
+    /**
+     * Scan all files recursively as paths
+     */
+    public function scanFilePathsRecursive(callable $filter=null): Generator
+    {
+        return $this->scanRawRecursive(true, false, $filter, false);
+    }
+
+    /**
+     * List all files recursively as paths
+     */
+    public function listFilePathsRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanFilePathsRecursive($filter));
     }
 
     /**
@@ -297,7 +379,7 @@ trait ScannerTrait
      */
     public function scanDirNamesRecursive(callable $filter=null): Generator
     {
-        return $this->scanRawRecursive(false, true, $filter, false);
+        return $this->scanRawRecursive(false, true, $filter, null);
     }
 
     /**
@@ -307,6 +389,23 @@ trait ScannerTrait
     {
         return iterator_to_array($this->scanDirNamesRecursive($filter));
     }
+
+    /**
+     * Scan all dirs recursively as paths
+     */
+    public function scanDirPathsRecursive(callable $filter=null): Generator
+    {
+        return $this->scanRawRecursive(false, true, $filter, false);
+    }
+
+    /**
+     * List all dirs recursively as paths
+     */
+    public function listDirPathsRecursive(callable $filter=null): array
+    {
+        return iterator_to_array($this->scanDirPathRecursive($filter));
+    }
+
 
     /**
      * Count all dirs recursively

@@ -414,6 +414,22 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Scan all children as paths
+     */
+    public function scanPaths(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanPaths($filter);
+    }
+
+    /**
+     * List all children as paths
+     */
+    public function listPaths(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listPaths($filter);
+    }
+
+    /**
      * Count all children
      */
     public function countContents(string $path, callable $filter=null): int
@@ -452,6 +468,22 @@ class Fs implements FacadePlugin
     public function listFileNames(string $path, callable $filter=null): array
     {
         return $this->dir($path)->listFileNames($filter);
+    }
+
+    /**
+     * Scan all files as paths
+     */
+    public function scanFilePaths(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanFilePaths($filter);
+    }
+
+    /**
+     * List all files as paths
+     */
+    public function listFilePaths(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFilePaths($filter);
     }
 
     /**
@@ -496,6 +528,22 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Scan all dirs as paths
+     */
+    public function scanDirPaths(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanDirPaths($filter);
+    }
+
+    /**
+     * List all dirs as paths
+     */
+    public function listDirPaths(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirPaths($filter);
+    }
+
+    /**
      * Count all dirs
      */
     public function countDirs(string $path, callable $filter=null): int
@@ -534,6 +582,22 @@ class Fs implements FacadePlugin
     public function listNamesRecursive(string $path, callable $filter=null): array
     {
         return $this->dir($path)->listNamesRecursive($filter);
+    }
+
+    /**
+     * Scan all children recursively as paths
+     */
+    public function scanPathsRecursive(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanPathsRecursive($filter);
+    }
+
+    /**
+     * List all children recursively as paths
+     */
+    public function listPathsRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listPathsRecursive($filter);
     }
 
     /**
@@ -578,6 +642,22 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Scan all files recursively as paths
+     */
+    public function scanFilePathsRecursive(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanFilePathsRecursive($filter);
+    }
+
+    /**
+     * List all files recursively as paths
+     */
+    public function listFilePathsRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFilePathsRecursive($filter);
+    }
+
+    /**
      * Count all files recursively
      */
     public function countFilesRecursive(string $path, callable $filter=null): int
@@ -616,6 +696,22 @@ class Fs implements FacadePlugin
     public function listDirNamesRecursive(string $path, callable $filter=null): array
     {
         return $this->dir($path)->listDirNamesRecursive($filter);
+    }
+
+    /**
+     * Scan all dirs recursively as paths
+     */
+    public function scanDirPathsRecursive(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanDirPathsRecursive($filter);
+    }
+
+    /**
+     * List all dirs recursively as paths
+     */
+    public function listDirPathsRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirPathsRecursive($filter);
     }
 
     /**
