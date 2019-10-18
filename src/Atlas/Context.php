@@ -32,7 +32,7 @@ class Context implements FacadeTarget
     const FACADE = 'Atlas';
 
     const PLUGINS = [
-        'fs'
+        'fs', 'mime'
     ];
 
 
