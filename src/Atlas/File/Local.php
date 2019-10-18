@@ -32,13 +32,19 @@ class Local extends Stream implements File, Inspectable
     /**
      * Init with file path, if mode is set, open file
      */
-    public function __construct(string $path, string $mode=null)
+    public function __construct($path, string $mode=null)
     {
-        parent::__construct($path, null);
-        $this->path = $path;
+        if (is_resource($path)) {
+            parent::__construct($path, null);
+            $this->path = stream_get_meta_data($this->resource)['uri'];
+        } else {
+            $path = (string)$path;
+            parent::__construct($path, null);
+            $this->path = $path;
 
-        if ($mode !== null) {
-            $this->open($mode);
+            if ($mode !== null) {
+                $this->open($mode);
+            }
         }
     }
 
@@ -113,6 +119,10 @@ class Local extends Stream implements File, Inspectable
     {
         if (!$this->exists()) {
             return null;
+        }
+
+        if ($this->resource) {
+            dd(stream_get_meta_data($this->resource));
         }
 
         if (false === ($output = filesize($this->path))) {

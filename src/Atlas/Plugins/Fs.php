@@ -11,6 +11,7 @@ use DecodeLabs\Veneer\FacadePlugin;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\Local as LocalFile;
+use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 
@@ -18,6 +19,23 @@ use Generator;
 
 class Fs implements FacadePlugin
 {
+    /**
+     * Create a new temp file
+     */
+    public function newTempFile(): File
+    {
+        return new LocalFile(tmpfile());
+    }
+
+    /**
+     * Create a new memory file
+     */
+    public function newMemoryFile(): File
+    {
+        return new MemoryFile();
+    }
+
+
     /**
      * Get node, return file or dir depending on what's on disk
      */

@@ -25,15 +25,21 @@ class Stream implements Channel
      */
     public function __construct($path, ?string $mode='a+')
     {
-        if ($mode === null) {
+        if (empty($path)) {
             return;
         }
 
-        if (is_resource($path)) {
+        $isResource = is_resource($path);
+
+        if ($mode === null && !$isResource) {
+            return;
+        }
+
+        if ($isResource) {
             $this->resource = $path;
             $this->mode = stream_get_meta_data($this->resource)['mode'];
         } else {
-            if (!$this->resource = fopen($path, $mode)) {
+            if (!$this->resource = fopen($path, (string)$mode)) {
                 throw Glitch::EIo('Unable to open stream');
             }
 
