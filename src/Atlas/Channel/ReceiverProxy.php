@@ -77,6 +77,14 @@ class ReceiverProxy implements Channel
     }
 
     /**
+     * Read single char from resource
+     */
+    public function readChar(): ?string
+    {
+        return null;
+    }
+
+    /**
      * Read single line from resource
      */
     public function readLine(): ?string

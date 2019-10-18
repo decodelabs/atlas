@@ -86,6 +86,22 @@ class Buffer implements Channel
     }
 
     /**
+     * Read single char from resource
+     */
+    public function readChar(): ?string
+    {
+        $this->checkReadable();
+
+        if (!strlen($this->buffer)) {
+            return null;
+        }
+
+        $output = substr($this->buffer, 0, 1);
+        $this->buffer = substr($this->buffer, 1);
+        return $output;
+    }
+
+    /**
      * Read single line from resource
      */
     public function readLine(): ?string

@@ -18,6 +18,7 @@ interface Channel
     public function isReadable(): bool;
     public function read(int $length): ?string;
     public function readAll(): ?string;
+    public function readChar(): ?string;
     public function readLine(): ?string;
     public function readTo(Channel $writer): Channel;
 

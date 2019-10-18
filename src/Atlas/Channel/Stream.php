@@ -124,6 +124,26 @@ class Stream implements Channel
     }
 
     /**
+     * Read single cgar from resource
+     */
+    public function readChar(): ?string
+    {
+        $this->checkReadable();
+
+        try {
+            $output = fgetc($this->resource);
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        if ($output === '' || $output === false) {
+            $output = null;
+        }
+
+        return $output;
+    }
+
+    /**
      * Read single line from resource
      */
     public function readLine(): ?string

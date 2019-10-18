@@ -312,6 +312,24 @@ class Broker implements Channel
     }
 
     /**
+     * Read char from first readable input channel
+     */
+    public function readChar(): ?string
+    {
+        foreach ($this->input as $channel) {
+            if (!$channel->isReadable()) {
+                continue;
+            }
+
+            if (null !== ($char = $channel->readChar())) {
+                return $char;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Read line from first readable input channel
      */
     public function readLine(): ?string
