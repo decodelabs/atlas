@@ -21,6 +21,7 @@ class Mime implements FacadePlugin
             $extension = $path;
         }
 
+        $extension = strtolower($extension);
 
         if (empty($extension) || !isset(self::TYPES[$extension])) {
             return $default;
