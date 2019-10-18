@@ -130,10 +130,6 @@ class Local extends Stream implements File, Inspectable
             return null;
         }
 
-        if ($this->resource) {
-            dd(stream_get_meta_data($this->resource));
-        }
-
         if (false === ($output = filesize($this->path))) {
             return null;
         }
