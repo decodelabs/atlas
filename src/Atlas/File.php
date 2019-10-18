@@ -13,6 +13,7 @@ use DecodeLabs\Atlas\Node;
 interface File extends Node, Channel
 {
     public function getSize(): ?int;
+    public function isOnDisk(): bool;
     public function getHash(string $type): ?string;
     public function getRawHash(string $type): ?string;
 

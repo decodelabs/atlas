@@ -88,6 +88,15 @@ class Local extends Stream implements File, Inspectable
 
 
     /**
+     * Can this file be read from disk
+     */
+    public function isOnDisk(): bool
+    {
+        return $this->exists();
+    }
+
+
+    /**
      * Is the resource still accessible?
      */
     public function isReadable(): bool

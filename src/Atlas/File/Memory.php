@@ -52,6 +52,14 @@ class Memory extends Local
     }
 
     /**
+     * Can this file be read from disk
+     */
+    public function isOnDisk(): bool
+    {
+        return false;
+    }
+
+    /**
      * Get size of file in bytes
      */
     public function getSize(): ?int
