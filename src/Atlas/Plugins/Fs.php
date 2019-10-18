@@ -20,7 +20,7 @@ use Generator;
 class Fs implements FacadePlugin
 {
     /**
-     * Create a new temp file
+     * Create a new empty temp file
      */
     public function newTempFile(): File
     {
@@ -28,11 +28,31 @@ class Fs implements FacadePlugin
     }
 
     /**
-     * Create a new memory file
+     * Create a new temp file
      */
-    public function newMemoryFile(): File
+    public function createTempFile(string $data): File
+    {
+        $file = $this->newTempFile();
+        $file->write($data);
+        return $file;
+    }
+
+    /**
+     * Create a new empty memory file
+     */
+    public function newMemoryFile(): MemoryFile
     {
         return new MemoryFile();
+    }
+
+    /**
+     * Create a new memory file with data
+     */
+    public function createMemoryFile(string $data): MemoryFile
+    {
+        $file = $this->newMemoryFile();
+        $file->write($data);
+        return $file;
     }
 
 
