@@ -311,6 +311,14 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Create system level temp dir
+     */
+    public function createTempDir(): Dir
+    {
+        return $this->createDir(sys_get_temp_dir().'decodelabs/temp/'.uniqid('x', true));
+    }
+
+    /**
      * Check last modified of dir within $seconds
      */
     public function hasDirChanged(string $path, int $seconds=30): bool
