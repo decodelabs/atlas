@@ -95,7 +95,9 @@ class Mime implements FacadePlugin
     const MIME_LIST = 'http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types';
 
     const EXTRA_TYPES = [
-        'php' => 'application/x-php'
+        'php' => 'application/x-php',
+        'sass' => 'text/x-sass',
+        'scss' => 'text/x-scss'
     ];
 
 
@@ -1083,6 +1085,8 @@ class Mime implements FacadePlugin
         'movie' => 'video/x-sgi-movie',
         'smv' => 'video/x-smv',
         'ice' => 'x-conference/x-cooltalk',
-        'php' => 'application/x-php'
+        'php' => 'application/x-php',
+        'sass' => 'text/x-sass',
+        'scss' => 'text/x-scss'
     ];
 }
