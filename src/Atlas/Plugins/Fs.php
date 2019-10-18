@@ -40,17 +40,17 @@ class Fs implements FacadePlugin
     /**
      * Create a new empty memory file
      */
-    public function newMemoryFile(): MemoryFile
+    public function newMemoryFile(string $key='temp'): MemoryFile
     {
-        return new MemoryFile();
+        return new MemoryFile($key);
     }
 
     /**
      * Create a new memory file with data
      */
-    public function createMemoryFile(?string $data): MemoryFile
+    public function createMemoryFile(?string $data, string $key='temp'): MemoryFile
     {
-        $file = $this->newMemoryFile();
+        $file = $this->newMemoryFile($key);
         $file->write($data);
         return $file;
     }

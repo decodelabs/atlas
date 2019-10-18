@@ -30,9 +30,9 @@ class Memory extends Local
     /**
      * Init with file path, if mode is set, open file
      */
-    public function __construct()
+    public function __construct(string $key='temp')
     {
-        parent::__construct(fopen('php://temp', 'w+b'));
+        parent::__construct(fopen('php://'.$key, 'w+b'));
     }
 
     /**
