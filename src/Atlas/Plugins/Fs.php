@@ -191,6 +191,14 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Check file last modified within $time
+     */
+    public function hasFileChangedIn(string $path, string $timeout): bool
+    {
+        return $this->file($path)->hasChangedIn($timeout);
+    }
+
+    /**
      * Set permissions of file
      */
     public function setFilePermissions(string $path, int $permissions): File
@@ -324,6 +332,14 @@ class Fs implements FacadePlugin
     public function hasDirChanged(string $path, int $seconds=30): bool
     {
         return $this->dir($path)->hasChanged($seconds);
+    }
+
+    /**
+     * Check dir last modified within $time
+     */
+    public function hasDirChangedIn(string $path, string $timeout): bool
+    {
+        return $this->file($path)->hasChangedIn($timeout);
     }
 
     /**
