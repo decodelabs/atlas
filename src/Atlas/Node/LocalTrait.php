@@ -144,6 +144,26 @@ trait LocalTrait
         return time() - $this->getLastModified() < $seconds;
     }
 
+    /**
+     * Compare with interval string
+     */
+    public function hasChangedIn(string $timeout): bool
+    {
+        if (preg_match('/^[0-9]+$/', $timeout)) {
+            return $this->hasChanged((int)$timeout);
+        }
+
+        $date = new \DateTime('now');
+        $interval = \DateInterval::createFromDateString($timeout);
+        $ts = $date->sub($interval)->getTimestamp();
+
+        if (!$mod = $this->getLastModified()) {
+            return false;
+        }
+
+        return $mod > $ts;
+    }
+
 
 
     /**

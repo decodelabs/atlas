@@ -22,6 +22,7 @@ interface Node
     public function clearStatCache(): Node;
     public function getLastModified(): ?int;
     public function hasChanged(int $timeout=30): bool;
+    public function hasChangedIn(string $timeout): bool;
 
     public function setPermissions(int $mode): Node;
     public function getPermissions(): ?int;
