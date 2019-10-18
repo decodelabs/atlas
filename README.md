@@ -162,5 +162,28 @@ Timer 1
 */
 ```
 
+### Mime types
+
+Detect a mime type for a file path:
+
+```php
+echo Atlas::$mime->detect(__FILE__);
+// application/x-php
+```
+
+Get known extensions for a type:
+
+```php
+$exts = Atlas::$mime->getExtensions('text/plain');
+// txt, text, conf, def, list, log, in
+```
+
+Suggest an extension for a mime type:
+
+```php
+echo Atlas::$mime->suggestExtension('text/plain');
+//txt
+```
+
 ## Licensing
 Atlas is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.
