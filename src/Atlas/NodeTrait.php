@@ -9,6 +9,15 @@ namespace DecodeLabs\Atlas;
 trait NodeTrait
 {
     /**
+     * Get path as string
+     */
+    public function __toString(): string
+    {
+        return $this->getPath();
+    }
+
+
+    /**
      * Get basename of item
      */
     public function getName(): string

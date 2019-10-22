@@ -9,6 +9,7 @@ namespace DecodeLabs\Atlas;
 interface Node
 {
     public function getPath(): string;
+    public function __toString(): string;
     public function getName(): string;
     public function exists(): bool;
 

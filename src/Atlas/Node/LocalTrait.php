@@ -284,12 +284,4 @@ trait LocalTrait
 
         return $newName;
     }
-
-    /**
-     * Get path as string
-     */
-    public function __toString(): string
-    {
-        return $this->getPath();
-    }
 }
