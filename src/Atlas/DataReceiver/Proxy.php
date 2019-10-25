@@ -4,7 +4,7 @@
  * @license http://opensource.org/licenses/MIT
  */
 declare(strict_types=1);
-namespace DecodeLabs\Atlas\Channel;
+namespace DecodeLabs\Atlas\DataReceiver;
 
 use DecodeLabs\Atlas\DataReceiver;
 use DecodeLabs\Atlas\DataReceiverTrait;
@@ -30,7 +30,7 @@ class Proxy implements DataReceiver
     /**
      * Set as writable
      */
-    public function setWritable(bool $flag): Channel
+    public function setWritable(bool $flag): DataReceiver
     {
         $this->writable = $flag;
         return $this;
