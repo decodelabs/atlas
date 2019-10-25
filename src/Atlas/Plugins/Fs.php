@@ -59,8 +59,12 @@ class Fs implements FacadePlugin
     /**
      * Get node, return file or dir depending on what's on disk
      */
-    public function get(string $path): Node
+    public function get($path): Node
     {
+        if ($node = $this->normalizeInput($path, Node::class)) {
+            return $node;
+        }
+
         if (is_dir($path)) {
             return $this->dir($path);
         } else {
@@ -181,16 +185,24 @@ class Fs implements FacadePlugin
     /**
      * Load file from $path, open if $mode is set
      */
-    public function file(string $path, string $mode=null): File
+    public function file($path, string $mode=null): File
     {
+        if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
+            return $node;
+        }
+
         return new LocalFile($path, $mode);
     }
 
     /**
      * Load existing file from $path, open if $mode is set
      */
-    public function existingFile(string $path, string $mode=null): ?File
+    public function existingFile($path, string $mode=null): ?File
     {
+        if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
+            return $node->exists() ? $node : null;
+        }
+
         $file = new LocalFile($path);
 
         if (!$file->exists()) {
@@ -329,16 +341,24 @@ class Fs implements FacadePlugin
     /**
      * Load dir from path
      */
-    public function dir(string $path): Dir
+    public function dir($path): Dir
     {
+        if (($node = $this->normalizeInput($path, Dir::class)) instanceof Dir) {
+            return $node;
+        }
+
         return new LocalDir($path);
     }
 
     /**
      * Load existing dir from path
      */
-    public function existingDir(string $path): ?Dir
+    public function existingDir($path): ?Dir
     {
+        if (($node = $this->normalizeInput($path, Dir::class)) instanceof Dir) {
+            return $node->exists() ? $node : null;
+        }
+
         $dir = new LocalDir($path);
 
         if (!$dir->exists()) {
@@ -861,5 +881,34 @@ class Fs implements FacadePlugin
     public function merge(string $path, string $destination): Dir
     {
         return $this->dir($path)->mergeInto($destination);
+    }
+
+
+
+    /**
+     * Normalize node input
+     */
+    protected function normalizeInput(&$path, string $type): ?Node
+    {
+        if (
+            $path instanceof Node &&
+            $path instanceof $type
+        ) {
+            return $path;
+        }
+
+        if ($path instanceof Node) {
+            throw Glitch::EInvalidArgument('Item is not a '.$type);
+        }
+
+        if (is_object($path) && method_exists($path, '__toString')) {
+            $path = (string)$path;
+        }
+
+        if (!is_string($path)) {
+            throw Glitch::EInvalidArgument('Invalid filesystem node input', null, $path);
+        }
+
+        return null;
     }
 }
