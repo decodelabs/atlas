@@ -188,6 +188,10 @@ class Fs implements FacadePlugin
     public function file($path, string $mode=null): File
     {
         if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
+            if ($mode !== null) {
+                $node->open($mode);
+            }
+
             return $node;
         }
 
@@ -200,7 +204,15 @@ class Fs implements FacadePlugin
     public function existingFile($path, string $mode=null): ?File
     {
         if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
-            return $node->exists() ? $node : null;
+            if (!$node->exists()) {
+                return null;
+            }
+
+            if ($mode !== null) {
+                $node->open($mode);
+            }
+
+            return $node;
         }
 
         $file = new LocalFile($path);
