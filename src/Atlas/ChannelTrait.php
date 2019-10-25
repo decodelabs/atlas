@@ -6,12 +6,17 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
+use DecodeLabs\Atlas\DataProviderTrait;
+use DecodeLabs\Atlas\DataReceiverTrait;
 use DecodeLabs\Atlas\Channel\Buffer;
 
 use DecodeLabs\Glitch;
 
 trait ChannelTrait
 {
+    use DataProviderTrait;
+    use DataReceiverTrait;
+
     /**
      * Set read blocking mode
      */
@@ -41,47 +46,6 @@ trait ChannelTrait
 
 
     /**
-     * Read all available data from resource
-     */
-    public function readAll(): ?string
-    {
-        $this->checkReadable();
-        $data = null;
-
-        while (!$this->isAtEnd()) {
-            $chunk = $this->read(8192);
-
-            if ($chunk === null) {
-                break;
-            }
-
-            $data .= $chunk;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Transfer available data to a write instance
-     */
-    public function readTo(Channel $writer): Channel
-    {
-        $this->checkReadable();
-
-        while (!$this->isAtEnd()) {
-            $chunk = $this->read(8192);
-
-            if ($chunk === null) {
-                break;
-            }
-
-            $writer->write($chunk);
-        }
-
-        return $this;
-    }
-
-    /**
      * Check the resource is readable and throw exception if not
      */
     protected function checkReadable(): void
@@ -101,22 +65,6 @@ trait ChannelTrait
     public function isWritable(): bool
     {
         return true;
-    }
-
-    /**
-     * Write a single line of data
-     */
-    public function writeLine(?string $data=''): int
-    {
-        return $this->write($data.PHP_EOL);
-    }
-
-    /**
-     * Pluck and write $length bytes from buffer
-     */
-    public function writeBuffer(Buffer $buffer, int $length): int
-    {
-        return $this->write($buffer->read($length), $length);
     }
 
     /**
