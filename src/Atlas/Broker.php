@@ -8,12 +8,13 @@ namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\DataProvider;
 use DecodeLabs\Atlas\DataReceiver;
+use DecodeLabs\Atlas\ErrorDataReceiver;
 use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Buffer;
 
 use DecodeLabs\Glitch;
 
-class Broker implements DataProvider, DataReceiver
+class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 {
     protected $input = [];
     protected $output = [];
