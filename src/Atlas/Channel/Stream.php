@@ -6,14 +6,17 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas\Channel;
 
+use DecodeLabs\Atlas\DataProvider;
+use DecodeLabs\Atlas\DataProviderTrait;
+use DecodeLabs\Atlas\DataReceiverTrait;
 use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\ChannelTrait;
 
 use DecodeLabs\Glitch;
 
 class Stream implements Channel
 {
-    use ChannelTrait;
+    use DataProviderTrait;
+    use DataReceiverTrait;
 
     protected $resource;
     protected $mode = null;
@@ -67,7 +70,7 @@ class Stream implements Channel
     /**
      * Set read blocking mode
      */
-    public function setBlocking(bool $flag): Channel
+    public function setReadBlocking(bool $flag): DataProvider
     {
         if (!$this->resource) {
             throw Glitch::ELogic('Cannot set blocking, resource not open');
@@ -80,7 +83,7 @@ class Stream implements Channel
     /**
      * Is this channel in blocking mode?
      */
-    public function isBlocking(): bool
+    public function isReadBlocking(): bool
     {
         if (!$this->resource) {
             return false;

@@ -6,12 +6,15 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas\Channel;
 
+use DecodeLabs\Atlas\DataProvider;
+use DecodeLabs\Atlas\DataProviderTrait;
+use DecodeLabs\Atlas\DataReceiverTrait;
 use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\ChannelTrait;
 
 class ReceiverProxy implements Channel
 {
-    use ChannelTrait;
+    use DataProviderTrait;
+    use DataReceiverTrait;
 
     protected $receiver;
     protected $writer;
@@ -39,7 +42,7 @@ class ReceiverProxy implements Channel
     /**
      * Set read blocking mode
      */
-    public function setBlocking(bool $flag): Channel
+    public function setReadBlocking(bool $flag): DataProvider
     {
         return $this;
     }
@@ -47,7 +50,7 @@ class ReceiverProxy implements Channel
     /**
      * Is this channel in blocking mode?
      */
-    public function isBlocking(): bool
+    public function isReadBlocking(): bool
     {
         return false;
     }

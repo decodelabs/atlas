@@ -11,6 +11,25 @@ use DecodeLabs\Atlas\Channel\Buffer;
 trait DataReceiverTrait
 {
     /**
+     * Is the resource still writable?
+     */
+    public function isWritable(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Check the resource is readable and throw exception if not
+     */
+    protected function checkWritable(): void
+    {
+        if (!$this->isWritable()) {
+            throw Glitch::ERuntime('Writing has been shut down');
+        }
+    }
+
+
+    /**
      * Write a single line of data
      */
     public function writeLine(?string $data=''): int

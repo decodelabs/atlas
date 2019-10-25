@@ -6,10 +6,53 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
+use DecodeLabs\Atlas\DataProvider;
+use DecodeLabs\Atlas\DataReceiver;
 use DecodeLabs\Atlas\Channel;
 
 trait DataProviderTrait
 {
+    /**
+     * Set read blocking mode
+     */
+    public function setReadBlocking(bool $flag): DataProvider
+    {
+        if ($flag) {
+            throw Glitch::ERuntime('DataProvider does not support blocking mode');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Is this channel in blocking mode?
+     */
+    public function isReadBlocking(): bool
+    {
+        return true;
+    }
+
+
+    /**
+     * Is the resource still accessible?
+     */
+    public function isReadable(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Check the resource is readable and throw exception if not
+     */
+    protected function checkReadable(): void
+    {
+        if (!$this->isReadable()) {
+            throw Glitch::ERuntime('Reading has been shut down');
+        }
+    }
+
+
+
     /**
      * Read all available data from resource
      */
@@ -34,7 +77,7 @@ trait DataProviderTrait
     /**
      * Transfer available data to a write instance
      */
-    public function readTo(Channel $writer): Channel
+    public function readTo(DataReceiver $writer): DataProvider
     {
         $this->checkReadable();
 
