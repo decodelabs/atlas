@@ -96,16 +96,16 @@ Channels can be grouped together and managed by an <code>IO Broker</code> -
 ```php
 // Create a CLI IO handler
 $broker = new Atlas::newBroker()
-    ->addInputChannel(Atlas::openStream(STDIN))
-    ->addOutputChannel(Atlas::openStream(STDOUT))
-    ->addErrorChannel(Atlas::openStream(STDERR));
+    ->addInputProvider(Atlas::openStream(STDIN))
+    ->addOutputReceiver(Atlas::openStream(STDOUT))
+    ->addErrorReceiver(Atlas::openStream(STDERR));
 
 // Shortcut to the above:
 $broker = Atlas::newCliBroker();
 
 
 // Read line from CLI
-$broker->setBlocking(true);
+$broker->setReadBlocking(true);
 $text = $broker->readLine();
 
 // Write it back to output
@@ -131,7 +131,7 @@ $eventLoop = Atlas::newEventLoop()
     })
 
     // Listen for reads, but frozen - won't activate until unfrozen
-    ->bindStreamReadFrozen($input = $broker->getFirstInputChannel(), function() use($broker) {
+    ->bindStreamReadFrozen($input = $broker->getFirstInputReceiver(), function() use($broker) {
         $broker->writeLine('You said: '.$broker->readLine());
     })
 
