@@ -1,3 +1,12 @@
+## v0.7.0 (2019-10-26)
+* Added mime type plugin
+* Added temp and memory file creation
+* Added readFrom() and readChar() to streams
+* Split Channel interface into lower level DataProvider / Receiver components
+* Improved symbolic link handling in Fs functions
+* Added scanPaths and listPaths dir helpers
+* Improved PHPStan setup
+
 ## v0.6.1 (2019-10-16)
 * Added PHPStan support
 * Bugfixes and updates from max level PHPStan scan
