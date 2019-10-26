@@ -76,6 +76,25 @@ class Local implements Dir, Inspectable
         return $this;
     }
 
+
+    /**
+     * Is this a file?
+     */
+    public function isFile(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Is this a dir?
+     */
+    public function isDir(): bool
+    {
+        return true;
+    }
+
+
+
     /**
      * Does this dir contain anything?
      */
@@ -110,6 +129,10 @@ class Local implements Dir, Inspectable
 
         chmod($this->path, $mode);
 
+        if ($this->isLink()) {
+            return $this;
+        }
+
         foreach ($this->scanRaw(true, true) as $item) {
             if ($item instanceof Dir) {
                 $item->setPermissionsRecursive($mode);
@@ -132,6 +155,10 @@ class Local implements Dir, Inspectable
 
         chown($this->path, $owner);
 
+        if ($this->isLink()) {
+            return $this;
+        }
+
         foreach ($this->scanRaw(true, true) as $item) {
             if ($item instanceof Dir) {
                 $item->setOwnerRecursive($owner);
@@ -153,6 +180,10 @@ class Local implements Dir, Inspectable
         }
 
         chgrp($this->path, $group);
+
+        if ($this->isLink()) {
+            return $this;
+        }
 
         foreach ($this->scanRaw(true, true) as $item) {
             if ($item instanceof Dir) {
@@ -260,7 +291,7 @@ class Local implements Dir, Inspectable
     /**
      * Get a child dir if it exists
      */
-    public function getDirIfExists(string $name): ?Dir
+    public function getExistingDir(string $name): ?Dir
     {
         $output = new self($this->path.'/'.ltrim($name, '/'));
 
@@ -276,7 +307,7 @@ class Local implements Dir, Inspectable
      */
     public function deleteDir(string $name): Dir
     {
-        if ($dir = $this->getDirIfExists($name)) {
+        if ($dir = $this->getExistingDir($name)) {
             $dir->delete();
         }
 
@@ -319,7 +350,7 @@ class Local implements Dir, Inspectable
     /**
      * Get a child file if it exists
      */
-    public function getFileIfExists(string $name): ?File
+    public function getExistingFile(string $name): ?File
     {
         $output = $this->wrapFile($this->path.'/'.ltrim($name, '/'));
 
@@ -335,7 +366,7 @@ class Local implements Dir, Inspectable
      */
     public function deleteFile(string $name): Dir
     {
-        if ($file = $this->getFileIfExists($name)) {
+        if ($file = $this->getExistingFile($name)) {
             $file->delete();
         }
 
@@ -349,11 +380,16 @@ class Local implements Dir, Inspectable
     public function copy(string $path): Node
     {
         if (file_exists($path)) {
-            throw Glitch::EIo('Destination dir already exists', null, $this);
+            throw Glitch::EAlreadyExists('Destination dir already exists', null, $this);
         }
 
-        return $this->mergeInto($path);
+        if ($this->isLink()) {
+            return $this->copySymlink($path);
+        } else {
+            return $this->mergeInto($path);
+        }
     }
+
 
     /**
      * Move dir to $destinationDir, rename basename to $newName if set
@@ -367,7 +403,7 @@ class Local implements Dir, Inspectable
         (new Local(dirname($path)))->ensureExists();
 
         if (file_exists($path)) {
-            throw Glitch::EIo('Destination file already exists', null, $path);
+            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
         }
 
         if (!rename($this->path, $path)) {
@@ -385,6 +421,11 @@ class Local implements Dir, Inspectable
     public function delete(): void
     {
         if (!$this->exists()) {
+            return;
+        }
+
+        if ($this->isLink()) {
+            unlink($this->path);
             return;
         }
 
@@ -424,10 +465,16 @@ class Local implements Dir, Inspectable
         $destination->ensureExists($this->getPermissions());
 
         foreach ($this->scanRawRecursive(true, true) as $subPath => $item) {
-            if ($item instanceof Dir) {
-                $destination->createDir($subPath, $item->getPermissions());
+            if ($item instanceof self) {
+                // Dir
+                if ($item->isLink()) {
+                    $item->copySymlink($destination->getPath().'/'.$subPath);
+                } else {
+                    $destination->createDir($subPath, $item->getPermissions());
+                }
             } else {
-                $item->copyTo($destination->getPath().'/'.$subPath)
+                // File
+                $item->copy($destination->getPath().'/'.$subPath)
                     ->setPermissions($item->getPermissions());
             }
         }

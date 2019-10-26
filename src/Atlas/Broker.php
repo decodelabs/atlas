@@ -6,63 +6,65 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
+use DecodeLabs\Atlas\DataProvider;
+use DecodeLabs\Atlas\DataReceiver;
+use DecodeLabs\Atlas\ErrorDataReceiver;
 use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\Channel\Stream;
 use DecodeLabs\Atlas\Channel\Buffer;
 
 use DecodeLabs\Glitch;
 
-class Broker implements Channel
+class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 {
     protected $input = [];
     protected $output = [];
     protected $error = [];
 
     /**
-     * Add channel on input endpoint
+     * Add provider on input endpoint
      */
-    public function addInputChannel(Channel $channel): Broker
+    public function addInputProvider(DataProvider $provider): Broker
     {
-        $id = spl_object_id($channel);
-        $this->input[$id] = $channel;
+        $id = spl_object_id($provider);
+        $this->input[$id] = $provider;
 
         return $this;
     }
 
     /**
-     * Is channel registered on input endpoint?
+     * Is provider registered on input endpoint?
      */
-    public function hasInputChannel(Channel $channel): bool
+    public function hasInputProvider(DataProvider $provider): bool
     {
-        $id = spl_object_id($channel);
+        $id = spl_object_id($provider);
         return isset($this->input[$id]);
     }
 
     /**
-     * Remove channel from input endpoint
+     * Remove provider from input endpoint
      */
-    public function removeInputChannel(Channel $channel): Broker
+    public function removeInputProvider(DataProvider $provider): Broker
     {
-        $id = spl_object_id($channel);
+        $id = spl_object_id($provider);
         unset($this->input[$id]);
         return $this;
     }
 
     /**
-     * Get list of input channels
+     * Get list of input providers
      */
-    public function getInputChannels(): array
+    public function getInputProviders(): array
     {
         return $this->input;
     }
 
     /**
-     * Get first input channel
+     * Get first input provider
      */
-    public function getFirstInputChannel(): ?Channel
+    public function getFirstInputProvider(): ?DataProvider
     {
-        foreach ($this->input as $channel) {
-            return $channel;
+        foreach ($this->input as $provider) {
+            return $provider;
         }
 
         return null;
@@ -70,50 +72,50 @@ class Broker implements Channel
 
 
     /**
-     * Add channel on output endpoint
+     * Add receiver on output endpoint
      */
-    public function addOutputChannel(Channel $channel): Broker
+    public function addOutputReceiver(DataReceiver $receiver): Broker
     {
-        $id = spl_object_id($channel);
-        $this->output[$id] = $channel;
+        $id = spl_object_id($receiver);
+        $this->output[$id] = $receiver;
 
         return $this;
     }
 
     /**
-     * Is channel registered on input endpoint?
+     * Is receiver registered on input endpoint?
      */
-    public function hasOutputChannel(Channel $channel): bool
+    public function hasOutputReceiver(DataReceiver $receiver): bool
     {
-        $id = spl_object_id($channel);
+        $id = spl_object_id($receiver);
         return isset($this->output[$id]);
     }
 
     /**
-     * Remove channel from output endpoint
+     * Remove receiver from output endpoint
      */
-    public function removeOutputChannel(Channel $channel): Broker
+    public function removeOutputReceiver(DataReceiver $receiver): Broker
     {
-        $id = spl_object_id($channel);
+        $id = spl_object_id($receiver);
         unset($this->output[$id]);
         return $this;
     }
 
     /**
-     * Get list of output channels
+     * Get list of output receivers
      */
-    public function getOutputChannels(): array
+    public function getOutputReceivers(): array
     {
         return $this->output;
     }
 
     /**
-     * Get first output channel
+     * Get first output receiver
      */
-    public function getFirstOutputChannel(): ?Channel
+    public function getFirstOutputReceiver(): ?DataReceiver
     {
-        foreach ($this->output as $channel) {
-            return $channel;
+        foreach ($this->output as $receiver) {
+            return $receiver;
         }
 
         return null;
@@ -121,50 +123,50 @@ class Broker implements Channel
 
 
     /**
-     * Add channel on error endpoint
+     * Add receiver on error endpoint
      */
-    public function addErrorChannel(Channel $channel): Broker
+    public function addErrorReceiver(DataReceiver $receiver): Broker
     {
-        $id = spl_object_id($channel);
-        $this->error[$id] = $channel;
+        $id = spl_object_id($receiver);
+        $this->error[$id] = $receiver;
 
         return $this;
     }
 
     /**
-     * Is channel registered at error endpoint?
+     * Is receiver registered at error endpoint?
      */
-    public function hasErrorChannel(Channel $channel): bool
+    public function hasErrorReceiver(DataReceiver $receiver): bool
     {
-        $id = spl_object_id($channel);
+        $id = spl_object_id($receiver);
         return isset($this->error[$id]);
     }
 
     /**
-     * Remove channel from error endpoint
+     * Remove receiver from error endpoint
      */
-    public function removeErrorChannel(Channel $channel): Broker
+    public function removeErrorReceiver(DataReceiver $receiver): Broker
     {
-        $id = spl_object_id($channel);
+        $id = spl_object_id($receiver);
         unset($this->error[$id]);
         return $this;
     }
 
     /**
-     * Get list of error channels
+     * Get list of error receivers
      */
-    public function getErrorChannels(): array
+    public function getErrorReceivers(): array
     {
         return $this->error;
     }
 
     /**
-     * Get first error channel
+     * Get first error receiver
      */
-    public function getFirstErrorChannel(): ?Channel
+    public function getFirstErrorReceiver(): ?DataReceiver
     {
-        foreach ($this->error as $channel) {
-            return $channel;
+        foreach ($this->error as $receiver) {
+            return $receiver;
         }
 
         return null;
@@ -226,6 +228,47 @@ class Broker implements Channel
 
 
     /**
+     * Add data receiver for both output and error endpoints
+     */
+    public function addDataReceiver(DataReceiver $receiver): Broker
+    {
+        $id = spl_object_id($receiver);
+
+        $this->output[$id] = $receiver;
+        $this->error[$id] = $receiver;
+
+        return $this;
+    }
+
+    /**
+     * Is receiver in any endpoint
+     */
+    public function hasDataReceiver(DataReceiver $receiver): bool
+    {
+        $id = spl_object_id($receiver);
+
+        return
+            isset($this->output[$id]) ||
+            isset($this->error[$id]);
+    }
+
+    /**
+     * Remove data receiver from all endpoints
+     */
+    public function removeDataReceiver(DataReceiver $receiver): Broker
+    {
+        $id = spl_object_id($receiver);
+
+        unset($this->output[$id]);
+        unset($this->error[$id]);
+
+        return $this;
+    }
+
+
+
+
+    /**
      * Get channel resource
      */
     public function getResource()
@@ -237,10 +280,10 @@ class Broker implements Channel
     /**
      * Set all input channels as blocking
      */
-    public function setBlocking(bool $flag): Channel
+    public function setReadBlocking(bool $flag): DataProvider
     {
-        foreach ($this->input as $channel) {
-            $channel->setBlocking($flag);
+        foreach ($this->input as $provider) {
+            $provider->setReadBlocking($flag);
         }
 
         return $this;
@@ -249,10 +292,10 @@ class Broker implements Channel
     /**
      * Any any input channels blocking?
      */
-    public function isBlocking(): bool
+    public function isReadBlocking(): bool
     {
-        foreach ($this->input as $channel) {
-            if ($channel->isBlocking()) {
+        foreach ($this->input as $provider) {
+            if ($provider->isReadBlocking()) {
                 return true;
             }
         }
@@ -266,8 +309,8 @@ class Broker implements Channel
      */
     public function isReadable(): bool
     {
-        foreach ($this->input as $channel) {
-            if ($channel->isReadable()) {
+        foreach ($this->input as $provider) {
+            if ($provider->isReadable()) {
                 return true;
             }
         }
@@ -280,12 +323,12 @@ class Broker implements Channel
      */
     public function read(int $length): ?string
     {
-        foreach ($this->input as $channel) {
-            if (!$channel->isReadable()) {
+        foreach ($this->input as $provider) {
+            if (!$provider->isReadable()) {
                 continue;
             }
 
-            if (null !== ($line = $channel->read($length))) {
+            if (null !== ($line = $provider->read($length))) {
                 return $line;
             }
         }
@@ -298,13 +341,31 @@ class Broker implements Channel
      */
     public function readAll(): ?string
     {
-        foreach ($this->input as $channel) {
-            if (!$channel->isReadable()) {
+        foreach ($this->input as $provider) {
+            if (!$provider->isReadable()) {
                 continue;
             }
 
-            if (null !== ($line = $channel->readAll())) {
+            if (null !== ($line = $provider->readAll())) {
                 return $line;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Read char from first readable input channel
+     */
+    public function readChar(): ?string
+    {
+        foreach ($this->input as $provider) {
+            if (!$provider->isReadable()) {
+                continue;
+            }
+
+            if (null !== ($char = $provider->readChar())) {
+                return $char;
             }
         }
 
@@ -316,12 +377,12 @@ class Broker implements Channel
      */
     public function readLine(): ?string
     {
-        foreach ($this->input as $channel) {
-            if (!$channel->isReadable()) {
+        foreach ($this->input as $provider) {
+            if (!$provider->isReadable()) {
                 continue;
             }
 
-            if (null !== ($line = $channel->readLine())) {
+            if (null !== ($line = $provider->readLine())) {
                 return $line;
             }
         }
@@ -332,7 +393,7 @@ class Broker implements Channel
     /**
      * Read all available data from input channels and pass to external channel
      */
-    public function readTo(Channel $writer): Channel
+    public function readTo(DataReceiver $writer): DataProvider
     {
         while (!$this->isAtEnd()) {
             $chunk = $this->read(8192);
@@ -353,8 +414,8 @@ class Broker implements Channel
      */
     public function isWritable(): bool
     {
-        foreach ($this->output as $channel) {
-            if ($channel->isWritable()) {
+        foreach ($this->output as $receiver) {
+            if ($receiver->isWritable()) {
                 return true;
             }
         }
@@ -373,13 +434,13 @@ class Broker implements Channel
             $length = strlen($data);
         }
 
-        foreach ($this->output as $channel) {
-            if (!$channel->isWritable()) {
+        foreach ($this->output as $receiver) {
+            if (!$receiver->isWritable()) {
                 continue;
             }
 
             for ($written = 0; $written < $length; $written += $result) {
-                $result = $channel->write(substr($data, $written), $length - $written);
+                $result = $receiver->write(substr($data, $written), $length - $written);
 
                 if ($result === null) {
                     throw Glitch::EOverflow('Could not write buffer to output', null, $data);
@@ -412,8 +473,8 @@ class Broker implements Channel
      */
     public function isErrorWritable(): bool
     {
-        foreach ($this->error as $channel) {
-            if ($channel->isWritable()) {
+        foreach ($this->error as $receiver) {
+            if ($receiver->isWritable()) {
                 return true;
             }
         }
@@ -432,13 +493,13 @@ class Broker implements Channel
             $length = strlen($data);
         }
 
-        foreach ($this->error as $channel) {
-            if (!$channel->isWritable()) {
+        foreach ($this->error as $receiver) {
+            if (!$receiver->isWritable()) {
                 continue;
             }
 
             for ($written = 0; $written < $length; $written += $result) {
-                $result = $channel->write(substr($data, $written), $length - $written);
+                $result = $receiver->write(substr($data, $written), $length - $written);
 
                 if ($result === null) {
                     throw Glitch::EOverflow('Could not write buffer to output', null, $data);
@@ -471,32 +532,12 @@ class Broker implements Channel
      */
     public function isAtEnd(): bool
     {
-        foreach ($this->input as $channel) {
-            if (!$channel->isAtEnd()) {
+        foreach ($this->input as $provider) {
+            if (!$provider->isAtEnd()) {
                 return false;
             }
         }
 
         return true;
-    }
-
-    /**
-     * Close all channels
-     */
-    public function close(): Channel
-    {
-        foreach ($this->input as $channel) {
-            $channel->close();
-        }
-
-        foreach ($this->output as $channel) {
-            $channel->close();
-        }
-
-        foreach ($this->error as $channel) {
-            $channel->close();
-        }
-
-        return $this;
     }
 }

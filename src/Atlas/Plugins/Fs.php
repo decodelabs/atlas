@@ -11,6 +11,7 @@ use DecodeLabs\Veneer\FacadePlugin;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\Local as LocalFile;
+use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 
@@ -19,14 +20,67 @@ use Generator;
 class Fs implements FacadePlugin
 {
     /**
+     * Create a new empty temp file
+     */
+    public function newTempFile(): File
+    {
+        return new LocalFile(tmpfile());
+    }
+
+    /**
+     * Create a new temp file
+     */
+    public function createTempFile(?string $data): File
+    {
+        $file = $this->newTempFile();
+        $file->write($data);
+        return $file;
+    }
+
+    /**
+     * Create a new empty memory file
+     */
+    public function newMemoryFile(string $key='temp'): MemoryFile
+    {
+        return new MemoryFile($key);
+    }
+
+    /**
+     * Create a new memory file with data
+     */
+    public function createMemoryFile(?string $data, string $key='temp'): MemoryFile
+    {
+        $file = $this->newMemoryFile($key);
+        $file->write($data);
+        return $file;
+    }
+
+
+    /**
      * Get node, return file or dir depending on what's on disk
      */
-    public function get(string $path): Node
+    public function get($path): Node
     {
+        if ($node = $this->normalizeInput($path, Node::class)) {
+            return $node;
+        }
+
         if (is_dir($path)) {
             return $this->dir($path);
         } else {
             return $this->file($path);
+        }
+    }
+
+    /**
+     * Get existing node, return file or dir depending on what's on disk
+     */
+    public function getExisting(string $path): ?Node
+    {
+        if (is_dir($path)) {
+            return $this->existingDir($path);
+        } else {
+            return $this->existingFile($path);
         }
     }
 
@@ -131,9 +185,47 @@ class Fs implements FacadePlugin
     /**
      * Load file from $path, open if $mode is set
      */
-    public function file(string $path, string $mode=null): File
+    public function file($path, string $mode=null): File
     {
+        if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
+            if ($mode !== null) {
+                $node->open($mode);
+            }
+
+            return $node;
+        }
+
         return new LocalFile($path, $mode);
+    }
+
+    /**
+     * Load existing file from $path, open if $mode is set
+     */
+    public function existingFile($path, string $mode=null): ?File
+    {
+        if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
+            if (!$node->exists()) {
+                return null;
+            }
+
+            if ($mode !== null) {
+                $node->open($mode);
+            }
+
+            return $node;
+        }
+
+        $file = new LocalFile($path);
+
+        if (!$file->exists()) {
+            return null;
+        }
+
+        if ($mode !== null) {
+            $file->open($mode);
+        }
+
+        return $file;
     }
 
     /**
@@ -158,6 +250,14 @@ class Fs implements FacadePlugin
     public function hasFileChanged(string $path, int $seconds=30): bool
     {
         return $this->file($path)->hasChanged($seconds);
+    }
+
+    /**
+     * Check file last modified within $time
+     */
+    public function hasFileChangedIn(string $path, string $timeout): bool
+    {
+        return $this->file($path)->hasChangedIn($timeout);
     }
 
     /**
@@ -253,9 +353,31 @@ class Fs implements FacadePlugin
     /**
      * Load dir from path
      */
-    public function dir(string $path): Dir
+    public function dir($path): Dir
     {
+        if (($node = $this->normalizeInput($path, Dir::class)) instanceof Dir) {
+            return $node;
+        }
+
         return new LocalDir($path);
+    }
+
+    /**
+     * Load existing dir from path
+     */
+    public function existingDir($path): ?Dir
+    {
+        if (($node = $this->normalizeInput($path, Dir::class)) instanceof Dir) {
+            return $node->exists() ? $node : null;
+        }
+
+        $dir = new LocalDir($path);
+
+        if (!$dir->exists()) {
+            return null;
+        }
+
+        return $dir;
     }
 
     /**
@@ -267,11 +389,27 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Create system level temp dir
+     */
+    public function createTempDir(): Dir
+    {
+        return $this->createDir(sys_get_temp_dir().'decodelabs/temp/'.uniqid('x', true));
+    }
+
+    /**
      * Check last modified of dir within $seconds
      */
     public function hasDirChanged(string $path, int $seconds=30): bool
     {
         return $this->dir($path)->hasChanged($seconds);
+    }
+
+    /**
+     * Check dir last modified within $time
+     */
+    public function hasDirChangedIn(string $path, string $timeout): bool
+    {
+        return $this->dir($path)->hasChangedIn($timeout);
     }
 
     /**
@@ -370,6 +508,22 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Scan all children as paths
+     */
+    public function scanPaths(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanPaths($filter);
+    }
+
+    /**
+     * List all children as paths
+     */
+    public function listPaths(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listPaths($filter);
+    }
+
+    /**
      * Count all children
      */
     public function countContents(string $path, callable $filter=null): int
@@ -408,6 +562,22 @@ class Fs implements FacadePlugin
     public function listFileNames(string $path, callable $filter=null): array
     {
         return $this->dir($path)->listFileNames($filter);
+    }
+
+    /**
+     * Scan all files as paths
+     */
+    public function scanFilePaths(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanFilePaths($filter);
+    }
+
+    /**
+     * List all files as paths
+     */
+    public function listFilePaths(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFilePaths($filter);
     }
 
     /**
@@ -452,6 +622,22 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Scan all dirs as paths
+     */
+    public function scanDirPaths(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanDirPaths($filter);
+    }
+
+    /**
+     * List all dirs as paths
+     */
+    public function listDirPaths(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirPaths($filter);
+    }
+
+    /**
      * Count all dirs
      */
     public function countDirs(string $path, callable $filter=null): int
@@ -490,6 +676,22 @@ class Fs implements FacadePlugin
     public function listNamesRecursive(string $path, callable $filter=null): array
     {
         return $this->dir($path)->listNamesRecursive($filter);
+    }
+
+    /**
+     * Scan all children recursively as paths
+     */
+    public function scanPathsRecursive(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanPathsRecursive($filter);
+    }
+
+    /**
+     * List all children recursively as paths
+     */
+    public function listPathsRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listPathsRecursive($filter);
     }
 
     /**
@@ -534,6 +736,22 @@ class Fs implements FacadePlugin
     }
 
     /**
+     * Scan all files recursively as paths
+     */
+    public function scanFilePathsRecursive(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanFilePathsRecursive($filter);
+    }
+
+    /**
+     * List all files recursively as paths
+     */
+    public function listFilePathsRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listFilePathsRecursive($filter);
+    }
+
+    /**
      * Count all files recursively
      */
     public function countFilesRecursive(string $path, callable $filter=null): int
@@ -572,6 +790,22 @@ class Fs implements FacadePlugin
     public function listDirNamesRecursive(string $path, callable $filter=null): array
     {
         return $this->dir($path)->listDirNamesRecursive($filter);
+    }
+
+    /**
+     * Scan all dirs recursively as paths
+     */
+    public function scanDirPathsRecursive(string $path, callable $filter=null): Generator
+    {
+        return $this->dir($path)->scanDirPathsRecursive($filter);
+    }
+
+    /**
+     * List all dirs recursively as paths
+     */
+    public function listDirPathsRecursive(string $path, callable $filter=null): array
+    {
+        return $this->dir($path)->listDirPathsRecursive($filter);
     }
 
     /**
@@ -659,5 +893,34 @@ class Fs implements FacadePlugin
     public function merge(string $path, string $destination): Dir
     {
         return $this->dir($path)->mergeInto($destination);
+    }
+
+
+
+    /**
+     * Normalize node input
+     */
+    protected function normalizeInput(&$path, string $type): ?Node
+    {
+        if (
+            $path instanceof Node &&
+            $path instanceof $type
+        ) {
+            return $path;
+        }
+
+        if ($path instanceof Node) {
+            throw Glitch::EInvalidArgument('Item is not a '.$type);
+        }
+
+        if (is_object($path) && method_exists($path, '__toString')) {
+            $path = (string)$path;
+        }
+
+        if (!is_string($path)) {
+            throw Glitch::EInvalidArgument('Invalid filesystem node input', null, $path);
+        }
+
+        return null;
     }
 }

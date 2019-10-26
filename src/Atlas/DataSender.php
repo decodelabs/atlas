@@ -6,12 +6,11 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Atlas\DataProvider;
 use DecodeLabs\Atlas\DataReceiver;
-use DecodeLabs\Atlas\Channel;
 
-interface Channel extends DataProvider, DataReceiver
+interface DataSender
 {
-    public function getResource();
-    public function close(): Channel;
+    public function setDataReceiver(DataReceiver $receiver): DataSender;
+    public function getDataReceiver(): ?DataReceiver;
+    public function sendData(): void;
 }

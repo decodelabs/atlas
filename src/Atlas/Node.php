@@ -9,11 +9,21 @@ namespace DecodeLabs\Atlas;
 interface Node
 {
     public function getPath(): string;
+    public function __toString(): string;
     public function getName(): string;
     public function exists(): bool;
+
+    public function isFile(): bool;
+    public function isDir(): bool;
+
+    public function isLink(): bool;
+    public function getLinkTarget(): ?Node;
+    public function createLink(string $path): Node;
+
     public function clearStatCache(): Node;
     public function getLastModified(): ?int;
     public function hasChanged(int $timeout=30): bool;
+    public function hasChangedIn(string $timeout): bool;
 
     public function setPermissions(int $mode): Node;
     public function getPermissions(): ?int;

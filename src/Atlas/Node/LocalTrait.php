@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas\Node;
 
 use DecodeLabs\Atlas\Node;
+use DecodeLabs\Atlas\NodeTrait;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
@@ -15,15 +16,10 @@ use DecodeLabs\Glitch;
 
 trait LocalTrait
 {
+    use NodeTrait;
+
     protected $path;
 
-    /**
-     * Get basename of item
-     */
-    public function getName(): string
-    {
-        return basename($this->getPath());
-    }
 
     /**
      * Get fs path to node
@@ -31,6 +27,55 @@ trait LocalTrait
     public function getPath(): string
     {
         return $this->path;
+    }
+
+
+    /**
+     * Is this a symbolic link?
+     */
+    public function isLink(): bool
+    {
+        return is_link($this->path);
+    }
+
+    /**
+     * Get item pointed to by link
+     */
+    public function getLinkTarget(): ?Node
+    {
+        if (!$this->isLink()) {
+            return null;
+        }
+
+        $path = readlink($this->path);
+
+        if (substr($path, 0, 1) == '.') {
+            $path = dirname($this->path).'/'.$path;
+        }
+
+        return new self($this->normalizePath($path));
+    }
+
+    /**
+     * Create a symlink to this node
+     */
+    public function createLink(string $path): Node
+    {
+        if (!$this->exists()) {
+            throw Glitch::ENotFound('Source node does not exist', null, $this);
+        }
+
+        if (file_exists($path)) {
+            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
+        }
+
+        (new LocalDir(dirname($path)))->ensureExists();
+
+        if (!symlink($this->path, $path)) {
+            throw Glitch::EIo('Unable to copy symlink: '.$path);
+        }
+
+        return new self($path);
     }
 
     /**
@@ -51,25 +96,16 @@ trait LocalTrait
             return null;
         }
 
-        if (false === ($output = filemtime($this->path))) {
+        try {
+            if (false === ($output = filemtime($this->path))) {
+                $output = null;
+            }
+        } catch (\ErrorException $e) {
             $output = null;
         }
 
         return $output;
     }
-
-    /**
-     * Compare last modified
-     */
-    public function hasChanged(int $seconds=30): bool
-    {
-        if (!$this->exists()) {
-            return false;
-        }
-
-        return time() - $this->getLastModified() < $seconds;
-    }
-
 
 
     /**
@@ -94,91 +130,15 @@ trait LocalTrait
             return null;
         }
 
-        if (false === ($output = fileperms($this->getPath()))) {
+        try {
+            if (false === ($output = fileperms($this->getPath()))) {
+                $output = null;
+            }
+        } catch (\ErrorException $e) {
             $output = null;
         }
 
         return $output;
-    }
-
-    /**
-     * Get permissions of node as octal string
-     */
-    public function getPermissionsOct(): ?string
-    {
-        if (null === ($perms = $this->getPermissions())) {
-            return null;
-        }
-
-        return decoct($perms & 0777);
-    }
-
-    /**
-     * Get permissions of node as resource string
-     * Taken from PHP manual
-     */
-    public function getPermissionsString(): ?string
-    {
-        if (null === ($perms = $this->getPermissions())) {
-            return null;
-        }
-
-        switch ($perms & 0xF000) {
-            case 0xC000: // socket
-                $info = 's';
-                break;
-
-            case 0xA000: // symbolic link
-                $info = 'l';
-                break;
-
-            case 0x8000: // regular
-                $info = 'r';
-                break;
-
-            case 0x6000: // block special
-                $info = 'b';
-                break;
-
-            case 0x4000: // directory
-                $info = 'd';
-                break;
-
-            case 0x2000: // character special
-                $info = 'c';
-                break;
-
-            case 0x1000: // FIFO pipe
-                $info = 'p';
-                break;
-
-            default: // unknown
-                $info = 'u';
-                break;
-        }
-
-        // Owner
-        $info .= (($perms & 0x0100) ? 'r' : '-');
-        $info .= (($perms & 0x0080) ? 'w' : '-');
-        $info .= (($perms & 0x0040) ?
-                    (($perms & 0x0800) ? 's' : 'x') :
-                    (($perms & 0x0800) ? 'S' : '-'));
-
-        // Group
-        $info .= (($perms & 0x0020) ? 'r' : '-');
-        $info .= (($perms & 0x0010) ? 'w' : '-');
-        $info .= (($perms & 0x0008) ?
-                    (($perms & 0x0400) ? 's' : 'x') :
-                    (($perms & 0x0400) ? 'S' : '-'));
-
-        // World
-        $info .= (($perms & 0x0004) ? 'r' : '-');
-        $info .= (($perms & 0x0002) ? 'w' : '-');
-        $info .= (($perms & 0x0001) ?
-                    (($perms & 0x0200) ? 't' : 'x') :
-                    (($perms & 0x0200) ? 'T' : '-'));
-
-        return $info;
     }
 
 
@@ -204,7 +164,11 @@ trait LocalTrait
             return null;
         }
 
-        if (false === ($output = fileowner($this->getPath()))) {
+        try {
+            if (false === ($output = fileowner($this->getPath()))) {
+                $output = null;
+            }
+        } catch (\ErrorException $e) {
             $output = null;
         }
 
@@ -233,7 +197,11 @@ trait LocalTrait
             return null;
         }
 
-        if (false === ($output = filegroup($this->getPath()))) {
+        try {
+            if (false === ($output = filegroup($this->getPath()))) {
+                $output = null;
+            }
+        } catch (\ErrorException $e) {
             $output = null;
         }
 
@@ -251,6 +219,25 @@ trait LocalTrait
         }
 
         return new LocalDir($path);
+    }
+
+
+    /**
+     * Copy symlink
+     */
+    protected function copySymlink(string $path): Node
+    {
+        (new LocalDir(dirname($path)))->ensureExists();
+
+        if (!$target = $this->getLinkTarget()) {
+            throw Glitch::EIo('Unable to follow symlink target: '.$this->getPath());
+        }
+
+        if (!symlink($target->getPath(), $path)) {
+            throw Glitch::EIo('Unable to copy symlink: '.$path);
+        }
+
+        return new self($path);
     }
 
 
@@ -296,13 +283,5 @@ trait LocalTrait
         }
 
         return $newName;
-    }
-
-    /**
-     * Get path as string
-     */
-    public function __toString(): string
-    {
-        return $this->getPath();
     }
 }

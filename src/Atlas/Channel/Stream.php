@@ -6,14 +6,17 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas\Channel;
 
+use DecodeLabs\Atlas\DataProvider;
+use DecodeLabs\Atlas\DataProviderTrait;
+use DecodeLabs\Atlas\DataReceiverTrait;
 use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\ChannelTrait;
 
 use DecodeLabs\Glitch;
 
 class Stream implements Channel
 {
-    use ChannelTrait;
+    use DataProviderTrait;
+    use DataReceiverTrait;
 
     protected $resource;
     protected $mode = null;
@@ -25,15 +28,21 @@ class Stream implements Channel
      */
     public function __construct($path, ?string $mode='a+')
     {
-        if ($mode === null) {
+        if (empty($path)) {
             return;
         }
 
-        if (is_resource($path)) {
+        $isResource = is_resource($path);
+
+        if ($mode === null && !$isResource) {
+            return;
+        }
+
+        if ($isResource) {
             $this->resource = $path;
             $this->mode = stream_get_meta_data($this->resource)['mode'];
         } else {
-            if (!$this->resource = fopen($path, $mode)) {
+            if (!$this->resource = fopen($path, (string)$mode)) {
                 throw Glitch::EIo('Unable to open stream');
             }
 
@@ -61,7 +70,7 @@ class Stream implements Channel
     /**
      * Set read blocking mode
      */
-    public function setBlocking(bool $flag): Channel
+    public function setReadBlocking(bool $flag): DataProvider
     {
         if (!$this->resource) {
             throw Glitch::ELogic('Cannot set blocking, resource not open');
@@ -74,7 +83,7 @@ class Stream implements Channel
     /**
      * Is this channel in blocking mode?
      */
-    public function isBlocking(): bool
+    public function isReadBlocking(): bool
     {
         if (!$this->resource) {
             return false;
@@ -112,6 +121,26 @@ class Stream implements Channel
 
         try {
             $output = fread($this->resource, $length);
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        if ($output === '' || $output === false) {
+            $output = null;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Read single cgar from resource
+     */
+    public function readChar(): ?string
+    {
+        $this->checkReadable();
+
+        try {
+            $output = fgetc($this->resource);
         } catch (\Throwable $e) {
             return null;
         }

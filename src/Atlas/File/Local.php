@@ -32,13 +32,19 @@ class Local extends Stream implements File, Inspectable
     /**
      * Init with file path, if mode is set, open file
      */
-    public function __construct(string $path, string $mode=null)
+    public function __construct($path, string $mode=null)
     {
-        parent::__construct($path, null);
-        $this->path = $path;
+        if (is_resource($path)) {
+            parent::__construct($path, null);
+            $this->path = stream_get_meta_data($this->resource)['uri'];
+        } else {
+            $path = (string)$path;
+            parent::__construct($path, null);
+            $this->path = $path;
 
-        if ($mode !== null) {
-            $this->open($mode);
+            if ($mode !== null) {
+                $this->open($mode);
+            }
         }
     }
 
@@ -59,8 +65,36 @@ class Local extends Stream implements File, Inspectable
             return true;
         }
 
-        return file_exists($this->path);
+        return file_exists($this->path) || is_link($this->path);
     }
+
+
+
+    /**
+     * Is this a file?
+     */
+    public function isFile(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Is this a dir?
+     */
+    public function isDir(): bool
+    {
+        return false;
+    }
+
+
+    /**
+     * Can this file be read from disk
+     */
+    public function isOnDisk(): bool
+    {
+        return $this->exists();
+    }
+
 
     /**
      * Is the resource still accessible?
@@ -334,6 +368,14 @@ class Local extends Stream implements File, Inspectable
             return $this;
         }
 
+        if ($this->isLink()) {
+            if (file_exists($path)) {
+                throw Glitch::EAlreadyExists('Destination file already exists', null, $this);
+            }
+
+            return $this->copySymlink($path);
+        }
+
         $target = new self($path, 'w');
         $closeAfter = false;
 
@@ -370,11 +412,11 @@ class Local extends Stream implements File, Inspectable
             throw Glitch::ENotFound('Source file does not exist', null, $this);
         }
 
-        (new LocalDir(dirname($path)))->ensureExists();
-
         if (file_exists($path)) {
-            throw Glitch::EIo('Destination file already exists', null, $path);
+            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
         }
+
+        (new LocalDir(dirname($path)))->ensureExists();
 
         if (!rename($this->path, $path)) {
             throw Glitch::EIo('Unable to rename file', null, $this);
@@ -454,6 +496,15 @@ class Local extends Stream implements File, Inspectable
         }
 
         return $output;
+    }
+
+    /**
+     * Seek and read
+     */
+    public function readFrom(int $position, int $length): ?string
+    {
+        $this->setPosition($position);
+        return $this->read($length);
     }
 
     /**

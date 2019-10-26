@@ -32,7 +32,7 @@ class Context implements FacadeTarget
     const FACADE = 'Atlas';
 
     const PLUGINS = [
-        'fs'
+        'fs', 'mime'
     ];
 
 
@@ -159,9 +159,9 @@ class Context implements FacadeTarget
     public function newCliBroker(): Broker
     {
         return $this->newBroker()
-            ->addInputChannel($this->openCliInputStream())
-            ->addOutputChannel($this->openCliOutputStream())
-            ->addErrorChannel($this->openCliErrorStream());
+            ->addInputProvider($this->openCliInputStream())
+            ->addOutputReceiver($this->openCliOutputStream())
+            ->addErrorReceiver($this->openCliErrorStream());
     }
 
     /**
@@ -170,8 +170,8 @@ class Context implements FacadeTarget
     public function newHttpBroker(): Broker
     {
         return $this->newBroker()
-            ->addInputChannel($this->openHttpInputStream())
-            ->addOutputChannel($this->openHttpOutputStream());
+            ->addInputProvider($this->openHttpInputStream())
+            ->addOutputReceiver($this->openHttpOutputStream());
     }
 
 

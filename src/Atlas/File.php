@@ -13,6 +13,7 @@ use DecodeLabs\Atlas\Node;
 interface File extends Node, Channel
 {
     public function getSize(): ?int;
+    public function isOnDisk(): bool;
     public function getHash(string $type): ?string;
     public function getRawHash(string $type): ?string;
 
@@ -32,6 +33,8 @@ interface File extends Node, Channel
     public function setPosition(int $position): File;
     public function movePosition(int $position, bool $fromEnd=false): File;
     public function getPosition(): int;
+    public function readFrom(int $position, int $length): ?string;
+
     public function flush(): File;
     public function truncate(int $size=0): File;
 }

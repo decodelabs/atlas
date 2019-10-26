@@ -6,12 +6,15 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas\Channel;
 
+use DecodeLabs\Atlas\DataProvider;
+use DecodeLabs\Atlas\DataProviderTrait;
+use DecodeLabs\Atlas\DataReceiverTrait;
 use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\ChannelTrait;
 
 class Buffer implements Channel
 {
-    use ChannelTrait;
+    use DataProviderTrait;
+    use DataReceiverTrait;
 
     protected $buffer;
     protected $open = true;
@@ -38,7 +41,7 @@ class Buffer implements Channel
     /**
      * Set read blocking mode
      */
-    public function setBlocking(bool $flag): Channel
+    public function setReadBlocking(bool $flag): DataProvider
     {
         return $this;
     }
@@ -46,7 +49,7 @@ class Buffer implements Channel
     /**
      * Is this channel in blocking mode?
      */
-    public function isBlocking(): bool
+    public function isReadBlocking(): bool
     {
         return false;
     }
@@ -82,6 +85,22 @@ class Buffer implements Channel
             $output = null;
         }
 
+        return $output;
+    }
+
+    /**
+     * Read single char from resource
+     */
+    public function readChar(): ?string
+    {
+        $this->checkReadable();
+
+        if (!strlen($this->buffer)) {
+            return null;
+        }
+
+        $output = substr($this->buffer, 0, 1);
+        $this->buffer = substr($this->buffer, 1);
         return $output;
     }
 

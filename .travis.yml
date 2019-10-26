@@ -1,0 +1,21 @@
+language: php
+php:
+    - '7.2'
+    - '7.3'
+
+cache:
+    directories:
+        - $HOME/.composer/cache/files
+
+before_install:
+    - sudo apt-get update
+    - sudo apt-get install libevent-dev
+
+install:
+    - composer install --prefer-dist
+
+before_script:
+    - yes '' | pecl install event
+
+script:
+    - vendor/bin/phpstan analyse --no-interaction --no-progress

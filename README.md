@@ -1,5 +1,12 @@
 # Atlas
 
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
+[![Latest Version](https://img.shields.io/packagist/v/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
+[![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
+[![Build Status](https://img.shields.io/travis/decodelabs/atlas/develop.svg?style=flat-square)](https://travis-ci.org/decodelabs/atlas)
+[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat-square)](https://github.com/phpstan/phpstan)
+[![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
+
 Easy filesystem and io functions for PHP
 
 ## Installation
@@ -89,16 +96,16 @@ Channels can be grouped together and managed by an <code>IO Broker</code> -
 ```php
 // Create a CLI IO handler
 $broker = new Atlas::newBroker()
-    ->addInputChannel(Atlas::openStream(STDIN))
-    ->addOutputChannel(Atlas::openStream(STDOUT))
-    ->addErrorChannel(Atlas::openStream(STDERR));
+    ->addInputProvider(Atlas::openStream(STDIN))
+    ->addOutputReceiver(Atlas::openStream(STDOUT))
+    ->addErrorReceiver(Atlas::openStream(STDERR));
 
 // Shortcut to the above:
 $broker = Atlas::newCliBroker();
 
 
 // Read line from CLI
-$broker->setBlocking(true);
+$broker->setReadBlocking(true);
 $text = $broker->readLine();
 
 // Write it back to output
@@ -124,7 +131,7 @@ $eventLoop = Atlas::newEventLoop()
     })
 
     // Listen for reads, but frozen - won't activate until unfrozen
-    ->bindStreamReadFrozen($input = $broker->getFirstInputChannel(), function() use($broker) {
+    ->bindStreamReadFrozen($input = $broker->getFirstInputReceiver(), function() use($broker) {
         $broker->writeLine('You said: '.$broker->readLine());
     })
 
@@ -153,6 +160,29 @@ Timer 1
 You said: Hello world
 Timer 1
 */
+```
+
+### Mime types
+
+Detect a mime type for a file path:
+
+```php
+echo Atlas::$mime->detect(__FILE__);
+// application/x-php
+```
+
+Get known extensions for a type:
+
+```php
+$exts = Atlas::$mime->getExtensions('text/plain');
+// txt, text, conf, def, list, log, in
+```
+
+Suggest an extension for a mime type:
+
+```php
+echo Atlas::$mime->suggestExtension('text/plain');
+//txt
 ```
 
 ## Licensing
