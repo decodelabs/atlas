@@ -14,7 +14,7 @@
         "php": "^7.2",
 
         "decodelabs/glitch": "<2",
-        "decodelabs/veneer": "~0.4",
+        "decodelabs/veneer": "~0.5",
         "decodelabs/systemic": "~0.6"
     },
     "require-dev": {
