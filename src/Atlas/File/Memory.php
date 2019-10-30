@@ -30,7 +30,7 @@ class Memory extends Local
     /**
      * Create from string key in php://
      */
-    public function create(string $key='temp'): Memory
+    public static function create(string $key='temp'): Memory
     {
         return new self(fopen('php://'.$key, 'w+b'));
     }
