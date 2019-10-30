@@ -28,11 +28,11 @@ use DecodeLabs\Glitch\Dumper\Inspector;
 class Memory extends Local
 {
     /**
-     * Init with file path, if mode is set, open file
+     * Create from string key in php://
      */
-    public function __construct(string $key='temp')
+    public function create(string $key='temp'): Memory
     {
-        parent::__construct(fopen('php://'.$key, 'w+b'));
+        return new self(fopen('php://'.$key, 'w+b'));
     }
 
     /**

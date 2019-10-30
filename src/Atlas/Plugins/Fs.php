@@ -42,7 +42,7 @@ class Fs implements FacadePlugin
      */
     public function newMemoryFile(string $key='temp'): MemoryFile
     {
-        return new MemoryFile($key);
+        return MemoryFile::create($key);
     }
 
     /**
