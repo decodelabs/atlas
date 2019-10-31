@@ -58,6 +58,15 @@ class Http implements FacadePlugin
     }
 
     /**
+     * Fetch HTTP URL to string
+     */
+    public function getString(string $url, array $options=[]): string
+    {
+        $response = $this->newClient()->get($url, $options);
+        return (string)$response->getBody();
+    }
+
+    /**
      * Fetch HTTL URL and save to disk
      */
     public function getFile(string $url, string $path, array $options=[]): File
