@@ -76,6 +76,15 @@ class Http implements FacadePlugin
     }
 
     /**
+     * Fetch HTTL URL and save to disk as temp file
+     */
+    public function getTempFile(string $url, array $options=[]): File
+    {
+        $response = $this->newClient()->get($url, $options);
+        return $this->saveTempResponse($response);
+    }
+
+    /**
      * Fetch json file over HTTP
      */
     public function getJson(string $url, array $options=[]): Tree
