@@ -106,6 +106,18 @@ class Http implements FacadePlugin
     }
 
     /**
+     * Save PSR7 response to disk as temp file
+     */
+    public function saveTempResponse(ResponseInterface $response): File
+    {
+        $file = $this->context->fs->newTempFile();
+        $this->transferStream($response->getBody(), $file);
+
+        $file->close();
+        return $file;
+    }
+
+    /**
      * Convert PSR7 response to DataProvider
      */
     public function importResponse(ResponseInterface $response): File
