@@ -296,8 +296,7 @@ class Fs implements FacadePlugin
     public function copyFile(string $path, string $destinationPath): File
     {
         $file = $this->file($path);
-        $file->copy($destinationPath);
-        return $file;
+        return $file->copy($destinationPath);
     }
 
     /**
@@ -306,8 +305,7 @@ class Fs implements FacadePlugin
     public function copyFileTo(string $path, string $destinationDir, string $newName=null): File
     {
         $file = $this->file($path);
-        $file->copyTo($destinationDir, $newName);
-        return $file;
+        return $file->copyTo($destinationDir, $newName);
     }
 
     /**
@@ -827,8 +825,7 @@ class Fs implements FacadePlugin
     public function copyDir(string $path, string $destinationPath): Dir
     {
         $dir = $this->dir($path);
-        $dir->copy($destinationPath);
-        return $dir;
+        return $dir->copy($destinationPath);
     }
 
     /**
@@ -837,8 +834,7 @@ class Fs implements FacadePlugin
     public function copyDirTo(string $path, string $destinationDir, string $newName=null): Dir
     {
         $dir = $this->dir($path);
-        $dir->copyTo($destinationDir, $newName);
-        return $dir;
+        return $dir->copyTo($destinationDir, $newName);
     }
 
     /**
