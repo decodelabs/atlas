@@ -296,7 +296,13 @@ class Fs implements FacadePlugin
     public function copyFile(string $path, string $destinationPath): File
     {
         $file = $this->file($path);
-        return $file->copy($destinationPath);
+        $output = $file->copy($destinationPath);
+
+        if (!$output instanceof File) {
+            throw Glitch::EUnexpectedValue('Output of file copy() was not a file', null, $output);
+        }
+
+        return $output;
     }
 
     /**
@@ -305,7 +311,13 @@ class Fs implements FacadePlugin
     public function copyFileTo(string $path, string $destinationDir, string $newName=null): File
     {
         $file = $this->file($path);
-        return $file->copyTo($destinationDir, $newName);
+        $output = $file->copyTo($destinationDir, $newName);
+
+        if (!$output instanceof File) {
+            throw Glitch::EUnexpectedValue('Output of file copy() was not a file', null, $output);
+        }
+
+        return $output;
     }
 
     /**
@@ -825,7 +837,13 @@ class Fs implements FacadePlugin
     public function copyDir(string $path, string $destinationPath): Dir
     {
         $dir = $this->dir($path);
-        return $dir->copy($destinationPath);
+        $output = $dir->copy($destinationPath);
+
+        if (!$output instanceof Dir) {
+            throw Glitch::EUnexpectedValue('Output of dir copy() was not a dir', null, $output);
+        }
+
+        return $output;
     }
 
     /**
@@ -834,7 +852,13 @@ class Fs implements FacadePlugin
     public function copyDirTo(string $path, string $destinationDir, string $newName=null): Dir
     {
         $dir = $this->dir($path);
-        return $dir->copyTo($destinationDir, $newName);
+        $output = $dir->copyTo($destinationDir, $newName);
+
+        if (!$output instanceof Dir) {
+            throw Glitch::EUnexpectedValue('Output of dir copy() was not a dir', null, $output);
+        }
+
+        return $output;
     }
 
     /**
