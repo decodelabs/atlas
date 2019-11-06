@@ -1,3 +1,11 @@
+## v0.7.1 (2019-11-06)
+* Added basic HTTP support plugin
+* Fixed signal handling in Select() EventLoop
+* Improved Memory File construction
+* Fixed copy\* return values in fs plugin
+* Fixed output type check in fs copy\*()
+* Updated Veneer dependency
+
 ## v0.7.0 (2019-10-26)
 * Added mime type plugin
 * Added temp and memory file creation

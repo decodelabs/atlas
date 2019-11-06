@@ -101,7 +101,7 @@ class Select implements EventLoop
 
 
             // Signals
-            if (!empty($this->signalBinding) && $this->hasPcntl) {
+            if (!empty($this->signals) && $this->hasPcntl) {
                 $hasHandler = true;
                 pcntl_signal_dispatch();
             }

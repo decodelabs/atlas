@@ -42,7 +42,7 @@ class Fs implements FacadePlugin
      */
     public function newMemoryFile(string $key='temp'): MemoryFile
     {
-        return new MemoryFile($key);
+        return MemoryFile::create($key);
     }
 
     /**
@@ -296,8 +296,13 @@ class Fs implements FacadePlugin
     public function copyFile(string $path, string $destinationPath): File
     {
         $file = $this->file($path);
-        $file->copy($destinationPath);
-        return $file;
+        $output = $file->copy($destinationPath);
+
+        if (!$output instanceof File) {
+            throw Glitch::EUnexpectedValue('Output of file copy() was not a file', null, $output);
+        }
+
+        return $output;
     }
 
     /**
@@ -306,8 +311,13 @@ class Fs implements FacadePlugin
     public function copyFileTo(string $path, string $destinationDir, string $newName=null): File
     {
         $file = $this->file($path);
-        $file->copyTo($destinationDir, $newName);
-        return $file;
+        $output = $file->copyTo($destinationDir, $newName);
+
+        if (!$output instanceof File) {
+            throw Glitch::EUnexpectedValue('Output of file copy() was not a file', null, $output);
+        }
+
+        return $output;
     }
 
     /**
@@ -827,8 +837,13 @@ class Fs implements FacadePlugin
     public function copyDir(string $path, string $destinationPath): Dir
     {
         $dir = $this->dir($path);
-        $dir->copy($destinationPath);
-        return $dir;
+        $output = $dir->copy($destinationPath);
+
+        if (!$output instanceof Dir) {
+            throw Glitch::EUnexpectedValue('Output of dir copy() was not a dir', null, $output);
+        }
+
+        return $output;
     }
 
     /**
@@ -837,8 +852,13 @@ class Fs implements FacadePlugin
     public function copyDirTo(string $path, string $destinationDir, string $newName=null): Dir
     {
         $dir = $this->dir($path);
-        $dir->copyTo($destinationDir, $newName);
-        return $dir;
+        $output = $dir->copyTo($destinationDir, $newName);
+
+        if (!$output instanceof Dir) {
+            throw Glitch::EUnexpectedValue('Output of dir copy() was not a dir', null, $output);
+        }
+
+        return $output;
     }
 
     /**

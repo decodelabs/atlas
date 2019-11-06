@@ -25,14 +25,15 @@ use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
 
 use DecodeLabs\Glitch;
 
-class Context implements FacadeTarget
+class Context implements FacadePluginAccessTarget
 {
     use FacadeTargetTrait;
+    use FacadePluginAccessTargetTrait;
 
     const FACADE = 'Atlas';
 
     const PLUGINS = [
-        'fs', 'mime'
+        'fs', 'mime', 'http'
     ];
 
 
