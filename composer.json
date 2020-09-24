@@ -4,18 +4,16 @@
     "type": "library",
     "keywords": ["filesystem", "io", "file", "directory"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Tom Wright",
-            "email": "tom@inflatablecookie.com"
-        }
-    ],
+    "authors": [{
+        "name": "Tom Wright",
+        "email": "tom@inflatablecookie.com"
+    }],
     "require": {
         "php": "^7.2",
 
-        "decodelabs/glitch": "<2",
-        "decodelabs/veneer": "~0.5",
-        "decodelabs/systemic": "~0.6",
+        "decodelabs/glitch": "^0.15",
+        "decodelabs/veneer": "^0.5",
+        "decodelabs/systemic": "^0.6",
 
         "psr/http-message": "^1.0"
     },
@@ -43,7 +41,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.x-dev"
+            "dev-develop": "0.7.x-dev"
         }
     }
 }
