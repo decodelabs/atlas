@@ -1,3 +1,6 @@
+## v0.7.2 (2020-11-24)
+* Updated Composer dependency handling
+
 ## v0.7.1 (2019-11-06)
 * Added basic HTTP support plugin
 * Fixed signal handling in Select() EventLoop
