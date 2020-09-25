@@ -5,5 +5,3 @@ parameters:
         - src/Atlas/EventLoop/Event.php
     level: 5
     inferPrivatePropertyTypeFromConstructor: true
-    ignoreErrors:
-        - '#^Could not read file\:#'
