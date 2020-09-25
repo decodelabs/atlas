@@ -21,11 +21,9 @@ use DecodeLabs\Atlas\Channel\Buffer;
 use Generator;
 
 use DecodeLabs\Glitch;
-use DecodeLabs\Glitch\Inspectable;
-use DecodeLabs\Glitch\Dumper\Entity;
-use DecodeLabs\Glitch\Dumper\Inspector;
+use DecodeLabs\Glitch\Dumpable;
 
-class Local extends Stream implements File, Inspectable
+class Local extends Stream implements File, Dumpable
 {
     use LocalTrait;
 
@@ -542,16 +540,16 @@ class Local extends Stream implements File, Inspectable
     /**
      * Inspect for Glitch
      */
-    public function glitchInspect(Entity $entity, Inspector $inspector): void
+    public function glitchDump(): iterable
     {
-        $entity
-            ->setDefinition(Glitch::normalizePath($this->path))
-            ->setMetaList([
-                'resource' => $inspector($this->resource),
-                'exists' => $inspector($this->exists()),
-                'readable' => $inspector($this->isReadable()),
-                'writable' => $inspector($this->isWritable()),
-                'permissions' => $this->getPermissionsOct().' : '.$this->getPermissionsString()
-            ]);
+        yield 'definition' => Glitch::normalizePath($this->path);
+
+        yield 'metaList' => [
+            'resource' => $this->resource,
+            'exists' => $this->exists(),
+            'readable' => $this->isReadable(),
+            'writable' => $this->isWritable(),
+            'permissions' => $this->getPermissionsOct().' : '.$this->getPermissionsString()
+        ];
     }
 }
