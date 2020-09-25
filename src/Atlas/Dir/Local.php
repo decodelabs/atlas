@@ -25,11 +25,9 @@ use RecursiveDirectoryIterator;
 use FilesystemIterator;
 
 use DecodeLabs\Glitch;
-use DecodeLabs\Glitch\Inspectable;
-use DecodeLabs\Glitch\Dumper\Entity;
-use DecodeLabs\Glitch\Dumper\Inspector;
+use DecodeLabs\Glitch\Dumpable;
 
-class Local implements Dir, Inspectable
+class Local implements Dir, Dumpable
 {
     use LocalTrait;
     use ScannerTrait;
@@ -495,13 +493,13 @@ class Local implements Dir, Inspectable
     /**
      * Inspect for Glitch
      */
-    public function glitchInspect(Entity $entity, Inspector $inspector): void
+    public function glitchDump(): iterable
     {
-        $entity
-            ->setDefinition(Glitch::normalizePath($this->path))
-            ->setMetaList([
-                'exists' => $inspector($this->exists()),
-                'permissions' => $this->getPermissionsOct().' : '.$this->getPermissionsString()
-            ]);
+        yield 'definition' => Glitch::normalizePath($this->path);
+
+        yield 'metaList' => [
+            'exists' => $this->exists(),
+            'permissions' => $this->getPermissionsOct().' : '.$this->getPermissionsString()
+        ];
     }
 }

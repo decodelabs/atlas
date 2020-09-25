@@ -12,11 +12,9 @@ use DecodeLabs\Atlas\MutexTrait;
 use DecodeLabs\Atlas\File\Local as LocalFile;
 
 use DecodeLabs\Glitch;
-use DecodeLabs\Glitch\Inspectable;
-use DecodeLabs\Glitch\Dumper\Entity;
-use DecodeLabs\Glitch\Dumper\Inspector;
+use DecodeLabs\Glitch\Dumpable;
 
-class Local implements Mutex, Inspectable
+class Local implements Mutex, Dumpable
 {
     use MutexTrait {
         MutexTrait::__construct as private __mutexConstruct;
@@ -59,16 +57,16 @@ class Local implements Mutex, Inspectable
     /**
      * Inspect for Glitch
      */
-    public function glitchInspect(Entity $entity, Inspector $inspector): void
+    public function glitchDump(): iterable
     {
-        $entity
-            ->setProperties([
-                '*name' => $inspector($this->name),
-                '*file' => $inspector($this->file)
-            ])
-            ->setMetaList([
-                'counter' => $inspector($this->counter),
-                'locked' => $this->isLocked()
-            ]);
+        yield 'properties' => [
+            '*name' => $this->name,
+            '*file' => $this->file
+        ];
+
+        yield 'metaList' => [
+            'counter' => $this->counter,
+            'locked' => $this->isLocked()
+        ];
     }
 }
