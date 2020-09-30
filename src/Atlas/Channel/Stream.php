@@ -11,7 +11,7 @@ use DecodeLabs\Atlas\DataProviderTrait;
 use DecodeLabs\Atlas\DataReceiverTrait;
 use DecodeLabs\Atlas\Channel;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 class Stream implements Channel
 {
@@ -43,7 +43,9 @@ class Stream implements Channel
             $this->mode = stream_get_meta_data($this->resource)['mode'];
         } else {
             if (!$this->resource = fopen($path, (string)$mode)) {
-                throw Glitch::EIo('Unable to open stream');
+                throw Exceptional::Io(
+                    'Unable to open stream'
+                );
             }
 
             $this->mode = $mode;
@@ -73,7 +75,9 @@ class Stream implements Channel
     public function setReadBlocking(bool $flag): DataProvider
     {
         if (!$this->resource) {
-            throw Glitch::ELogic('Cannot set blocking, resource not open');
+            throw Exceptional::Logic(
+                'Cannot set blocking, resource not open'
+            );
         }
 
         stream_set_blocking($this->resource, $flag);
@@ -210,7 +214,9 @@ class Stream implements Channel
         }
 
         if ($output === false) {
-            throw Glitch::Eio('Unable to write to stream', null, $this);
+            throw Exceptional::Io(
+                'Unable to write to stream', null, $this
+            );
         }
 
         return $output;

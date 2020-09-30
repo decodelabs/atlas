@@ -3,5 +3,5 @@ parameters:
         - src
     excludes_analyse:
         - src/Atlas/EventLoop/Event.php
-    level: max
+    level: 5
     inferPrivatePropertyTypeFromConstructor: true

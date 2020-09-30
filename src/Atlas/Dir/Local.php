@@ -26,6 +26,7 @@ use FilesystemIterator;
 
 use DecodeLabs\Glitch;
 use DecodeLabs\Glitch\Dumpable;
+use DecodeLabs\Exceptional;
 
 class Local implements Dir, Dumpable
 {
@@ -55,7 +56,9 @@ class Local implements Dir, Dumpable
     {
         if (!is_dir($this->path)) {
             if (file_exists($this->path)) {
-                throw Glitch::EIo('Dir destination exists as file', null, $this);
+                throw Exceptional::Io(
+                    'Dir destination exists as file', null, $this
+                );
             }
 
             if ($permissions === null) {
@@ -63,7 +66,9 @@ class Local implements Dir, Dumpable
             }
 
             if (!mkdir($this->path, $permissions, true)) {
-                throw Glitch::EIo('Unable to mkdir', null, $this);
+                throw Exceptional::Io(
+                    'Unable to mkdir', null, $this
+                );
             }
         } else {
             if ($permissions !== null) {
@@ -122,7 +127,9 @@ class Local implements Dir, Dumpable
     public function setPermissionsRecursive(int $mode): Dir
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set permissions, dir does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Cannot set permissions, dir does not exist', null, $this
+            );
         }
 
         chmod($this->path, $mode);
@@ -148,7 +155,9 @@ class Local implements Dir, Dumpable
     public function setOwnerRecursive(int $owner): Dir
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set owner, dir does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Cannot set owner, dir does not exist', null, $this
+            );
         }
 
         chown($this->path, $owner);
@@ -174,7 +183,9 @@ class Local implements Dir, Dumpable
     public function setGroupRecursive(int $group): Dir
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set group, dir does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Cannot set group, dir does not exist', null, $this
+            );
         }
 
         chgrp($this->path, $group);
@@ -378,7 +389,9 @@ class Local implements Dir, Dumpable
     public function copy(string $path): Node
     {
         if (file_exists($path)) {
-            throw Glitch::EAlreadyExists('Destination dir already exists', null, $this);
+            throw Exceptional::AlreadyExists(
+                'Destination dir already exists', null, $this
+            );
         }
 
         if ($this->isLink()) {
@@ -395,17 +408,23 @@ class Local implements Dir, Dumpable
     public function move(string $path): Node
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Source dir does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Source dir does not exist', null, $this
+            );
         }
 
         (new Local(dirname($path)))->ensureExists();
 
         if (file_exists($path)) {
-            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
+            throw Exceptional::AlreadyExists(
+                'Destination file already exists', null, $path
+            );
         }
 
         if (!rename($this->path, $path)) {
-            throw Glitch::EIo('Unable to rename dir', null, $this);
+            throw Exceptional::Io(
+                'Unable to rename dir', null, $this
+            );
         }
 
         $this->path = $path;
@@ -456,7 +475,9 @@ class Local implements Dir, Dumpable
     public function mergeInto(string $destination): Dir
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Source dir does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Source dir does not exist', null, $this
+            );
         }
 
         $destination = new self($destination);

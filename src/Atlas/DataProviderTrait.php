@@ -10,6 +10,8 @@ use DecodeLabs\Atlas\DataProvider;
 use DecodeLabs\Atlas\DataReceiver;
 use DecodeLabs\Atlas\Channel;
 
+use DecodeLabs\Exceptional;
+
 trait DataProviderTrait
 {
     /**
@@ -18,7 +20,9 @@ trait DataProviderTrait
     public function setReadBlocking(bool $flag): DataProvider
     {
         if ($flag) {
-            throw Glitch::ERuntime('DataProvider does not support blocking mode');
+            throw Exceptional::Runtime(
+                'DataProvider does not support blocking mode'
+            );
         }
 
         return $this;
@@ -47,7 +51,9 @@ trait DataProviderTrait
     protected function checkReadable(): void
     {
         if (!$this->isReadable()) {
-            throw Glitch::ERuntime('Reading has been shut down');
+            throw Exceptional::Runtime(
+                'Reading has been shut down'
+            );
         }
     }
 

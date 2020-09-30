@@ -20,7 +20,7 @@ use DecodeLabs\Atlas\Channel\Buffer;
 
 use Generator;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 class Memory extends Local
 {
@@ -37,7 +37,9 @@ class Memory extends Local
      */
     public function createLink(string $path): Node
     {
-        throw Glitch::EForbidden('Unable to create symbolic link to php://temp stream');
+        throw Exceptional::Forbidden(
+            'Unable to create symbolic link to php://temp stream'
+        );
     }
 
     /**
@@ -91,7 +93,9 @@ class Memory extends Local
     public function lock(bool $nonBlocking=false): bool
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot lock file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot lock file, file not open', null, $this
+            );
         }
 
         return true;
@@ -103,7 +107,9 @@ class Memory extends Local
     public function lockExclusive(bool $nonBlocking=false): bool
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot lock file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot lock file, file not open', null, $this
+            );
         }
 
         return true;

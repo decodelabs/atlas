@@ -16,7 +16,7 @@ use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 use EventBase as EventLibBase;
 use Event as EventLib;
@@ -347,7 +347,7 @@ class Event implements EventLoop
         if (!$res) {
             $event->free();
 
-            throw Glitch::{'EBinding,ERuntime'}(
+            throw Exceptional::{'Binding,Runtime'}(
                 'Could not add event'
             );
         }
@@ -371,7 +371,7 @@ class Event implements EventLoop
                 break;
 
             default:
-                throw Glitch::EInvalidArgument(
+                throw Exceptional::InvalidArgument(
                     'Unknown event io type: '.$type
                 );
         }
