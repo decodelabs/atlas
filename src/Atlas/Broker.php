@@ -12,7 +12,7 @@ use DecodeLabs\Atlas\ErrorDataReceiver;
 use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Buffer;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 {
@@ -443,7 +443,9 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
                 $result = $receiver->write(substr($data, $written), $length - $written);
 
                 if ($result === null) {
-                    throw Glitch::EOverflow('Could not write buffer to output', null, $data);
+                    throw Exceptional::Overflow(
+                        'Could not write buffer to output', null, $data
+                    );
                 }
             }
         }
@@ -502,7 +504,9 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
                 $result = $receiver->write(substr($data, $written), $length - $written);
 
                 if ($result === null) {
-                    throw Glitch::EOverflow('Could not write buffer to output', null, $data);
+                    throw Exceptional::Overflow(
+                        'Could not write buffer to output', null, $data
+                    );
                 }
             }
         }

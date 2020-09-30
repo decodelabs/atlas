@@ -15,8 +15,8 @@ use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
 
-use DecodeLabs\Glitch;
 use DecodeLabs\Systemic;
+use DecodeLabs\Exceptional;
 
 trait EventLoopTrait
 {
@@ -1066,7 +1066,9 @@ trait EventLoopTrait
             $orig = $binding;
 
             if (!$binding = $this->getSignalBinding($binding)) {
-                throw Glitch::EInvalidArgument('Invalid signal binding', null, $orig);
+                throw Exceptional::InvalidArgument(
+                    'Invalid signal binding', null, $orig
+                );
             }
         }
 
@@ -1112,7 +1114,9 @@ trait EventLoopTrait
             $orig = $binding;
 
             if (!$binding = $this->getSignalBinding($binding)) {
-                throw Glitch::EInvalidArgument('Invalid signal binding', null, $orig);
+                throw Exceptional::InvalidArgument(
+                    'Invalid signal binding', null, $orig
+                );
             }
         }
 
@@ -1158,7 +1162,9 @@ trait EventLoopTrait
             $orig = $binding;
 
             if (!$binding = $this->getSignalBinding($binding)) {
-                throw Glitch::EInvalidArgument('Invalid signal binding', null, $orig);
+                throw Exceptional::InvalidArgument(
+                    'Invalid signal binding', null, $orig
+                );
             }
         }
 
@@ -1194,7 +1200,9 @@ trait EventLoopTrait
         }
 
         if (!is_string($id)) {
-            throw Glitch::EInvalidArgument('Invalid signal id', null, $id);
+            throw Exceptional::InvalidArgument(
+                'Invalid signal id', null, $id
+            );
         }
 
         return $this->signals[$id] ?? null;
@@ -1328,7 +1336,9 @@ trait EventLoopTrait
             $orig = $binding;
 
             if (!$binding = $this->getTimerBinding($binding)) {
-                throw Glitch::EInvalidArgument('Invalid timer binding', null, $orig);
+                throw Exceptional::InvalidArgument(
+                    'Invalid timer binding', null, $orig
+                );
             }
         }
 
@@ -1358,7 +1368,9 @@ trait EventLoopTrait
             $orig = $binding;
 
             if (!$binding = $this->getTimerBinding($binding)) {
-                throw Glitch::EInvalidArgument('Invalid timer binding', null, $orig);
+                throw Exceptional::InvalidArgument(
+                    'Invalid timer binding', null, $orig
+                );
             }
         }
 
@@ -1388,7 +1400,9 @@ trait EventLoopTrait
             $orig = $binding;
 
             if (!$binding = $this->getTimerBinding($binding)) {
-                throw Glitch::EInvalidArgument('Invalid timer binding', null, $orig);
+                throw Exceptional::InvalidArgument(
+                    'Invalid timer binding', null, $orig
+                );
             }
         }
 
@@ -1423,7 +1437,9 @@ trait EventLoopTrait
         }
 
         if (!is_string($id)) {
-            throw Glitch::EInvalidArgument('Invalid timer id', null, $id);
+            throw Exceptional::InvalidArgument(
+                'Invalid timer id', null, $id
+            );
         }
 
         return $this->timers[$id] ?? null;

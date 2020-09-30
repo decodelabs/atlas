@@ -12,7 +12,7 @@ use DecodeLabs\Atlas\NodeTrait;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 trait LocalTrait
 {
@@ -62,17 +62,23 @@ trait LocalTrait
     public function createLink(string $path): Node
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Source node does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Source node does not exist', null, $this
+            );
         }
 
         if (file_exists($path)) {
-            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
+            throw Exceptional::AlreadyExists(
+                'Destination file already exists', null, $path
+            );
         }
 
         (new LocalDir(dirname($path)))->ensureExists();
 
         if (!symlink($this->path, $path)) {
-            throw Glitch::EIo('Unable to copy symlink: '.$path);
+            throw Exceptional::Io(
+                'Unable to copy symlink: '.$path
+            );
         }
 
         return new self($path);
@@ -114,7 +120,9 @@ trait LocalTrait
     public function setPermissions(int $mode): Node
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set permissions, file does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Cannot set permissions, file does not exist', null, $this
+            );
         }
 
         chmod($this->path, $mode);
@@ -148,7 +156,9 @@ trait LocalTrait
     public function setOwner(int $owner): Node
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set owner, file does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Cannot set owner, file does not exist', null, $this
+            );
         }
 
         chown($this->path, $owner);
@@ -181,7 +191,9 @@ trait LocalTrait
     public function setGroup(int $group): Node
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Cannot set owner, file does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Cannot set owner, file does not exist', null, $this
+            );
         }
 
         chgrp($this->path, $group);
@@ -230,11 +242,15 @@ trait LocalTrait
         (new LocalDir(dirname($path)))->ensureExists();
 
         if (!$target = $this->getLinkTarget()) {
-            throw Glitch::EIo('Unable to follow symlink target: '.$this->getPath());
+            throw Exceptional::Io(
+                'Unable to follow symlink target: '.$this->getPath()
+            );
         }
 
         if (!symlink($target->getPath(), $path)) {
-            throw Glitch::EIo('Unable to copy symlink: '.$path);
+            throw Exceptional::Io(
+                'Unable to copy symlink: '.$path
+            );
         }
 
         return new self($path);
@@ -279,7 +295,9 @@ trait LocalTrait
         }
 
         if ($newName == '' || $newName === '..' || $newName === '.' || strstr($newName, '/')) {
-            throw Glitch::EInvalidArgument('New name is invalid: '.$newName, null, $this);
+            throw Exceptional::InvalidArgument(
+                'New name is invalid: '.$newName, null, $this
+            );
         }
 
         return $newName;

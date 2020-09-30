@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas\Plugins;
 
 use DecodeLabs\Veneer\FacadePlugin;
+use DecodeLabs\Exceptional;
 
 class Mime implements FacadePlugin
 {
@@ -66,7 +67,9 @@ class Mime implements FacadePlugin
     public function exportTypesArray(): string
     {
         if (!$data = file_get_contents(self::MIME_LIST)) {
-            throw Glitch::ERuntime('Unable to fetch Apache mime list');
+            throw Exceptional::Runtime(
+                'Unable to fetch Apache mime list'
+            );
         }
 
         $output = [];

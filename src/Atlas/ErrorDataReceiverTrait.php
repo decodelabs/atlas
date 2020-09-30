@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Channel\Buffer;
+use DecodeLabs\Exceptional;
 
 trait ErrorDataReceiverTrait
 {
@@ -24,7 +25,9 @@ trait ErrorDataReceiverTrait
     protected function checkErrorWritable(): void
     {
         if (!$this->isErrorWritable()) {
-            throw Glitch::ERuntime('Error writing has been shut down');
+            throw Exceptional::Runtime(
+                'Error writing has been shut down'
+            );
         }
     }
 

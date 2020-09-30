@@ -9,7 +9,7 @@ namespace DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\EventLoop;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 trait ProviderTrait
 {
@@ -21,7 +21,7 @@ trait ProviderTrait
     public function setEventLoop(EventLoop $eventLoop): Provider
     {
         if ($this->isRunning()) {
-            throw Glitch::ERuntime(
+            throw Exceptional::Runtime(
                 'You cannot change the event loop while it is running'
             );
         }

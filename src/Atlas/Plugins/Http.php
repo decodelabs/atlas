@@ -15,9 +15,10 @@ use DecodeLabs\Atlas\DataReceiver;
 use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\File\Memory as MemoryFile;
 
-use DecodeLabs\Glitch;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
+
+use DecodeLabs\Exceptional;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -42,7 +43,9 @@ class Http implements FacadePlugin
     public function newClient(array $options=[]): HttpClient
     {
         if (!class_exists(HttpClient::class)) {
-            throw Glitch::EComponentUnavailable('Cannot create HTTP Client, GuzzleHttp is not installed');
+            throw Exceptional::ComponentUnavailable(
+                'Cannot create HTTP Client, GuzzleHttp is not installed'
+            );
         }
 
         return new HttpClient($options);
@@ -90,7 +93,9 @@ class Http implements FacadePlugin
     public function getJson(string $url, array $options=[]): Tree
     {
         if (!class_exists(NativeTree::class)) {
-            throw Glitch::EComponentUnavailable('Cannot expand JSON response without decodelabs/collections');
+            throw Exceptional::ComponentUnavailable(
+                'Cannot expand JSON response without decodelabs/collections'
+            );
         }
 
         $response = $this->newClient()->get($url, $options);

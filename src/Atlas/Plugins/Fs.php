@@ -15,6 +15,8 @@ use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 
+use DecodeLabs\Exceptional;
+
 use Generator;
 
 class Fs implements FacadePlugin
@@ -299,7 +301,9 @@ class Fs implements FacadePlugin
         $output = $file->copy($destinationPath);
 
         if (!$output instanceof File) {
-            throw Glitch::EUnexpectedValue('Output of file copy() was not a file', null, $output);
+            throw Exceptional::UnexpectedValue(
+                'Output of file copy() was not a file', null, $output
+            );
         }
 
         return $output;
@@ -314,7 +318,9 @@ class Fs implements FacadePlugin
         $output = $file->copyTo($destinationDir, $newName);
 
         if (!$output instanceof File) {
-            throw Glitch::EUnexpectedValue('Output of file copy() was not a file', null, $output);
+            throw Exceptional::UnexpectedValue(
+                'Output of file copy() was not a file', null, $output
+            );
         }
 
         return $output;
@@ -840,7 +846,9 @@ class Fs implements FacadePlugin
         $output = $dir->copy($destinationPath);
 
         if (!$output instanceof Dir) {
-            throw Glitch::EUnexpectedValue('Output of dir copy() was not a dir', null, $output);
+            throw Exceptional::UnexpectedValue(
+                'Output of dir copy() was not a dir', null, $output
+            );
         }
 
         return $output;
@@ -855,7 +863,9 @@ class Fs implements FacadePlugin
         $output = $dir->copyTo($destinationDir, $newName);
 
         if (!$output instanceof Dir) {
-            throw Glitch::EUnexpectedValue('Output of dir copy() was not a dir', null, $output);
+            throw Exceptional::UnexpectedValue(
+                'Output of dir copy() was not a dir', null, $output
+            );
         }
 
         return $output;
@@ -930,15 +940,22 @@ class Fs implements FacadePlugin
         }
 
         if ($path instanceof Node) {
-            throw Glitch::EInvalidArgument('Item is not a '.$type);
+            throw Exceptional::InvalidArgument(
+                'Item is not a '.$type
+            );
         }
 
-        if (is_object($path) && method_exists($path, '__toString')) {
+        if (
+            is_object($path) &&
+            method_exists($path, '__toString')
+        ) {
             $path = (string)$path;
         }
 
         if (!is_string($path)) {
-            throw Glitch::EInvalidArgument('Invalid filesystem node input', null, $path);
+            throw Exceptional::InvalidArgument(
+                'Invalid filesystem node input', null, $path
+            );
         }
 
         return null;

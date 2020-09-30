@@ -23,7 +23,7 @@ use DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas\EventLoop\Event as LibEventLoop;
 use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
 
-use DecodeLabs\Glitch;
+use DecodeLabs\Exceptional;
 
 class Context implements FacadePluginAccessTarget
 {
@@ -52,7 +52,9 @@ class Context implements FacadePluginAccessTarget
     public function loadFacadePlugin(string $name): FacadePlugin
     {
         if (!in_array($name, self::PLUGINS)) {
-            throw Glitch::EInvalidArgument($name.' is not a recognised facade plugin');
+            throw Exceptional::InvalidArgument(
+                $name.' is not a recognised facade plugin'
+            );
         }
 
         $class = '\\DecodeLabs\\Atlas\\Plugins\\'.ucfirst($name);
@@ -79,7 +81,9 @@ class Context implements FacadePluginAccessTarget
     public function openCliInputStream(): Channel
     {
         if (!defined('STDIN')) {
-            throw Glitch::ERuntime('STDIN is only available on the CLI SAPI');
+            throw Exceptional::Runtime(
+                'STDIN is only available on the CLI SAPI'
+            );
         }
 
         return new Stream(\STDIN, 'r');
@@ -91,7 +95,9 @@ class Context implements FacadePluginAccessTarget
     public function openCliOutputStream(): Channel
     {
         if (!defined('STDOUT')) {
-            throw Glitch::ERuntime('STDOUT is only available on the CLI SAPI');
+            throw Exceptional::Runtime(
+                'STDOUT is only available on the CLI SAPI'
+            );
         }
 
         return new Stream(\STDOUT, 'w');
@@ -103,7 +109,9 @@ class Context implements FacadePluginAccessTarget
     public function openCliErrorStream(): Channel
     {
         if (!defined('STDERR')) {
-            throw Glitch::ERuntime('STDERR is only available on the CLI SAPI');
+            throw Exceptional::Runtime(
+                'STDERR is only available on the CLI SAPI'
+            );
         }
 
         return new Stream(\STDERR, 'w');

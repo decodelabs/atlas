@@ -22,6 +22,7 @@ use Generator;
 
 use DecodeLabs\Glitch;
 use DecodeLabs\Glitch\Dumpable;
+use DecodeLabs\Exceptional;
 
 class Local extends Stream implements File, Dumpable
 {
@@ -187,7 +188,9 @@ class Local extends Stream implements File, Dumpable
         }
 
         if (!$this->lockExclusive()) {
-            throw Glitch::EIo('Unable to lock file for writing', null, $this);
+            throw Exceptional::Io(
+                'Unable to lock file for writing', null, $this
+            );
         }
 
         $this->truncate();
@@ -218,7 +221,9 @@ class Local extends Stream implements File, Dumpable
         }
 
         if (!$this->lock()) {
-            throw Glitch::EIo('Unable to lock file for reading', null, $this);
+            throw Exceptional::Io(
+                'Unable to lock file for reading', null, $this
+            );
         }
 
         $this->setPosition(0);
@@ -282,7 +287,9 @@ class Local extends Stream implements File, Dumpable
         }
 
         if (!$this->resource = fopen($this->path, $mode)) {
-            throw Glitch::EIo('Unable to open file', null, $this);
+            throw Exceptional::Io(
+                'Unable to open file', null, $this
+            );
         }
 
         return $this;
@@ -312,7 +319,9 @@ class Local extends Stream implements File, Dumpable
     public function lock(bool $nonBlocking=false): bool
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot lock file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot lock file, file not open', null, $this
+            );
         }
 
         if ($nonBlocking) {
@@ -328,7 +337,9 @@ class Local extends Stream implements File, Dumpable
     public function lockExclusive(bool $nonBlocking=false): bool
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot lock file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot lock file, file not open', null, $this
+            );
         }
 
         return flock(
@@ -349,7 +360,9 @@ class Local extends Stream implements File, Dumpable
         }
 
         if (!flock($this->resource, LOCK_UN)) {
-            throw Glitch::EIo('Unable to unlock file', null, $this);
+            throw Exceptional::Io(
+                'Unable to unlock file', null, $this
+            );
         }
 
         return $this;
@@ -368,7 +381,9 @@ class Local extends Stream implements File, Dumpable
 
         if ($this->isLink()) {
             if (file_exists($path)) {
-                throw Glitch::EAlreadyExists('Destination file already exists', null, $this);
+                throw Exceptional::AlreadyExists(
+                    'Destination file already exists', null, $this
+                );
             }
 
             return $this->copySymlink($path);
@@ -407,17 +422,23 @@ class Local extends Stream implements File, Dumpable
     public function move(string $path): Node
     {
         if (!$this->exists()) {
-            throw Glitch::ENotFound('Source file does not exist', null, $this);
+            throw Exceptional::NotFound(
+                'Source file does not exist', null, $this
+            );
         }
 
         if (file_exists($path)) {
-            throw Glitch::EAlreadyExists('Destination file already exists', null, $path);
+            throw Exceptional::AlreadyExists(
+                'Destination file already exists', null, $path
+            );
         }
 
         (new LocalDir(dirname($path)))->ensureExists();
 
         if (!rename($this->path, $path)) {
-            throw Glitch::EIo('Unable to rename file', null, $this);
+            throw Exceptional::Io(
+                'Unable to rename file', null, $this
+            );
         }
 
         $this->path = $path;
@@ -451,11 +472,15 @@ class Local extends Stream implements File, Dumpable
     public function setPosition(int $offset): File
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot seek file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot seek file, file not open', null, $this
+            );
         }
 
         if (0 !== fseek($this->resource, $offset, SEEK_SET)) {
-            throw Glitch::EIo('Failed to seek file', null, $this);
+            throw Exceptional::Io(
+                'Failed to seek file', null, $this
+            );
         }
 
         return $this;
@@ -467,11 +492,15 @@ class Local extends Stream implements File, Dumpable
     public function movePosition(int $offset, bool $fromEnd=false): File
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot seek file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot seek file, file not open', null, $this
+            );
         }
 
         if (0 !== fseek($this->resource, $offset, $fromEnd ? SEEK_END : SEEK_CUR)) {
-            throw Glitch::EIo('Failed to seek file', null, $this);
+            throw Exceptional::Io(
+                'Failed to seek file', null, $this
+            );
         }
 
         return $this;
@@ -484,13 +513,17 @@ class Local extends Stream implements File, Dumpable
     public function getPosition(): int
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot ftell file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot ftell file, file not open', null, $this
+            );
         }
 
         $output = ftell($this->resource);
 
         if ($output === false) {
-            throw Glitch::EIo('Failed to ftell file', null, $this);
+            throw Exceptional::Io(
+                'Failed to ftell file', null, $this
+            );
         }
 
         return $output;
@@ -511,11 +544,15 @@ class Local extends Stream implements File, Dumpable
     public function flush(): File
     {
         if ($this->resource === null) {
-            throw Glitch::EIo('Cannot flush file, file not open', null, $this);
+            throw Exceptional::Io(
+                'Cannot flush file, file not open', null, $this
+            );
         }
 
         if (false === fflush($this->resource)) {
-            throw Glitch::EIo('Failed to flush file', null, $this);
+            throw Exceptional::Io(
+                'Failed to flush file', null, $this
+            );
         }
 
         return $this;

@@ -11,6 +11,7 @@
     "require": {
         "php": "^7.2",
 
+        "decodelabs/exceptional": "^0.2",
         "decodelabs/glitch": "^0.15.6",
         "decodelabs/veneer": "^0.5",
         "decodelabs/systemic": "^0.6",
