@@ -1,3 +1,6 @@
+## v0.7.6 (2020-10-02)
+* Updated glitch-support
+
 ## v0.7.5 (2020-10-02)
 * Removed Glitch dependency
 

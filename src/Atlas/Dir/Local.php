@@ -25,7 +25,7 @@ use RecursiveDirectoryIterator;
 use FilesystemIterator;
 
 use DecodeLabs\Glitch\Dumpable;
-use DecodeLabs\Glitch\Path\Normalizer as Path;
+use DecodeLabs\Glitch\Proxy;
 
 use DecodeLabs\Exceptional;
 
@@ -517,7 +517,7 @@ class Local implements Dir, Dumpable
      */
     public function glitchDump(): iterable
     {
-        yield 'definition' => Path::normalize($this->path);
+        yield 'definition' => Proxy::normalizePath($this->path);
 
         yield 'metaList' => [
             'exists' => $this->exists(),
