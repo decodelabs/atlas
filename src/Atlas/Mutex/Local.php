@@ -8,10 +8,8 @@ namespace DecodeLabs\Atlas\Mutex;
 
 use DecodeLabs\Atlas\Mutex;
 use DecodeLabs\Atlas\MutexTrait;
-
 use DecodeLabs\Atlas\File\Local as LocalFile;
 
-use DecodeLabs\Glitch;
 use DecodeLabs\Glitch\Dumpable;
 
 class Local implements Mutex, Dumpable
@@ -55,7 +53,7 @@ class Local implements Mutex, Dumpable
 
 
     /**
-     * Inspect for Glitch
+     * Export for dump inspection
      */
     public function glitchDump(): iterable
     {
