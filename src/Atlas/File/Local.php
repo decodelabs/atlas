@@ -20,8 +20,9 @@ use DecodeLabs\Atlas\Channel\Buffer;
 
 use Generator;
 
-use DecodeLabs\Glitch;
 use DecodeLabs\Glitch\Dumpable;
+use DecodeLabs\Glitch\Path\Normalizer as Path;
+
 use DecodeLabs\Exceptional;
 
 class Local extends Stream implements File, Dumpable
@@ -575,11 +576,11 @@ class Local extends Stream implements File, Dumpable
 
 
     /**
-     * Inspect for Glitch
+     * Export for dump inspection
      */
     public function glitchDump(): iterable
     {
-        yield 'definition' => Glitch::normalizePath($this->path);
+        yield 'definition' => Path::normalize($this->path);
 
         yield 'metaList' => [
             'resource' => $this->resource,
