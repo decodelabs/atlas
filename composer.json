@@ -22,7 +22,7 @@
         "phpunit/phpunit": "^8",
         "phpstan/phpstan": "0.12.45",
         "phpstan/extension-installer": "^1.0",
-        "decodelabs/phpstan-decodelabs": "^0.3.5",
+        "decodelabs/phpstan-decodelabs": "^0.3.7",
 
         "guzzlehttp/guzzle": "^6.4",
         "decodelabs/collections": "^0.5"
