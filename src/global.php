@@ -10,8 +10,10 @@ declare(strict_types=1);
  */
 namespace DecodeLabs\Atlas
 {
+    use DecodeLabs\Atlas;
     use DecodeLabs\Atlas\Context;
+    use DecodeLabs\Veneer;
 
     // Register the Veneer facade
-    Context::registerFacade();
+    Veneer::register(Context::class, Atlas::class);
 }
