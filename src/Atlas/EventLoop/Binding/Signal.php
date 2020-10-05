@@ -11,6 +11,7 @@ use DecodeLabs\Atlas\EventLoop\Binding;
 use DecodeLabs\Atlas\EventLoop\BindingTrait;
 
 use DecodeLabs\Systemic;
+use DecodeLabs\Exceptional;
 
 class Signal implements Binding
 {
@@ -25,6 +26,12 @@ class Signal implements Binding
      */
     public function __construct(EventLoop $eventLoop, string $id, bool $persistent, $signals, callable $callback)
     {
+        if (!class_exists(Systemic::class)) {
+            throw Exceptional::ComponentUnavailable(
+                'EventLoop Signal support requires DecodeLabs Systemic'
+            );
+        }
+
         $this->__traitConstruct($eventLoop, $id, $persistent, $callback);
         $this->resource = [];
 

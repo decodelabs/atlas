@@ -8,7 +8,6 @@ namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Socket;
 use DecodeLabs\Atlas\Channel\Stream;
-use DecodeLabs\Systemic\Process\Signal;
 
 use DecodeLabs\Atlas\EventLoop\Binding\Socket as SocketBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
@@ -1046,7 +1045,7 @@ trait EventLoopTrait
      */
     public function freezeSignal($signal): EventLoop
     {
-        $number = Systemic::$process->normalizeSignal($signal);
+        $number = $this->normalizeSignal($signal);
 
         foreach ($this->signals as $id => $binding) {
             if ($binding->hasSignal($number)) {
@@ -1094,7 +1093,7 @@ trait EventLoopTrait
      */
     public function unfreezeSignal($signal): EventLoop
     {
-        $number = Systemic::$process->normalizeSignal($signal);
+        $number = $this->normalizeSignal($signal);
 
         foreach ($this->signals as $id => $binding) {
             if ($binding->hasSignal($number)) {
@@ -1142,7 +1141,7 @@ trait EventLoopTrait
      */
     public function removeSignal($signal): EventLoop
     {
-        $number = Systemic::$process->normalizeSignal($signal);
+        $number = $this->normalizeSignal($signal);
 
         foreach ($this->signals as $id => $binding) {
             if ($binding->hasSignal($number)) {
@@ -1222,7 +1221,7 @@ trait EventLoopTrait
     public function countSignalBindingsFor($signal): int
     {
         $count = 0;
-        $number = Systemic::$process->normalizeSignal($signal);
+        $number = $this->normalizeSignal($signal);
 
         foreach ($this->signals as $id => $binding) {
             if ($binding->hasSignal($number)) {
@@ -1247,7 +1246,7 @@ trait EventLoopTrait
     public function getSignalBindingsFor($signal): array
     {
         $output = [];
-        $number = Systemic::$process->normalizeSignal($signal);
+        $number = $this->normalizeSignal($signal);
 
         foreach ($this->signals as $id => $binding) {
             if ($binding->hasSignal($number)) {
@@ -1256,6 +1255,20 @@ trait EventLoopTrait
         }
 
         return $output;
+    }
+
+    /**
+     * Normalize signal input
+     */
+    protected function normalizeSignal($signal): int
+    {
+        if (!class_exists(Systemic::class)) {
+            throw Exceptional::ComponentUnavailable(
+                'EventLoop Signal support requires DecodeLabs Systemic'
+            );
+        }
+
+        return Systemic::$process->normalizeSignal($signal);
     }
 
 
