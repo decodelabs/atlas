@@ -6,7 +6,7 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas\Plugins;
 
-use DecodeLabs\Veneer\FacadePlugin;
+use DecodeLabs\Veneer\Plugin;
 
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\File;
@@ -19,7 +19,7 @@ use DecodeLabs\Exceptional;
 
 use Generator;
 
-class Fs implements FacadePlugin
+class Fs implements Plugin
 {
     /**
      * Create a new empty temp file

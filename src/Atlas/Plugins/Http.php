@@ -6,7 +6,7 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas\Plugins;
 
-use DecodeLabs\Veneer\FacadePlugin;
+use DecodeLabs\Veneer\Plugin;
 
 use DecodeLabs\Atlas\Context;
 use DecodeLabs\Atlas\Node;
@@ -25,7 +25,7 @@ use Psr\Http\Message\StreamInterface;
 
 use GuzzleHttp\Client as HttpClient;
 
-class Http implements FacadePlugin
+class Http implements Plugin
 {
     protected $context;
 

@@ -6,10 +6,10 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas\Plugins;
 
-use DecodeLabs\Veneer\FacadePlugin;
+use DecodeLabs\Veneer\Plugin;
 use DecodeLabs\Exceptional;
 
-class Mime implements FacadePlugin
+class Mime implements Plugin
 {
     /**
      * Detect mime type from path

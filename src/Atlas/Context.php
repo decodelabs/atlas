@@ -6,11 +6,11 @@
 declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Veneer\FacadeTarget;
-use DecodeLabs\Veneer\FacadeTargetTrait;
-use DecodeLabs\Veneer\FacadePluginAccessTarget;
-use DecodeLabs\Veneer\FacadePluginAccessTargetTrait;
-use DecodeLabs\Veneer\FacadePlugin;
+use DecodeLabs\Veneer\Plugin as VeneerPlugin;
+use DecodeLabs\Veneer\Plugin\Provider as VeneerPluginProvider;
+use DecodeLabs\Veneer\Plugin\ProviderTrait as VeneerPluginProviderTrait;
+use DecodeLabs\Veneer\Plugin\AccessTarget as VeneerPluginAccessTarget;
+use DecodeLabs\Veneer\Plugin\AccessTargetTrait as VeneerPluginAccessTargetTrait;
 
 use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Stream;
@@ -25,12 +25,10 @@ use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
 
 use DecodeLabs\Exceptional;
 
-class Context implements FacadePluginAccessTarget
+class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
 {
-    use FacadeTargetTrait;
-    use FacadePluginAccessTargetTrait;
-
-    const FACADE = 'Atlas';
+    use VeneerPluginProviderTrait;
+    use VeneerPluginAccessTargetTrait;
 
     const PLUGINS = [
         'fs', 'mime', 'http'
@@ -40,7 +38,7 @@ class Context implements FacadePluginAccessTarget
     /**
      * Stub to get empty plugin list to avoid broken targets
      */
-    public function getFacadePluginNames(): array
+    public function getVeneerPluginNames(): array
     {
         return static::PLUGINS;
     }
@@ -49,11 +47,11 @@ class Context implements FacadePluginAccessTarget
     /**
      * Load factory plugins
      */
-    public function loadFacadePlugin(string $name): FacadePlugin
+    public function loadVeneerPlugin(string $name): VeneerPlugin
     {
         if (!in_array($name, self::PLUGINS)) {
             throw Exceptional::InvalidArgument(
-                $name.' is not a recognised facade plugin'
+                $name.' is not a recognised Veneer plugin'
             );
         }
 
