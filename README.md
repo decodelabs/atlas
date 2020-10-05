@@ -3,7 +3,7 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 [![Latest Version](https://img.shields.io/packagist/v/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 [![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
-[![Build Status](https://img.shields.io/travis/decodelabs/atlas/develop.svg?style=flat-square)](https://travis-ci.org/decodelabs/atlas)
+[![Build Status](https://img.shields.io/travis/com/decodelabs/atlas/master.svg?style=flat-square)](https://travis-ci.org/decodelabs/atlas)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat-square)](https://github.com/phpstan/phpstan)
 [![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 
@@ -22,13 +22,8 @@ composer install decodelabs/atlas
 
 ### Importing
 
-Atlas uses a [Veneer Facade](https://github.com/decodelabs/veneer) so you don't _need_ to add any <code>use</code> declarations to your code, the class will be aliased into whatever namespace you are working in.
-
-However, if you want to avoid filling your namespace with class aliases, you can import the Facade with:
-
-```php
-use DecodeLabs\Atlas;
-```
+Atlas uses [Veneer](https://github.com/decodelabs/veneer) to provide a unified frotage under <code>DecodeLabs\Atlas</code>.
+You can access all the primary functionality via this static frontage without compromising testing and dependency injection.
 
 
 ### Basic local filesystem functions
@@ -37,6 +32,8 @@ There are many standard filesystem functions represented by either <code>File</c
 See [Fs.php](./src/Atlas/Plugins/Fs.php), [File/Local.php](./src/Atlas/File/Local.php) and [Dir/Local.php](./src/Atlas/Dir/Local.php) for the full list.
 
 ```php
+use DecodeLabs\Atlas;
+
 Atlas::$fs->get('/path/to/dir_or_file')
     ->copyTo('/another/path/');
 
@@ -54,6 +51,8 @@ Scan the contents of a folder with optional filtering..
 Replace "scan" for "list" to return an array rather than a <code>Generator</code>:
 
 ```php
+use DecodeLabs\Atlas;
+
 foreach(Atlas::$fs->scan('my/dir') as $name => $fileOrDir) {
     // All files and dirs in my/dir
 }
@@ -78,6 +77,8 @@ See [Fs.php](./src/Atlas/Plugins/Fs.php) or [Dir/Local.php](./src/Atlas/Dir/Scan
 Channels represent simple in / out handlers and can be written to and read from:
 
 ```php
+use DecodeLabs\Atlas;
+
 $stream = Atlas::openStream('path/to/file');
 $stream->writeLine('Hello world');
 
@@ -94,6 +95,8 @@ echo $buffer->read(6); // "Some t"
 Channels can be grouped together and managed by an <code>IO Broker</code> -
 
 ```php
+use DecodeLabs\Atlas;
+
 // Create a CLI IO handler
 $broker = new Atlas::newBroker()
     ->addInputProvider(Atlas::openStream(STDIN))
@@ -121,6 +124,8 @@ Listen for events on IO, Signals and Timers and respond accordingly.
 If php's Event extension is available, that will be used, otherwise a basic <code>select()</code> loop fills in the gaps.
 
 ```php
+use DecodeLabs\Atlas;
+
 $broker = Atlas::newCliBroker();
 
 $eventLoop = Atlas::newEventLoop()
@@ -167,6 +172,8 @@ Timer 1
 Detect a mime type for a file path:
 
 ```php
+use DecodeLabs\Atlas;
+
 echo Atlas::$mime->detect(__FILE__);
 // application/x-php
 ```
@@ -174,6 +181,8 @@ echo Atlas::$mime->detect(__FILE__);
 Get known extensions for a type:
 
 ```php
+use DecodeLabs\Atlas;
+
 $exts = Atlas::$mime->getExtensions('text/plain');
 // txt, text, conf, def, list, log, in
 ```
@@ -181,6 +190,8 @@ $exts = Atlas::$mime->getExtensions('text/plain');
 Suggest an extension for a mime type:
 
 ```php
+use DecodeLabs\Atlas;
+
 echo Atlas::$mime->suggestExtension('text/plain');
 //txt
 ```
