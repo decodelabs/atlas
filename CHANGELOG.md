@@ -1,3 +1,6 @@
+## v0.7.9 (2020-10-06)
+* Removed Systemic dependency
+
 ## v0.7.8 (2020-10-05)
 * Improved readme
 * Updated PHPStan
