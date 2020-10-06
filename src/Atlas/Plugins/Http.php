@@ -1,29 +1,27 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\Plugins;
 
-use DecodeLabs\Veneer\Plugin;
-
 use DecodeLabs\Atlas\Context;
-use DecodeLabs\Atlas\Node;
-use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\DataReceiver;
-use DecodeLabs\Atlas\File\Local as LocalFile;
-use DecodeLabs\Atlas\File\Memory as MemoryFile;
-
+use DecodeLabs\Atlas\File;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
 
 use DecodeLabs\Exceptional;
+use DecodeLabs\Veneer\Plugin;
+
+use GuzzleHttp\Client as HttpClient;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-
-use GuzzleHttp\Client as HttpClient;
 
 class Http implements Plugin
 {
@@ -40,7 +38,7 @@ class Http implements Plugin
     /**
      * Create new HTTP client
      */
-    public function newClient(array $options=[]): HttpClient
+    public function newClient(array $options = []): HttpClient
     {
         if (!class_exists(HttpClient::class)) {
             throw Exceptional::ComponentUnavailable(
@@ -54,7 +52,7 @@ class Http implements Plugin
     /**
      * Fetch HTTP URL to memory file
      */
-    public function get(string $url, array $options=[]): File
+    public function get(string $url, array $options = []): File
     {
         $response = $this->newClient()->get($url, $options);
         return $this->importResponse($response);
@@ -63,7 +61,7 @@ class Http implements Plugin
     /**
      * Fetch HTTP URL to string
      */
-    public function getString(string $url, array $options=[]): string
+    public function getString(string $url, array $options = []): string
     {
         $response = $this->newClient()->get($url, $options);
         return (string)$response->getBody();
@@ -72,7 +70,7 @@ class Http implements Plugin
     /**
      * Fetch HTTL URL and save to disk
      */
-    public function getFile(string $url, string $path, array $options=[]): File
+    public function getFile(string $url, string $path, array $options = []): File
     {
         $response = $this->newClient()->get($url, $options);
         return $this->saveResponse($response, $path);
@@ -81,7 +79,7 @@ class Http implements Plugin
     /**
      * Fetch HTTL URL and save to disk as temp file
      */
-    public function getTempFile(string $url, array $options=[]): File
+    public function getTempFile(string $url, array $options = []): File
     {
         $response = $this->newClient()->get($url, $options);
         return $this->saveTempResponse($response);
@@ -90,7 +88,7 @@ class Http implements Plugin
     /**
      * Fetch json file over HTTP
      */
-    public function getJson(string $url, array $options=[]): Tree
+    public function getJson(string $url, array $options = []): Tree
     {
         if (!class_exists(NativeTree::class)) {
             throw Exceptional::ComponentUnavailable(

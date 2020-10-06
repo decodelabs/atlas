@@ -1,15 +1,18 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\Channel;
 
+use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\DataProvider;
 use DecodeLabs\Atlas\DataProviderTrait;
 use DecodeLabs\Atlas\DataReceiverTrait;
-use DecodeLabs\Atlas\Channel;
 
 use DecodeLabs\Exceptional;
 
@@ -26,7 +29,7 @@ class Stream implements Channel
     /**
      * Init with stream path
      */
-    public function __construct($path, ?string $mode='a+')
+    public function __construct($path, ?string $mode = 'a+')
     {
         if (empty($path)) {
             return;
@@ -203,7 +206,7 @@ class Stream implements Channel
     /**
      * Write ?$length bytes to resource
      */
-    public function write(?string $data, int $length=null): int
+    public function write(?string $data, int $length = null): int
     {
         $this->checkWritable();
 
@@ -215,7 +218,9 @@ class Stream implements Channel
 
         if ($output === false) {
             throw Exceptional::Io(
-                'Unable to write to stream', null, $this
+                'Unable to write to stream',
+                null,
+                $this
             );
         }
 

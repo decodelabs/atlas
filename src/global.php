@@ -1,8 +1,10 @@
 <?php
+
 /**
- * This file is part of the Veneer package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
 
 /**
@@ -11,7 +13,6 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas
 {
     use DecodeLabs\Atlas;
-    use DecodeLabs\Atlas\Context;
     use DecodeLabs\Veneer;
 
     // Register the Veneer facade

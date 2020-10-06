@@ -22,6 +22,7 @@
         "phpstan/phpstan": "^0.12.45",
         "phpstan/extension-installer": "^1.0",
         "decodelabs/phpstan-decodelabs": "^0.3.11",
+        "symplify/easy-coding-standard": "^8.3",
 
         "guzzlehttp/guzzle": "^6.4",
         "decodelabs/systemic": "^0.6.11",
@@ -45,5 +46,10 @@
         "branch-alias": {
             "dev-develop": "0.7.x-dev"
         }
+    },
+    "scripts": {
+        "analyze": "phpstan analyze --no-progress",
+        "psr12": "ecs check --no-progress-bar",
+        "psr12-fix": "ecs check --no-progress-bar --fix"
     }
 }

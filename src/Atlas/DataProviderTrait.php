@@ -1,14 +1,13 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
-declare(strict_types=1);
-namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Atlas\DataProvider;
-use DecodeLabs\Atlas\DataReceiver;
-use DecodeLabs\Atlas\Channel;
+declare(strict_types=1);
+
+namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Exceptional;
 

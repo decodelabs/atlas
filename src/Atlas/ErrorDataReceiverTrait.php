@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Channel\Buffer;
@@ -35,9 +38,9 @@ trait ErrorDataReceiverTrait
     /**
      * Write a single line of data
      */
-    public function writeErrorLine(?string $data=''): int
+    public function writeErrorLine(?string $data = ''): int
     {
-        return $this->writeError($data.PHP_EOL);
+        return $this->writeError($data . PHP_EOL);
     }
 
     /**

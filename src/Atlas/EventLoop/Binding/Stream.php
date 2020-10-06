@@ -1,17 +1,19 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\EventLoop\Binding;
 
+use DecodeLabs\Atlas\Channel\Stream as StreamChannel;
 use DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas\EventLoop\Binding;
-use DecodeLabs\Atlas\EventLoop\BindingTrait;
 use DecodeLabs\Atlas\EventLoop\Binding\Io as IoBinding;
-use DecodeLabs\Atlas\EventLoop\Binding\IoTrait;
-use DecodeLabs\Atlas\Channel\Stream as StreamChannel;
+use DecodeLabs\Atlas\EventLoop\BindingTrait;
 
 class Stream implements IoBinding
 {
@@ -26,13 +28,13 @@ class Stream implements IoBinding
     /**
      * Init with timer information
      */
-    public function __construct(EventLoop $eventLoop, bool $persistent, StreamChannel $stream, string $ioMode, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null)
+    public function __construct(EventLoop $eventLoop, bool $persistent, StreamChannel $stream, string $ioMode, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null)
     {
         $this->stream = $stream;
         $this->streamId = spl_object_id($stream);
         $this->ioMode = $ioMode;
 
-        $this->__traitConstruct($eventLoop, $this->ioMode.':'.$this->streamId, $persistent, $callback);
+        $this->__traitConstruct($eventLoop, $this->ioMode . ':' . $this->streamId, $persistent, $callback);
         $this->timeout = $timeout;
         $this->timeoutHandler = $timeoutHandler;
     }

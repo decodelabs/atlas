@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas;
 
 interface Node
@@ -22,7 +25,7 @@ interface Node
 
     public function clearStatCache(): Node;
     public function getLastModified(): ?int;
-    public function hasChanged(int $timeout=30): bool;
+    public function hasChanged(int $timeout = 30): bool;
     public function hasChangedIn(string $timeout): bool;
 
     public function setPermissions(int $mode): Node;
@@ -37,9 +40,9 @@ interface Node
     public function getParent(): ?Dir;
 
     public function copy(string $path): Node;
-    public function copyTo(string $destinationDir, string $newName=null): Node;
+    public function copyTo(string $destinationDir, string $newName = null): Node;
     public function renameTo(string $newName): Node;
     public function move(string $path): Node;
-    public function moveTo(string $destinationDir, string $newName=null): Node;
+    public function moveTo(string $destinationDir, string $newName = null): Node;
     public function delete(): void;
 }

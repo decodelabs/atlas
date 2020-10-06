@@ -1,21 +1,22 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Atlas\Socket;
 use DecodeLabs\Atlas\Channel\Stream;
-
+use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Socket as SocketBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
-use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
 
-use DecodeLabs\Systemic;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Systemic;
 
 trait EventLoopTrait
 {
@@ -106,7 +107,7 @@ trait EventLoopTrait
     /**
      * Register 1sec timed callback for testing run conditions
      */
-    public function setCycleHandler(?callable $callback=null): EventLoop
+    public function setCycleHandler(?callable $callback = null): EventLoop
     {
         $this->cycleHandler = $callback;
         $this->registerCycleHandler($callback);
@@ -133,80 +134,128 @@ trait EventLoopTrait
     /**
      * Bind to socket read event
      */
-    public function bindSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindSocketRead(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $socket,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to socket read event, frozen
      */
-    public function bindFrozenSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenSocketRead(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $socket,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single socket read event
      */
-    public function bindSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindSocketReadOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $socket,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single socket read event, frozen
      */
-    public function bindFrozenSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenSocketReadOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $socket,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to socket write event
      */
-    public function bindSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindSocketWrite(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $socket,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to socket write event, frozen
      */
-    public function bindFrozenSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenSocketWrite(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, true, $socket, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $socket,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single socket write event
      */
-    public function bindSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $socket,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single socket read event, frozen
      */
-    public function bindFrozenSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addSocketBinding(new SocketBinding(
-            $this, false, $socket, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $socket,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
@@ -244,12 +293,12 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
-            $this->freezeBinding($this->sockets['r:'.$id]);
+        if (isset($this->sockets['r:' . $id])) {
+            $this->freezeBinding($this->sockets['r:' . $id]);
         }
 
-        if (isset($this->sockets['w:'.$id])) {
-            $this->freezeBinding($this->sockets['w:'.$id]);
+        if (isset($this->sockets['w:' . $id])) {
+            $this->freezeBinding($this->sockets['w:' . $id]);
         }
 
         return $this;
@@ -262,8 +311,8 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
-            $this->freezeBinding($this->sockets['r:'.$id]);
+        if (isset($this->sockets['r:' . $id])) {
+            $this->freezeBinding($this->sockets['r:' . $id]);
         }
 
         return $this;
@@ -276,8 +325,8 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['w:'.$id])) {
-            $this->freezeBinding($this->sockets['w:'.$id]);
+        if (isset($this->sockets['w:' . $id])) {
+            $this->freezeBinding($this->sockets['w:' . $id]);
         }
 
         return $this;
@@ -288,7 +337,7 @@ trait EventLoopTrait
      */
     public function freezeAllSockets(): EventLoop
     {
-        foreach ($this->sockets as $id => $binding) {
+        foreach ($this->sockets as $binding) {
             $this->freezeBinding($binding);
         }
 
@@ -304,12 +353,12 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
-            $this->unfreezeBinding($this->sockets['r:'.$id]);
+        if (isset($this->sockets['r:' . $id])) {
+            $this->unfreezeBinding($this->sockets['r:' . $id]);
         }
 
-        if (isset($this->sockets['w:'.$id])) {
-            $this->unfreezeBinding($this->sockets['w:'.$id]);
+        if (isset($this->sockets['w:' . $id])) {
+            $this->unfreezeBinding($this->sockets['w:' . $id]);
         }
 
         return $this;
@@ -322,8 +371,8 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
-            $this->unfreezeBinding($this->sockets['r:'.$id]);
+        if (isset($this->sockets['r:' . $id])) {
+            $this->unfreezeBinding($this->sockets['r:' . $id]);
         }
 
         return $this;
@@ -336,8 +385,8 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['w:'.$id])) {
-            $this->unfreezeBinding($this->sockets['w:'.$id]);
+        if (isset($this->sockets['w:' . $id])) {
+            $this->unfreezeBinding($this->sockets['w:' . $id]);
         }
 
         return $this;
@@ -348,7 +397,7 @@ trait EventLoopTrait
      */
     public function unfreezeAllSockets(): EventLoop
     {
-        foreach ($this->sockets as $id => $binding) {
+        foreach ($this->sockets as $binding) {
             $this->unfreezeBinding($binding);
         }
 
@@ -364,12 +413,12 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
-            $this->removeSocketBinding($this->sockets['r:'.$id]);
+        if (isset($this->sockets['r:' . $id])) {
+            $this->removeSocketBinding($this->sockets['r:' . $id]);
         }
 
-        if (isset($this->sockets['w:'.$id])) {
-            $this->removeSocketBinding($this->sockets['w:'.$id]);
+        if (isset($this->sockets['w:' . $id])) {
+            $this->removeSocketBinding($this->sockets['w:' . $id]);
         }
 
         return $this;
@@ -382,8 +431,8 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
-            $this->removeSocketBinding($this->sockets['r:'.$id]);
+        if (isset($this->sockets['r:' . $id])) {
+            $this->removeSocketBinding($this->sockets['r:' . $id]);
         }
 
         return $this;
@@ -396,8 +445,8 @@ trait EventLoopTrait
     {
         $id = $socket->getId();
 
-        if (isset($this->sockets['w:'.$id])) {
-            $this->removeSocketBinding($this->sockets['w:'.$id]);
+        if (isset($this->sockets['w:' . $id])) {
+            $this->removeSocketBinding($this->sockets['w:' . $id]);
         }
 
         return $this;
@@ -444,11 +493,11 @@ trait EventLoopTrait
         $count = 0;
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
+        if (isset($this->sockets['r:' . $id])) {
             $count++;
         }
 
-        if (isset($this->sockets['w:'.$id])) {
+        if (isset($this->sockets['w:' . $id])) {
             $count++;
         }
 
@@ -471,12 +520,12 @@ trait EventLoopTrait
         $output = [];
         $id = $socket->getId();
 
-        if (isset($this->sockets['r:'.$id])) {
-            $output['r:'.$id] = $this->sockets['r:'.$id];
+        if (isset($this->sockets['r:' . $id])) {
+            $output['r:' . $id] = $this->sockets['r:' . $id];
         }
 
-        if (isset($this->sockets['w:'.$id])) {
-            $output['w:'.$id] = $this->sockets['w:'.$id];
+        if (isset($this->sockets['w:' . $id])) {
+            $output['w:' . $id] = $this->sockets['w:' . $id];
         }
 
         return $output;
@@ -552,80 +601,128 @@ trait EventLoopTrait
     /**
      * Bind to stream read event
      */
-    public function bindStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindStreamRead(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $stream, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $stream,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to stream read event, frozen
      */
-    public function bindFrozenStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenStreamRead(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $stream, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $stream,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single stream read event
      */
-    public function bindStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindStreamReadOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $stream, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $stream,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single stream read event, frozen
      */
-    public function bindFrozenStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenStreamReadOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $stream, 'r', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $stream,
+            'r',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to socket write event
      */
-    public function bindStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindStreamWrite(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $stream, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $stream,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to socket write event, frozen
      */
-    public function bindFrozenStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenStreamWrite(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, true, $stream, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            true,
+            $stream,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
     /**
      * Bind to single socket write event
      */
-    public function bindStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $stream, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $stream,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), false);
     }
 
     /**
      * Bind to single socket read event, frozen
      */
-    public function bindFrozenStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop
+    public function bindFrozenStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop
     {
         return $this->addStreamBinding(new StreamBinding(
-            $this, false, $stream, 'w', $callback, $timeout, $timeoutHandler
+            $this,
+            false,
+            $stream,
+            'w',
+            $callback,
+            $timeout,
+            $timeoutHandler
         ), true);
     }
 
@@ -662,12 +759,12 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
-            $this->freezeBinding($this->streams['r:'.$id]);
+        if (isset($this->streams['r:' . $id])) {
+            $this->freezeBinding($this->streams['r:' . $id]);
         }
 
-        if (isset($this->streams['w:'.$id])) {
-            $this->freezeBinding($this->streams['w:'.$id]);
+        if (isset($this->streams['w:' . $id])) {
+            $this->freezeBinding($this->streams['w:' . $id]);
         }
 
         return $this;
@@ -680,8 +777,8 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
-            $this->freezeBinding($this->streams['r:'.$id]);
+        if (isset($this->streams['r:' . $id])) {
+            $this->freezeBinding($this->streams['r:' . $id]);
         }
 
         return $this;
@@ -694,8 +791,8 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['w:'.$id])) {
-            $this->freezeBinding($this->streams['w:'.$id]);
+        if (isset($this->streams['w:' . $id])) {
+            $this->freezeBinding($this->streams['w:' . $id]);
         }
 
         return $this;
@@ -706,7 +803,7 @@ trait EventLoopTrait
      */
     public function freezeAllStreams(): EventLoop
     {
-        foreach ($this->streams as $id => $binding) {
+        foreach ($this->streams as $binding) {
             $this->freezeBinding($binding);
         }
 
@@ -721,12 +818,12 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
-            $this->unfreezeBinding($this->streams['r:'.$id]);
+        if (isset($this->streams['r:' . $id])) {
+            $this->unfreezeBinding($this->streams['r:' . $id]);
         }
 
-        if (isset($this->streams['w:'.$id])) {
-            $this->unfreezeBinding($this->streams['w:'.$id]);
+        if (isset($this->streams['w:' . $id])) {
+            $this->unfreezeBinding($this->streams['w:' . $id]);
         }
 
         return $this;
@@ -739,8 +836,8 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
-            $this->unfreezeBinding($this->streams['r:'.$id]);
+        if (isset($this->streams['r:' . $id])) {
+            $this->unfreezeBinding($this->streams['r:' . $id]);
         }
 
         return $this;
@@ -753,8 +850,8 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['w:'.$id])) {
-            $this->unfreezeBinding($this->streams['w:'.$id]);
+        if (isset($this->streams['w:' . $id])) {
+            $this->unfreezeBinding($this->streams['w:' . $id]);
         }
 
         return $this;
@@ -765,7 +862,7 @@ trait EventLoopTrait
      */
     public function unfreezeAllStreams(): EventLoop
     {
-        foreach ($this->streams as $id => $binding) {
+        foreach ($this->streams as $binding) {
             $this->unfreezeBinding($binding);
         }
 
@@ -781,12 +878,12 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
-            $this->removeStreamBinding($this->streams['r:'.$id]);
+        if (isset($this->streams['r:' . $id])) {
+            $this->removeStreamBinding($this->streams['r:' . $id]);
         }
 
-        if (isset($this->streams['w:'.$id])) {
-            $this->removeStreamBinding($this->streams['w:'.$id]);
+        if (isset($this->streams['w:' . $id])) {
+            $this->removeStreamBinding($this->streams['w:' . $id]);
         }
 
         return $this;
@@ -799,8 +896,8 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
-            $this->removeStreamBinding($this->streams['r:'.$id]);
+        if (isset($this->streams['r:' . $id])) {
+            $this->removeStreamBinding($this->streams['r:' . $id]);
         }
 
         return $this;
@@ -813,8 +910,8 @@ trait EventLoopTrait
     {
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['w:'.$id])) {
-            $this->removeStreamBinding($this->streams['w:'.$id]);
+        if (isset($this->streams['w:' . $id])) {
+            $this->removeStreamBinding($this->streams['w:' . $id]);
         }
 
         return $this;
@@ -861,11 +958,11 @@ trait EventLoopTrait
         $count = 0;
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
+        if (isset($this->streams['r:' . $id])) {
             $count++;
         }
 
-        if (isset($this->streams['w:'.$id])) {
+        if (isset($this->streams['w:' . $id])) {
             $count++;
         }
 
@@ -888,12 +985,12 @@ trait EventLoopTrait
         $output = [];
         $id = $this->getStreamId($stream);
 
-        if (isset($this->streams['r:'.$id])) {
-            $output['r:'.$id] = $this->streams['r:'.$id];
+        if (isset($this->streams['r:' . $id])) {
+            $output['r:' . $id] = $this->streams['r:' . $id];
         }
 
-        if (isset($this->streams['w:'.$id])) {
-            $output['w:'.$id] = $this->streams['w:'.$id];
+        if (isset($this->streams['w:' . $id])) {
+            $output['w:' . $id] = $this->streams['w:' . $id];
         }
 
         return $output;
@@ -980,7 +1077,11 @@ trait EventLoopTrait
     public function bindSignal(string $id, $signals, callable $callback): EventLoop
     {
         return $this->addSignalBinding(new SignalBinding(
-            $this, $id, true, $signals, $callback
+            $this,
+            $id,
+            true,
+            $signals,
+            $callback
         ), false);
     }
 
@@ -990,7 +1091,11 @@ trait EventLoopTrait
     public function bindFrozenSignal(string $id, $signals, callable $callback): EventLoop
     {
         return $this->addSignalBinding(new SignalBinding(
-            $this, $id, true, $signals, $callback
+            $this,
+            $id,
+            true,
+            $signals,
+            $callback
         ), true);
     }
 
@@ -1000,7 +1105,11 @@ trait EventLoopTrait
     public function bindSignalOnce(string $id, $signals, callable $callback): EventLoop
     {
         return $this->addSignalBinding(new SignalBinding(
-            $this, $id, false, $signals, $callback
+            $this,
+            $id,
+            false,
+            $signals,
+            $callback
         ), false);
     }
 
@@ -1010,7 +1119,11 @@ trait EventLoopTrait
     public function bindFrozenSignalOnce(string $id, $signals, callable $callback): EventLoop
     {
         return $this->addSignalBinding(new SignalBinding(
-            $this, $id, false, $signals, $callback
+            $this,
+            $id,
+            false,
+            $signals,
+            $callback
         ), true);
     }
 
@@ -1047,7 +1160,7 @@ trait EventLoopTrait
     {
         $number = $this->normalizeSignal($signal);
 
-        foreach ($this->signals as $id => $binding) {
+        foreach ($this->signals as $binding) {
             if ($binding->hasSignal($number)) {
                 $this->freezeBinding($binding);
             }
@@ -1066,7 +1179,9 @@ trait EventLoopTrait
 
             if (!$binding = $this->getSignalBinding($binding)) {
                 throw Exceptional::InvalidArgument(
-                    'Invalid signal binding', null, $orig
+                    'Invalid signal binding',
+                    null,
+                    $orig
                 );
             }
         }
@@ -1080,7 +1195,7 @@ trait EventLoopTrait
      */
     public function freezeAllSignals(): EventLoop
     {
-        foreach ($this->signals as $id => $binding) {
+        foreach ($this->signals as $binding) {
             $this->freezeBinding($binding);
         }
 
@@ -1095,7 +1210,7 @@ trait EventLoopTrait
     {
         $number = $this->normalizeSignal($signal);
 
-        foreach ($this->signals as $id => $binding) {
+        foreach ($this->signals as $binding) {
             if ($binding->hasSignal($number)) {
                 $this->unfreezeBinding($binding);
             }
@@ -1114,7 +1229,9 @@ trait EventLoopTrait
 
             if (!$binding = $this->getSignalBinding($binding)) {
                 throw Exceptional::InvalidArgument(
-                    'Invalid signal binding', null, $orig
+                    'Invalid signal binding',
+                    null,
+                    $orig
                 );
             }
         }
@@ -1128,7 +1245,7 @@ trait EventLoopTrait
      */
     public function unfreezeAllSignals(): EventLoop
     {
-        foreach ($this->signals as $id => $binding) {
+        foreach ($this->signals as $binding) {
             $this->unfreezeBinding($binding);
         }
 
@@ -1143,7 +1260,7 @@ trait EventLoopTrait
     {
         $number = $this->normalizeSignal($signal);
 
-        foreach ($this->signals as $id => $binding) {
+        foreach ($this->signals as $binding) {
             if ($binding->hasSignal($number)) {
                 $this->removeSignalBinding($binding);
             }
@@ -1162,7 +1279,9 @@ trait EventLoopTrait
 
             if (!$binding = $this->getSignalBinding($binding)) {
                 throw Exceptional::InvalidArgument(
-                    'Invalid signal binding', null, $orig
+                    'Invalid signal binding',
+                    null,
+                    $orig
                 );
             }
         }
@@ -1200,7 +1319,9 @@ trait EventLoopTrait
 
         if (!is_string($id)) {
             throw Exceptional::InvalidArgument(
-                'Invalid signal id', null, $id
+                'Invalid signal id',
+                null,
+                $id
             );
         }
 
@@ -1223,7 +1344,7 @@ trait EventLoopTrait
         $count = 0;
         $number = $this->normalizeSignal($signal);
 
-        foreach ($this->signals as $id => $binding) {
+        foreach ($this->signals as $binding) {
             if ($binding->hasSignal($number)) {
                 $count++;
             }
@@ -1280,7 +1401,11 @@ trait EventLoopTrait
     public function bindTimer(string $id, float $duration, callable $callback): EventLoop
     {
         return $this->addTimerBinding(new TimerBinding(
-            $this, $id, true, $duration, $callback
+            $this,
+            $id,
+            true,
+            $duration,
+            $callback
         ), false);
     }
 
@@ -1290,7 +1415,11 @@ trait EventLoopTrait
     public function bindFrozenTimer(string $id, float $duration, callable $callback): EventLoop
     {
         return $this->addTimerBinding(new TimerBinding(
-            $this, $id, true, $duration, $callback
+            $this,
+            $id,
+            true,
+            $duration,
+            $callback
         ), true);
     }
 
@@ -1300,7 +1429,11 @@ trait EventLoopTrait
     public function bindTimerOnce(string $id, float $duration, callable $callback): EventLoop
     {
         return $this->addTimerBinding(new TimerBinding(
-            $this, $id, false, $duration, $callback
+            $this,
+            $id,
+            false,
+            $duration,
+            $callback
         ), false);
     }
 
@@ -1310,7 +1443,11 @@ trait EventLoopTrait
     public function bindFrozenTimerOnce(string $id, float $duration, callable $callback): EventLoop
     {
         return $this->addTimerBinding(new TimerBinding(
-            $this, $id, false, $duration, $callback
+            $this,
+            $id,
+            false,
+            $duration,
+            $callback
         ), true);
     }
 
@@ -1350,7 +1487,9 @@ trait EventLoopTrait
 
             if (!$binding = $this->getTimerBinding($binding)) {
                 throw Exceptional::InvalidArgument(
-                    'Invalid timer binding', null, $orig
+                    'Invalid timer binding',
+                    null,
+                    $orig
                 );
             }
         }
@@ -1364,7 +1503,7 @@ trait EventLoopTrait
      */
     public function freezeAllTimers(): EventLoop
     {
-        foreach ($this->timers as $id => $binding) {
+        foreach ($this->timers as $binding) {
             $this->freezeBinding($binding);
         }
 
@@ -1382,7 +1521,9 @@ trait EventLoopTrait
 
             if (!$binding = $this->getTimerBinding($binding)) {
                 throw Exceptional::InvalidArgument(
-                    'Invalid timer binding', null, $orig
+                    'Invalid timer binding',
+                    null,
+                    $orig
                 );
             }
         }
@@ -1396,7 +1537,7 @@ trait EventLoopTrait
      */
     public function unfreezeAllTimers(): EventLoop
     {
-        foreach ($this->timers as $id => $binding) {
+        foreach ($this->timers as $binding) {
             $this->unfreezeBinding($binding);
         }
 
@@ -1414,7 +1555,9 @@ trait EventLoopTrait
 
             if (!$binding = $this->getTimerBinding($binding)) {
                 throw Exceptional::InvalidArgument(
-                    'Invalid timer binding', null, $orig
+                    'Invalid timer binding',
+                    null,
+                    $orig
                 );
             }
         }
@@ -1451,7 +1594,9 @@ trait EventLoopTrait
 
         if (!is_string($id)) {
             throw Exceptional::InvalidArgument(
-                'Invalid timer id', null, $id
+                'Invalid timer id',
+                null,
+                $id
             );
         }
 

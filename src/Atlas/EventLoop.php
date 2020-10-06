@@ -1,20 +1,22 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Atlas\Socket;
 use DecodeLabs\Atlas\Channel\Stream;
-use DecodeLabs\Systemic\Process\Signal;
-
 use DecodeLabs\Atlas\EventLoop\Binding;
+use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Socket as SocketBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
-use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
+
+use DecodeLabs\Systemic\Process\Signal;
 
 interface EventLoop
 {
@@ -32,19 +34,19 @@ interface EventLoop
     public function getAllBindings(): array;
     public function countAllBindings(): int;
 
-    public function setCycleHandler(?callable $callback=null): EventLoop;
+    public function setCycleHandler(?callable $callback = null): EventLoop;
     public function getCycleHandler(): ?callable;
 
 
     // Socket
-    public function bindSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenSocketRead(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenSocketReadOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenSocketWrite(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
+    public function bindSocketRead(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenSocketRead(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindSocketReadOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenSocketReadOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindSocketWrite(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenSocketWrite(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenSocketWriteOnce(Socket $socket, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
 
     public function freezeSocket(Socket $socket): EventLoop;
     public function freezeSocketRead(Socket $socket): EventLoop;
@@ -73,14 +75,14 @@ interface EventLoop
 
 
     // Stream
-    public function bindStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenStreamRead(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenStreamReadOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenStreamWrite(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
-    public function bindFrozenStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null): EventLoop;
+    public function bindStreamRead(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenStreamRead(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindStreamReadOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenStreamReadOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindStreamWrite(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenStreamWrite(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
+    public function bindFrozenStreamWriteOnce(Stream $stream, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null): EventLoop;
 
     public function freezeStream(Stream $stream): EventLoop;
     public function freezeStreamRead(Stream $stream): EventLoop;

@@ -1,17 +1,20 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\EventLoop\Binding;
 
 use DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas\EventLoop\Binding;
 use DecodeLabs\Atlas\EventLoop\BindingTrait;
 
-use DecodeLabs\Systemic;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Systemic;
 
 class Signal implements Binding
 {

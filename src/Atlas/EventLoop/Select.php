@@ -1,34 +1,35 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\EventLoop;
 
 use DecodeLabs\Atlas\EventLoop;
-use DecodeLabs\Atlas\EventLoopTrait;
-use DecodeLabs\Atlas\EventLoop\Binding;
-
+use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Socket as SocketBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
-use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
+use DecodeLabs\Atlas\EventLoopTrait;
 
 class Select implements EventLoop
 {
     use EventLoopTrait;
 
-    const SIGNAL = 0;
-    const SOCKET = 1;
-    const STREAM = 2;
-    const TIMER = 3;
+    public const SIGNAL = 0;
+    public const SOCKET = 1;
+    public const STREAM = 2;
+    public const TIMER = 3;
 
-    const READ = 'r';
-    const WRITE = 'w';
+    public const READ = 'r';
+    public const WRITE = 'w';
 
-    const RESOURCE = 0;
-    const HANDLER = 1;
+    public const RESOURCE = 0;
+    public const HANDLER = 1;
 
     protected $breakLoop = false;
     protected $generateMaps = true;
@@ -267,7 +268,7 @@ class Select implements EventLoop
         $this->signalMap = [];
 
         foreach ($this->signals as $id => $binding) {
-            foreach ($binding->signals as $number => $signal) {
+            foreach (array_keys($binding->signals) as $number) {
                 $this->signalMap[$number][$id] = $binding;
             }
         }
@@ -365,7 +366,7 @@ class Select implements EventLoop
 
         foreach ($this->signalMap as $number => $set) {
             pcntl_signal($number, function ($number) use ($set) {
-                foreach ($set as $id => $binding) {
+                foreach ($set as $binding) {
                     $binding->trigger($number);
                 }
             });
@@ -381,7 +382,7 @@ class Select implements EventLoop
             return;
         }
 
-        foreach ($this->signalMap as $number => $set) {
+        foreach (array_keys($this->signalMap) as $number) {
             pcntl_signal($number, \SIG_IGN);
         }
     }

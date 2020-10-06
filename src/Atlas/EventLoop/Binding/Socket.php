@@ -1,16 +1,18 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\EventLoop\Binding;
 
 use DecodeLabs\Atlas\EventLoop;
 use DecodeLabs\Atlas\EventLoop\Binding;
-use DecodeLabs\Atlas\EventLoop\BindingTrait;
 use DecodeLabs\Atlas\EventLoop\Binding\Io as IoBinding;
-use DecodeLabs\Atlas\EventLoop\Binding\IoTrait;
+use DecodeLabs\Atlas\EventLoop\BindingTrait;
 
 use DecodeLabs\Atlas\Socket as SocketChannel;
 
@@ -27,13 +29,13 @@ class Socket implements IoBinding
     /**
      * Init with timer information
      */
-    public function __construct(EventLoop $eventLoop, bool $persistent, SocketChannel $socket, string $ioMode, callable $callback, ?float $timeout=null, ?callable $timeoutHandler=null)
+    public function __construct(EventLoop $eventLoop, bool $persistent, SocketChannel $socket, string $ioMode, callable $callback, ?float $timeout = null, ?callable $timeoutHandler = null)
     {
         $this->socket = $socket;
         $this->socketId = $socket->getId();
         $this->ioMode = $ioMode;
 
-        $this->__traitConstruct($eventLoop, $this->ioMode.':'.$this->socketId, $persistent, $callback);
+        $this->__traitConstruct($eventLoop, $this->ioMode . ':' . $this->socketId, $persistent, $callback);
         $this->timeout = $timeout;
         $this->timeoutHandler = $timeoutHandler;
     }

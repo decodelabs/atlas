@@ -1,12 +1,13 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
-declare(strict_types=1);
-namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Atlas\DataReceiver;
+declare(strict_types=1);
+
+namespace DecodeLabs\Atlas;
 
 interface DataProvider
 {

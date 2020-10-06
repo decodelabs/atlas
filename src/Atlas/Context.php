@@ -1,36 +1,34 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas;
 
+use DecodeLabs\Atlas\Channel\Buffer;
+use DecodeLabs\Atlas\Channel\Stream;
+use DecodeLabs\Atlas\EventLoop\Event as LibEventLoop;
+use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
+use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
+
+use DecodeLabs\Exceptional;
+
+use DecodeLabs\Veneer\Plugin\AccessTarget as VeneerPluginAccessTarget;
+use DecodeLabs\Veneer\Plugin\AccessTargetTrait as VeneerPluginAccessTargetTrait;
 use DecodeLabs\Veneer\Plugin as VeneerPlugin;
 use DecodeLabs\Veneer\Plugin\Provider as VeneerPluginProvider;
 use DecodeLabs\Veneer\Plugin\ProviderTrait as VeneerPluginProviderTrait;
-use DecodeLabs\Veneer\Plugin\AccessTarget as VeneerPluginAccessTarget;
-use DecodeLabs\Veneer\Plugin\AccessTargetTrait as VeneerPluginAccessTargetTrait;
-
-use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\Channel\Stream;
-use DecodeLabs\Atlas\Channel\Buffer;
-
-use DecodeLabs\Atlas\Mutex;
-use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
-
-use DecodeLabs\Atlas\EventLoop;
-use DecodeLabs\Atlas\EventLoop\Event as LibEventLoop;
-use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
-
-use DecodeLabs\Exceptional;
 
 class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
 {
     use VeneerPluginProviderTrait;
     use VeneerPluginAccessTargetTrait;
 
-    const PLUGINS = [
+    public const PLUGINS = [
         'fs', 'mime', 'http'
     ];
 
@@ -51,11 +49,11 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     {
         if (!in_array($name, self::PLUGINS)) {
             throw Exceptional::InvalidArgument(
-                $name.' is not a recognised Veneer plugin'
+                $name . ' is not a recognised Veneer plugin'
             );
         }
 
-        $class = '\\DecodeLabs\\Atlas\\Plugins\\'.ucfirst($name);
+        $class = '\\DecodeLabs\\Atlas\\Plugins\\' . ucfirst($name);
         return new $class($this);
     }
 
@@ -64,7 +62,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Open a stream Channel
      */
-    public function openStream($path, string $mode='a+'): Channel
+    public function openStream($path, string $mode = 'a+'): Channel
     {
         if ($path instanceof Channel) {
             return $path;
@@ -137,7 +135,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Create a new buffer Channel
      */
-    public function newBuffer(?string $buffer=null): Buffer
+    public function newBuffer(?string $buffer = null): Buffer
     {
         return new Buffer($buffer);
     }

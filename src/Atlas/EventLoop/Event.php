@@ -1,25 +1,26 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\EventLoop;
 
 use DecodeLabs\Atlas\EventLoop;
-use DecodeLabs\Atlas\EventLoopTrait;
-use DecodeLabs\Atlas\EventLoop\Binding;
 use DecodeLabs\Atlas\EventLoop\Binding\Io as IoBinding;
-
+use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Socket as SocketBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Stream as StreamBinding;
-use DecodeLabs\Atlas\EventLoop\Binding\Signal as SignalBinding;
 use DecodeLabs\Atlas\EventLoop\Binding\Timer as TimerBinding;
+use DecodeLabs\Atlas\EventLoopTrait;
 
 use DecodeLabs\Exceptional;
 
-use EventBase as EventLibBase;
 use Event as EventLib;
+use EventBase as EventLibBase;
 
 class Event implements EventLoop
 {
@@ -72,7 +73,7 @@ class Event implements EventLoop
             return $this;
         }
 
-        $this->{'unregister'.$binding->getType().'Binding'}($binding);
+        $this->{'unregister' . $binding->getType() . 'Binding'}($binding);
         $binding->markFrozen(true);
 
         return $this;
@@ -87,7 +88,7 @@ class Event implements EventLoop
             return $this;
         }
 
-        $this->{'register'.$binding->getType().'Binding'}($binding);
+        $this->{'register' . $binding->getType() . 'Binding'}($binding);
         $binding->markFrozen(false);
 
         return $this;
@@ -234,7 +235,7 @@ class Event implements EventLoop
             $flags |= EventLib::PERSIST;
         }
 
-        foreach ($binding->signals as $number => $signal) {
+        foreach (array_keys($binding->signals) as $number) {
             $binding->resource[$number] = $this->registerEvent(
                 $number,
                 $flags,
@@ -324,7 +325,7 @@ class Event implements EventLoop
     /**
      * Register resource with event base
      */
-    protected function registerEvent($target, int $flags, ?float $timeout, callable $callback, $arg=null): EventLib
+    protected function registerEvent($target, int $flags, ?float $timeout, callable $callback, $arg = null): EventLib
     {
         if ($timeout <= 0) {
             $timeout = null;
@@ -372,7 +373,7 @@ class Event implements EventLoop
 
             default:
                 throw Exceptional::InvalidArgument(
-                    'Unknown event io type: '.$type
+                    'Unknown event io type: ' . $type
                 );
         }
 
