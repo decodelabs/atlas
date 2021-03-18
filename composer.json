@@ -24,7 +24,7 @@
         "decodelabs/phpstan-decodelabs": "^0.4",
         "symplify/easy-coding-standard": "^8.3",
 
-        "guzzlehttp/guzzle": "^6.4",
+        "guzzlehttp/guzzle": "^7.0",
         "decodelabs/collections": "^0.6"
     },
     "suggest": {
