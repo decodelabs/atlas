@@ -11,8 +11,6 @@ namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Channel\Buffer;
 use DecodeLabs\Atlas\Channel\Stream;
-use DecodeLabs\Atlas\EventLoop\Event as LibEventLoop;
-use DecodeLabs\Atlas\EventLoop\Select as SelectEventLoop;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
 
 use DecodeLabs\Exceptional;
@@ -177,18 +175,5 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
         return $this->newBroker()
             ->addInputProvider($this->openHttpInputStream())
             ->addOutputReceiver($this->openHttpOutputStream());
-    }
-
-
-    /**
-     * Create an event loop
-     */
-    public function newEventLoop(): EventLoop
-    {
-        if (extension_loaded('event')) {
-            return new LibEventLoop();
-        } else {
-            return new SelectEventLoop();
-        }
     }
 }

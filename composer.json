@@ -9,11 +9,11 @@
         "email": "tom@inflatablecookie.com"
     }],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^8.0",
 
-        "decodelabs/veneer": "^0.6.2",
-        "decodelabs/exceptional": "^0.2.8",
-        "decodelabs/glitch-support": "^0.2",
+        "decodelabs/veneer": "^0.7",
+        "decodelabs/exceptional": "^0.3",
+        "decodelabs/glitch-support": "^0.3",
 
         "psr/http-message": "^1.0"
     },
@@ -21,17 +21,15 @@
         "phpunit/phpunit": "^8",
         "phpstan/phpstan": "^0.12.45",
         "phpstan/extension-installer": "^1.0",
-        "decodelabs/phpstan-decodelabs": "^0.3.11",
+        "decodelabs/phpstan-decodelabs": "^0.4",
         "symplify/easy-coding-standard": "^8.3",
 
         "guzzlehttp/guzzle": "^6.4",
-        "decodelabs/systemic": "^0.6.11",
-        "decodelabs/collections": "^0.5"
+        "decodelabs/collections": "^0.6"
     },
     "suggest": {
         "ext-event": "Faster and more reliable event loops",
         "guzzlehttp/guzzle": "Communication over HTTP",
-        "decodelabs/systemic": "EventLoop Signal support",
         "decodelabs/collections": "Fetch JSON files over HTTP"
     },
     "autoload": {
