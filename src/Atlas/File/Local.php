@@ -1,29 +1,27 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\File;
 
+use DecodeLabs\Atlas\Channel;
+use DecodeLabs\Atlas\Channel\Buffer;
+use DecodeLabs\Atlas\Channel\Stream;
+use DecodeLabs\Atlas\Dir;
+use DecodeLabs\Atlas\Dir\Local as LocalDir;
+use DecodeLabs\Atlas\File;
+use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
 
-use DecodeLabs\Atlas\File;
-use DecodeLabs\Atlas\File\Local as LocalFile;
-use DecodeLabs\Atlas\Dir;
-use DecodeLabs\Atlas\Dir\Local as LocalDir;
-
-use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\Channel\Stream;
-use DecodeLabs\Atlas\Channel\Buffer;
-
-use Generator;
-
+use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Glitch\Proxy;
-
-use DecodeLabs\Exceptional;
 
 class Local extends Stream implements File, Dumpable
 {
@@ -32,7 +30,7 @@ class Local extends Stream implements File, Dumpable
     /**
      * Init with file path, if mode is set, open file
      */
-    public function __construct($path, string $mode=null)
+    public function __construct($path, string $mode = null)
     {
         if (is_resource($path)) {
             parent::__construct($path, null);
@@ -190,7 +188,9 @@ class Local extends Stream implements File, Dumpable
 
         if (!$this->lockExclusive()) {
             throw Exceptional::Io(
-                'Unable to lock file for writing', null, $this
+                'Unable to lock file for writing',
+                null,
+                $this
             );
         }
 
@@ -223,7 +223,9 @@ class Local extends Stream implements File, Dumpable
 
         if (!$this->lock()) {
             throw Exceptional::Io(
-                'Unable to lock file for reading', null, $this
+                'Unable to lock file for reading',
+                null,
+                $this
             );
         }
 
@@ -289,7 +291,9 @@ class Local extends Stream implements File, Dumpable
 
         if (!$this->resource = fopen($this->path, $mode)) {
             throw Exceptional::Io(
-                'Unable to open file', null, $this
+                'Unable to open file',
+                null,
+                $this
             );
         }
 
@@ -317,11 +321,13 @@ class Local extends Stream implements File, Dumpable
     /**
      * Attempt to shared lock file
      */
-    public function lock(bool $nonBlocking=false): bool
+    public function lock(bool $nonBlocking = false): bool
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open', null, $this
+                'Cannot lock file, file not open',
+                null,
+                $this
             );
         }
 
@@ -335,11 +341,13 @@ class Local extends Stream implements File, Dumpable
     /**
      * Attempt to exclusive lock file
      */
-    public function lockExclusive(bool $nonBlocking=false): bool
+    public function lockExclusive(bool $nonBlocking = false): bool
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open', null, $this
+                'Cannot lock file, file not open',
+                null,
+                $this
             );
         }
 
@@ -362,7 +370,9 @@ class Local extends Stream implements File, Dumpable
 
         if (!flock($this->resource, LOCK_UN)) {
             throw Exceptional::Io(
-                'Unable to unlock file', null, $this
+                'Unable to unlock file',
+                null,
+                $this
             );
         }
 
@@ -383,7 +393,9 @@ class Local extends Stream implements File, Dumpable
         if ($this->isLink()) {
             if (file_exists($path)) {
                 throw Exceptional::AlreadyExists(
-                    'Destination file already exists', null, $this
+                    'Destination file already exists',
+                    null,
+                    $this
                 );
             }
 
@@ -424,13 +436,17 @@ class Local extends Stream implements File, Dumpable
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source file does not exist', null, $this
+                'Source file does not exist',
+                null,
+                $this
             );
         }
 
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination file already exists', null, $path
+                'Destination file already exists',
+                null,
+                $path
             );
         }
 
@@ -438,7 +454,9 @@ class Local extends Stream implements File, Dumpable
 
         if (!rename($this->path, $path)) {
             throw Exceptional::Io(
-                'Unable to rename file', null, $this
+                'Unable to rename file',
+                null,
+                $this
             );
         }
 
@@ -474,13 +492,17 @@ class Local extends Stream implements File, Dumpable
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot seek file, file not open', null, $this
+                'Cannot seek file, file not open',
+                null,
+                $this
             );
         }
 
         if (0 !== fseek($this->resource, $offset, SEEK_SET)) {
             throw Exceptional::Io(
-                'Failed to seek file', null, $this
+                'Failed to seek file',
+                null,
+                $this
             );
         }
 
@@ -490,17 +512,21 @@ class Local extends Stream implements File, Dumpable
     /**
      * Move file pointer to offset
      */
-    public function movePosition(int $offset, bool $fromEnd=false): File
+    public function movePosition(int $offset, bool $fromEnd = false): File
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot seek file, file not open', null, $this
+                'Cannot seek file, file not open',
+                null,
+                $this
             );
         }
 
         if (0 !== fseek($this->resource, $offset, $fromEnd ? SEEK_END : SEEK_CUR)) {
             throw Exceptional::Io(
-                'Failed to seek file', null, $this
+                'Failed to seek file',
+                null,
+                $this
             );
         }
 
@@ -515,7 +541,9 @@ class Local extends Stream implements File, Dumpable
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot ftell file, file not open', null, $this
+                'Cannot ftell file, file not open',
+                null,
+                $this
             );
         }
 
@@ -523,7 +551,9 @@ class Local extends Stream implements File, Dumpable
 
         if ($output === false) {
             throw Exceptional::Io(
-                'Failed to ftell file', null, $this
+                'Failed to ftell file',
+                null,
+                $this
             );
         }
 
@@ -546,13 +576,17 @@ class Local extends Stream implements File, Dumpable
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot flush file, file not open', null, $this
+                'Cannot flush file, file not open',
+                null,
+                $this
             );
         }
 
         if (false === fflush($this->resource)) {
             throw Exceptional::Io(
-                'Failed to flush file', null, $this
+                'Failed to flush file',
+                null,
+                $this
             );
         }
 
@@ -562,7 +596,7 @@ class Local extends Stream implements File, Dumpable
     /**
      * Truncate a file to $size bytes
      */
-    public function truncate(int $size=0): File
+    public function truncate(int $size = 0): File
     {
         if ($this->resource !== null) {
             ftruncate($this->resource, $size);
@@ -587,7 +621,7 @@ class Local extends Stream implements File, Dumpable
             'exists' => $this->exists(),
             'readable' => $this->isReadable(),
             'writable' => $this->isWritable(),
-            'permissions' => $this->getPermissionsOct().' : '.$this->getPermissionsString()
+            'permissions' => $this->getPermissionsOct() . ' : ' . $this->getPermissionsString()
         ];
     }
 }

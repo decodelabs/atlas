@@ -1,15 +1,18 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\Channel;
 
+use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\DataProvider;
 use DecodeLabs\Atlas\DataProviderTrait;
 use DecodeLabs\Atlas\DataReceiverTrait;
-use DecodeLabs\Atlas\Channel;
 
 class Buffer implements Channel
 {
@@ -24,7 +27,7 @@ class Buffer implements Channel
     /**
      * Init with stream path
      */
-    public function __construct(string $buffer=null)
+    public function __construct(string $buffer = null)
     {
         $this->buffer = (string)$buffer;
     }
@@ -150,7 +153,7 @@ class Buffer implements Channel
     /**
      * Write ?$length bytes to resource
      */
-    public function write(?string $data, int $length=null): int
+    public function write(?string $data, int $length = null): int
     {
         $this->checkWritable();
 

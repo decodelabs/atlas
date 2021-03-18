@@ -1,20 +1,23 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\Plugins;
 
-use DecodeLabs\Veneer\Plugin;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Veneer\Plugin;
 
 class Mime implements Plugin
 {
     /**
      * Detect mime type from path
      */
-    public function detect(string $path, string $default='application/octet-stream'): string
+    public function detect(string $path, string $default = 'application/octet-stream'): string
     {
         if (preg_match('#[^a-zA-Z0-9]#', $path)) {
             $extension = pathinfo($path, \PATHINFO_EXTENSION);
@@ -90,27 +93,27 @@ class Mime implements Plugin
                     continue;
                 }
 
-                $output[$key] = '    \''.$key.'\' => \''.$matches[1][0].'\'';
+                $output[$key] = '    \'' . $key . '\' => \'' . $matches[1][0] . '\'';
             }
         }
 
         foreach (self::EXTRA_TYPES as $key => $value) {
-            $output[$key] = '    \''.$key.'\' => \''.$value.'\'';
+            $output[$key] = '    \'' . $key . '\' => \'' . $value . '\'';
         }
 
-        return '['."\n".implode(",\n", $output)."\n".']';
+        return '[' . "\n" . implode(",\n", $output) . "\n" . ']';
     }
 
-    const MIME_LIST = 'http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types';
+    public const MIME_LIST = 'http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types';
 
-    const EXTRA_TYPES = [
+    public const EXTRA_TYPES = [
         'php' => 'application/x-php',
         'sass' => 'text/x-sass',
         'scss' => 'text/x-scss'
     ];
 
 
-    const TYPES = [
+    public const TYPES = [
         'ez' => 'application/andrew-inset',
         'aw' => 'application/applixware',
         'atom' => 'application/atom+xml',

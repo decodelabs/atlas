@@ -1,24 +1,17 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\File;
 
-use DecodeLabs\Atlas\Node;
-use DecodeLabs\Atlas\Node\LocalTrait;
-
-use DecodeLabs\Atlas\File;
-use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\Dir;
-use DecodeLabs\Atlas\Dir\Local as LocalDir;
-
-use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\Channel\Stream;
-use DecodeLabs\Atlas\Channel\Buffer;
-
-use Generator;
+use DecodeLabs\Atlas\File;
+use DecodeLabs\Atlas\Node;
 
 use DecodeLabs\Exceptional;
 
@@ -27,9 +20,9 @@ class Memory extends Local
     /**
      * Create from string key in php://
      */
-    public static function create(string $key='temp'): Memory
+    public static function create(string $key = 'temp'): Memory
     {
-        return new self(fopen('php://'.$key, 'w+b'));
+        return new self(fopen('php://' . $key, 'w+b'));
     }
 
     /**
@@ -90,11 +83,13 @@ class Memory extends Local
     /**
      * Attempt to shared lock file
      */
-    public function lock(bool $nonBlocking=false): bool
+    public function lock(bool $nonBlocking = false): bool
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open', null, $this
+                'Cannot lock file, file not open',
+                null,
+                $this
             );
         }
 
@@ -104,11 +99,13 @@ class Memory extends Local
     /**
      * Attempt to exclusive lock file
      */
-    public function lockExclusive(bool $nonBlocking=false): bool
+    public function lockExclusive(bool $nonBlocking = false): bool
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open', null, $this
+                'Cannot lock file, file not open',
+                null,
+                $this
             );
         }
 

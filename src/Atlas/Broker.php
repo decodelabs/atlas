@@ -1,17 +1,15 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Atlas\DataProvider;
-use DecodeLabs\Atlas\DataReceiver;
-use DecodeLabs\Atlas\ErrorDataReceiver;
-use DecodeLabs\Atlas\Channel;
 use DecodeLabs\Atlas\Channel\Buffer;
-
 use DecodeLabs\Exceptional;
 
 class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
@@ -426,7 +424,7 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
     /**
      * Write data, limit of $length, to output channels
      */
-    public function write(?string $data, int $length=null): int
+    public function write(?string $data, int $length = null): int
     {
         if ($length === 0 || $data === null) {
             return 0;
@@ -444,7 +442,9 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
                 if ($result === null) {
                     throw Exceptional::Overflow(
-                        'Could not write buffer to output', null, $data
+                        'Could not write buffer to output',
+                        null,
+                        $data
                     );
                 }
             }
@@ -456,9 +456,9 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
     /**
      * Write line to error channels
      */
-    public function writeLine(?string $data=''): int
+    public function writeLine(?string $data = ''): int
     {
-        return $this->write($data.PHP_EOL);
+        return $this->write($data . PHP_EOL);
     }
 
     /**
@@ -487,7 +487,7 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
     /**
      * Write data, limit of $length, to error channels
      */
-    public function writeError(?string $data, int $length=null): int
+    public function writeError(?string $data, int $length = null): int
     {
         if ($length === 0 || $data === null) {
             return 0;
@@ -505,7 +505,9 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
                 if ($result === null) {
                     throw Exceptional::Overflow(
-                        'Could not write buffer to output', null, $data
+                        'Could not write buffer to output',
+                        null,
+                        $data
                     );
                 }
             }
@@ -517,9 +519,9 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
     /**
      * Write line to error channels
      */
-    public function writeErrorLine(?string $data=''): int
+    public function writeErrorLine(?string $data = ''): int
     {
-        return $this->writeError($data.PHP_EOL);
+        return $this->writeError($data . PHP_EOL);
     }
 
     /**

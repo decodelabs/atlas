@@ -1,33 +1,29 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\Dir;
 
+use DecodeLabs\Atlas\Dir;
+use DecodeLabs\Atlas\File;
+use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
 
-use DecodeLabs\Atlas\File;
-use DecodeLabs\Atlas\File\Local as LocalFile;
-use DecodeLabs\Atlas\Dir;
-
-use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\Channel\Stream;
-use DecodeLabs\Atlas\Channel\Buffer;
-
-use Generator;
-use Traversable;
-use DirectoryIterator;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
-use FilesystemIterator;
-
+use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Glitch\Proxy;
 
-use DecodeLabs\Exceptional;
+use DirectoryIterator;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Traversable;
 
 class Local implements Dir, Dumpable
 {
@@ -53,12 +49,14 @@ class Local implements Dir, Dumpable
     /**
      * Create dir if it doesn't exist
      */
-    public function ensureExists(int $permissions=null): Dir
+    public function ensureExists(int $permissions = null): Dir
     {
         if (!is_dir($this->path)) {
             if (file_exists($this->path)) {
                 throw Exceptional::Io(
-                    'Dir destination exists as file', null, $this
+                    'Dir destination exists as file',
+                    null,
+                    $this
                 );
             }
 
@@ -68,7 +66,9 @@ class Local implements Dir, Dumpable
 
             if (!mkdir($this->path, $permissions, true)) {
                 throw Exceptional::Io(
-                    'Unable to mkdir', null, $this
+                    'Unable to mkdir',
+                    null,
+                    $this
                 );
             }
         } else {
@@ -129,7 +129,9 @@ class Local implements Dir, Dumpable
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set permissions, dir does not exist', null, $this
+                'Cannot set permissions, dir does not exist',
+                null,
+                $this
             );
         }
 
@@ -157,7 +159,9 @@ class Local implements Dir, Dumpable
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set owner, dir does not exist', null, $this
+                'Cannot set owner, dir does not exist',
+                null,
+                $this
             );
         }
 
@@ -185,7 +189,9 @@ class Local implements Dir, Dumpable
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set group, dir does not exist', null, $this
+                'Cannot set group, dir does not exist',
+                null,
+                $this
             );
         }
 
@@ -241,7 +247,7 @@ class Local implements Dir, Dumpable
      */
     public function getChild(string $name): ?Node
     {
-        $path = $this->path.'/'.ltrim($name, '/');
+        $path = $this->path . '/' . ltrim($name, '/');
 
         if (is_dir($path)) {
             return new self($path);
@@ -257,7 +263,7 @@ class Local implements Dir, Dumpable
      */
     public function hasChild(string $name): bool
     {
-        $path = $this->path.'/'.ltrim($name, '/');
+        $path = $this->path . '/' . ltrim($name, '/');
         return file_exists($path);
     }
 
@@ -277,7 +283,7 @@ class Local implements Dir, Dumpable
     /**
      * Create a dir as a child
      */
-    public function createDir(string $name, int $permissions=null): Dir
+    public function createDir(string $name, int $permissions = null): Dir
     {
         return $this->getDir($name)->ensureExists($permissions);
     }
@@ -295,7 +301,7 @@ class Local implements Dir, Dumpable
      */
     public function getDir(string $name): Dir
     {
-        return new self($this->path.'/'.ltrim($name, '/'));
+        return new self($this->path . '/' . ltrim($name, '/'));
     }
 
     /**
@@ -303,7 +309,7 @@ class Local implements Dir, Dumpable
      */
     public function getExistingDir(string $name): ?Dir
     {
-        $output = new self($this->path.'/'.ltrim($name, '/'));
+        $output = new self($this->path . '/' . ltrim($name, '/'));
 
         if (!$output->exists()) {
             $output = null;
@@ -354,7 +360,7 @@ class Local implements Dir, Dumpable
      */
     public function getFile(string $name): File
     {
-        return $this->wrapFile($this->path.'/'.ltrim($name, '/'));
+        return $this->wrapFile($this->path . '/' . ltrim($name, '/'));
     }
 
     /**
@@ -362,7 +368,7 @@ class Local implements Dir, Dumpable
      */
     public function getExistingFile(string $name): ?File
     {
-        $output = $this->wrapFile($this->path.'/'.ltrim($name, '/'));
+        $output = $this->wrapFile($this->path . '/' . ltrim($name, '/'));
 
         if (!$output->exists()) {
             $output = null;
@@ -391,7 +397,9 @@ class Local implements Dir, Dumpable
     {
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination dir already exists', null, $this
+                'Destination dir already exists',
+                null,
+                $this
             );
         }
 
@@ -410,7 +418,9 @@ class Local implements Dir, Dumpable
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source dir does not exist', null, $this
+                'Source dir does not exist',
+                null,
+                $this
             );
         }
 
@@ -418,13 +428,17 @@ class Local implements Dir, Dumpable
 
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination file already exists', null, $path
+                'Destination file already exists',
+                null,
+                $path
             );
         }
 
         if (!rename($this->path, $path)) {
             throw Exceptional::Io(
-                'Unable to rename dir', null, $this
+                'Unable to rename dir',
+                null,
+                $this
             );
         }
 
@@ -477,7 +491,9 @@ class Local implements Dir, Dumpable
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source dir does not exist', null, $this
+                'Source dir does not exist',
+                null,
+                $this
             );
         }
 
@@ -488,13 +504,13 @@ class Local implements Dir, Dumpable
             if ($item instanceof self) {
                 // Dir
                 if ($item->isLink()) {
-                    $item->copySymlink($destination->getPath().'/'.$subPath);
+                    $item->copySymlink($destination->getPath() . '/' . $subPath);
                 } else {
                     $destination->createDir($subPath, $item->getPermissions());
                 }
             } else {
                 // File
-                $item->copy($destination->getPath().'/'.$subPath)
+                $item->copy($destination->getPath() . '/' . $subPath)
                     ->setPermissions($item->getPermissions());
             }
         }
@@ -521,7 +537,7 @@ class Local implements Dir, Dumpable
 
         yield 'metaList' => [
             'exists' => $this->exists(),
-            'permissions' => $this->getPermissionsOct().' : '.$this->getPermissionsString()
+            'permissions' => $this->getPermissionsOct() . ' : ' . $this->getPermissionsString()
         ];
     }
 }

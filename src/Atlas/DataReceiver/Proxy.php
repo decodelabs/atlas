@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas\DataReceiver;
 
 use DecodeLabs\Atlas\DataReceiver;
@@ -47,7 +50,7 @@ class Proxy implements DataReceiver
     /**
      * Write ?$length bytes to resource
      */
-    public function write(?string $data, int $length=null): int
+    public function write(?string $data, int $length = null): int
     {
         $this->checkWritable();
 

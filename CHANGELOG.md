@@ -1,3 +1,9 @@
+## v0.8.0 (2021-03-18)
+* Enabled PHP8 testing
+* Moved EventLoop structure to Eventful library
+* Applied full PSR12 standards
+* Added PSR12 check to Travis build
+
 ## v0.7.9 (2020-10-06)
 * Removed Systemic dependency
 

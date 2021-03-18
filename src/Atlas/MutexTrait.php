@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
+
 declare(strict_types=1);
+
 namespace DecodeLabs\Atlas;
 
 trait MutexTrait
@@ -43,7 +46,7 @@ trait MutexTrait
     /**
      * Acquire lock (with count), bail after $timeout seconds
      */
-    public function lock(int $timeout=null): bool
+    public function lock(int $timeout = null): bool
     {
         if ($this->counter > 0 || $this->waitForLock($timeout)) {
             $this->counter++;
@@ -56,7 +59,7 @@ trait MutexTrait
     /**
      * Keep attempting to lock until $timeout or success
      */
-    protected function waitForLock(int $timeout=null): bool
+    protected function waitForLock(int $timeout = null): bool
     {
         $blocking = $timeout === null;
         $start = microtime(true);

@@ -3,7 +3,7 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 [![Latest Version](https://img.shields.io/packagist/v/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 [![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
-[![Build Status](https://img.shields.io/travis/com/decodelabs/atlas/master.svg?style=flat-square)](https://travis-ci.org/decodelabs/atlas)
+[![Build Status](https://img.shields.io/travis/com/decodelabs/atlas/main.svg?style=flat-square)](https://travis-ci.com/decodelabs/atlas)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat-square)](https://github.com/phpstan/phpstan)
 [![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
 
@@ -117,55 +117,6 @@ $broker->writeLine('INPUT: '.$text);
 
 Once grouped, the Channels in an IO broker can be used as the interface between many different information sources; see [Systemic Unix process launcher](https://github.com/decodelabs/systemic/blob/develop/src/Systemic/Process/Launcher/Unix.php) for an example of an IO Broker managing input and output with <code>proc_open()</code>.
 
-
-### Event loop
-
-Listen for events on IO, Signals and Timers and respond accordingly.
-If php's Event extension is available, that will be used, otherwise a basic <code>select()</code> loop fills in the gaps.
-
-```php
-use DecodeLabs\Atlas;
-
-$broker = Atlas::newCliBroker();
-
-$eventLoop = Atlas::newEventLoop()
-
-    // Run every 2 seconds
-    ->bindTimer('timer1', 2, function() use($broker) {
-        $broker->writeLine('Timer 1');
-    })
-
-    // Listen for reads, but frozen - won't activate until unfrozen
-    ->bindStreamReadFrozen($input = $broker->getFirstInputReceiver(), function() use($broker) {
-        $broker->writeLine('You said: '.$broker->readLine());
-    })
-
-    // Run once after 1 second
-    ->bindTimerOnce('timer2', 1, function($binding) use($broker, $input) {
-        $broker->writeLine('Timer 2');
-
-        // Unfreeze io reads
-        $binding->eventLoop->unfreeze($intput);
-    })
-
-    // Check if we want to bail every second
-    ->setCycleHandler(function(int $cycles) {
-        if($cycles > 10) {
-            return false;
-        }
-    });
-
-
-/*
-Outputs something like:
-
-Timer 2
-Timer 1
-Timer 1
-You said: Hello world
-Timer 1
-*/
-```
 
 ### Mime types
 

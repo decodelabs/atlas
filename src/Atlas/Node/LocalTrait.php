@@ -1,16 +1,18 @@
 <?php
+
 /**
- * This file is part of the Atlas package
+ * @package Atlas
  * @license http://opensource.org/licenses/MIT
  */
-declare(strict_types=1);
-namespace DecodeLabs\Atlas\Node;
 
-use DecodeLabs\Atlas\Node;
-use DecodeLabs\Atlas\NodeTrait;
+declare(strict_types=1);
+
+namespace DecodeLabs\Atlas\Node;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
+use DecodeLabs\Atlas\Node;
+use DecodeLabs\Atlas\NodeTrait;
 
 use DecodeLabs\Exceptional;
 
@@ -50,7 +52,7 @@ trait LocalTrait
         $path = readlink($this->path);
 
         if (substr($path, 0, 1) == '.') {
-            $path = dirname($this->path).'/'.$path;
+            $path = dirname($this->path) . '/' . $path;
         }
 
         return new self($this->normalizePath($path));
@@ -63,13 +65,17 @@ trait LocalTrait
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source node does not exist', null, $this
+                'Source node does not exist',
+                null,
+                $this
             );
         }
 
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination file already exists', null, $path
+                'Destination file already exists',
+                null,
+                $path
             );
         }
 
@@ -77,7 +83,7 @@ trait LocalTrait
 
         if (!symlink($this->path, $path)) {
             throw Exceptional::Io(
-                'Unable to copy symlink: '.$path
+                'Unable to copy symlink: ' . $path
             );
         }
 
@@ -121,7 +127,9 @@ trait LocalTrait
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set permissions, file does not exist', null, $this
+                'Cannot set permissions, file does not exist',
+                null,
+                $this
             );
         }
 
@@ -157,7 +165,9 @@ trait LocalTrait
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set owner, file does not exist', null, $this
+                'Cannot set owner, file does not exist',
+                null,
+                $this
             );
         }
 
@@ -192,7 +202,9 @@ trait LocalTrait
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set owner, file does not exist', null, $this
+                'Cannot set owner, file does not exist',
+                null,
+                $this
             );
         }
 
@@ -243,13 +255,13 @@ trait LocalTrait
 
         if (!$target = $this->getLinkTarget()) {
             throw Exceptional::Io(
-                'Unable to follow symlink target: '.$this->getPath()
+                'Unable to follow symlink target: ' . $this->getPath()
             );
         }
 
         if (!symlink($target->getPath(), $path)) {
             throw Exceptional::Io(
-                'Unable to copy symlink: '.$path
+                'Unable to copy symlink: ' . $path
             );
         }
 
@@ -260,10 +272,10 @@ trait LocalTrait
     /**
      * Copy file to $destinationDir, rename basename to $newName if set
      */
-    public function copyTo(string $destinationDir, string $newName=null): Node
+    public function copyTo(string $destinationDir, string $newName = null): Node
     {
         $newName = $this->normalizeNewName($newName);
-        $destination = rtrim($destinationDir, '/').'/'.$newName;
+        $destination = rtrim($destinationDir, '/') . '/' . $newName;
         return $this->copy($destination);
     }
 
@@ -278,10 +290,10 @@ trait LocalTrait
     /**
      * Move file to $destinationDir, rename basename to $newName if set
      */
-    public function moveTo(string $destinationDir, string $newName=null): Node
+    public function moveTo(string $destinationDir, string $newName = null): Node
     {
         $newName = $this->normalizeNewName($newName);
-        $destination = rtrim($destinationDir, '/').'/'.$newName;
+        $destination = rtrim($destinationDir, '/') . '/' . $newName;
         return $this->move($destination);
     }
 
@@ -296,7 +308,9 @@ trait LocalTrait
 
         if ($newName == '' || $newName === '..' || $newName === '.' || strstr($newName, '/')) {
             throw Exceptional::InvalidArgument(
-                'New name is invalid: '.$newName, null, $this
+                'New name is invalid: ' . $newName,
+                null,
+                $this
             );
         }
 
