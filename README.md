@@ -14,7 +14,7 @@ Easy filesystem and io functions for PHP
 Install via Composer:
 
 ```bash
-composer install decodelabs/atlas
+composer require decodelabs/atlas
 ```
 
 
