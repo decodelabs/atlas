@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
-use DateTime;
 use DateInterval;
+use DateTime;
 
 trait NodeTrait
 {
