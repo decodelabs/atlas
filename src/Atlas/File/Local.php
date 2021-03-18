@@ -23,6 +23,8 @@ use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Glitch\Proxy;
 
+use Throwable;
+
 class Local extends Stream implements File, Dumpable
 {
     use LocalTrait;
@@ -476,7 +478,7 @@ class Local extends Stream implements File, Dumpable
         if ($exists) {
             try {
                 unlink($this->path);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 if ($this->exists()) {
                     throw $e;
                 }

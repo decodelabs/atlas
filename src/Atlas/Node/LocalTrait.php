@@ -15,6 +15,7 @@ use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\NodeTrait;
 
 use DecodeLabs\Exceptional;
+use ErrorException;
 
 trait LocalTrait
 {
@@ -112,7 +113,7 @@ trait LocalTrait
             if (false === ($output = filemtime($this->path))) {
                 $output = null;
             }
-        } catch (\ErrorException $e) {
+        } catch (ErrorException $e) {
             $output = null;
         }
 
@@ -150,7 +151,7 @@ trait LocalTrait
             if (false === ($output = fileperms($this->getPath()))) {
                 $output = null;
             }
-        } catch (\ErrorException $e) {
+        } catch (ErrorException $e) {
             $output = null;
         }
 
@@ -188,7 +189,7 @@ trait LocalTrait
             if (false === ($output = fileowner($this->getPath()))) {
                 $output = null;
             }
-        } catch (\ErrorException $e) {
+        } catch (ErrorException $e) {
             $output = null;
         }
 
@@ -225,7 +226,7 @@ trait LocalTrait
             if (false === ($output = filegroup($this->getPath()))) {
                 $output = null;
             }
-        } catch (\ErrorException $e) {
+        } catch (ErrorException $e) {
             $output = null;
         }
 

@@ -15,6 +15,7 @@ use DecodeLabs\Atlas\DataProviderTrait;
 use DecodeLabs\Atlas\DataReceiverTrait;
 
 use DecodeLabs\Exceptional;
+use Throwable;
 
 class Stream implements Channel
 {
@@ -128,7 +129,7 @@ class Stream implements Channel
 
         try {
             $output = fread($this->resource, $length);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
 
@@ -148,7 +149,7 @@ class Stream implements Channel
 
         try {
             $output = fgetc($this->resource);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
 
@@ -168,7 +169,7 @@ class Stream implements Channel
 
         try {
             $output = fgets($this->resource);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
 
@@ -247,7 +248,7 @@ class Stream implements Channel
         if ($this->resource) {
             try {
                 fclose($this->resource);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
             }
         }
 

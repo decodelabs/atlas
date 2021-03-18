@@ -108,7 +108,7 @@ class Local implements Dir, Dumpable
             return true;
         }
 
-        foreach (new \DirectoryIterator($this->path) as $item) {
+        foreach (new DirectoryIterator($this->path) as $item) {
             if ($item->isDot()) {
                 continue;
             }
