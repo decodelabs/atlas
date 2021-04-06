@@ -15,4 +15,5 @@ namespace DecodeLabs\Atlas;
 interface Socket extends Channel
 {
     public function getId(): string;
+    public function isStreamBased(): bool;
 }
