@@ -25,7 +25,7 @@
         "symplify/easy-coding-standard": "^8.3",
 
         "guzzlehttp/guzzle": "^7.0",
-        "decodelabs/collections": "^0.6"
+        "decodelabs/collections": "^0.6.1"
     },
     "suggest": {
         "ext-event": "Faster and more reliable event loops",
