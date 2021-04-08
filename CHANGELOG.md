@@ -1,3 +1,6 @@
+## v0.8.1 (2021-04-08)
+* Updated for max PHPStan conformance
+
 ## v0.8.0 (2021-03-18)
 * Enabled PHP8 testing
 * Moved EventLoop structure to Eventful library
