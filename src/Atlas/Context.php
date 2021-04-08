@@ -14,7 +14,6 @@ use DecodeLabs\Atlas\Channel\Stream;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
 use DecodeLabs\Atlas\Plugins\Fs as FsPlugin;
 use DecodeLabs\Atlas\Plugins\Http as HttpPlugin;
-use DecodeLabs\Atlas\Plugins\Mime as MimePlugin;
 
 use DecodeLabs\Exceptional;
 
@@ -27,7 +26,6 @@ use DecodeLabs\Veneer\Plugin\ProviderTrait as VeneerPluginProviderTrait;
 /**
  * @property FsPlugin $fs
  * @property HttpPlugin $http
- * @property MimePlugin $mime
  */
 class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
 {
@@ -35,7 +33,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     use VeneerPluginAccessTargetTrait;
 
     public const PLUGINS = [
-        'fs', 'http', 'mime'
+        'fs', 'http'
     ];
 
 

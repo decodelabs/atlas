@@ -1,3 +1,5 @@
+* Moved mime plugin to Typify
+
 ## v0.8.1 (2021-04-08)
 * Updated for max PHPStan conformance
 

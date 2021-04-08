@@ -126,32 +126,9 @@ Once grouped, the Channels in an IO broker can be used as the interface between 
 
 ### Mime types
 
-Detect a mime type for a file path:
+Looking for the mime type detection stuff that used to be here?
 
-```php
-use DecodeLabs\Atlas;
-
-echo Atlas::$mime->detect(__FILE__);
-// application/x-php
-```
-
-Get known extensions for a type:
-
-```php
-use DecodeLabs\Atlas;
-
-$exts = Atlas::$mime->getExtensions('text/plain');
-// txt, text, conf, def, list, log, in
-```
-
-Suggest an extension for a mime type:
-
-```php
-use DecodeLabs\Atlas;
-
-echo Atlas::$mime->suggestExtension('text/plain');
-//txt
-```
+This has been moved to its own project, [Typify](https://github.com/decodelabs/typify/).
 
 ## Licensing
 Atlas is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.
