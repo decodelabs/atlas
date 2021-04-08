@@ -12,6 +12,9 @@ namespace DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Channel\Buffer;
 use DecodeLabs\Atlas\Channel\Stream;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
+use DecodeLabs\Atlas\Plugins\Fs as FsPlugin;
+use DecodeLabs\Atlas\Plugins\Http as HttpPlugin;
+use DecodeLabs\Atlas\Plugins\Mime as MimePlugin;
 
 use DecodeLabs\Exceptional;
 
@@ -21,13 +24,18 @@ use DecodeLabs\Veneer\Plugin as VeneerPlugin;
 use DecodeLabs\Veneer\Plugin\Provider as VeneerPluginProvider;
 use DecodeLabs\Veneer\Plugin\ProviderTrait as VeneerPluginProviderTrait;
 
+/**
+ * @property FsPlugin $fs
+ * @property HttpPlugin $http
+ * @property MimePlugin $mime
+ */
 class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
 {
     use VeneerPluginProviderTrait;
     use VeneerPluginAccessTargetTrait;
 
     public const PLUGINS = [
-        'fs', 'mime', 'http'
+        'fs', 'http', 'mime'
     ];
 
 
@@ -59,14 +67,16 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
 
     /**
      * Open a stream Channel
+     *
+     * @param Channel|string|resource $stream
      */
-    public function openStream($path, string $mode = 'a+'): Channel
+    public function openStream($stream, string $mode = 'a+'): Channel
     {
-        if ($path instanceof Channel) {
-            return $path;
+        if ($stream instanceof Channel) {
+            return $stream;
         }
 
-        return new Stream($path, $mode);
+        return new Stream($stream, $mode);
     }
 
     /**

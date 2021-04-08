@@ -11,6 +11,9 @@ namespace DecodeLabs\Atlas;
 
 interface DataSender
 {
+    /**
+     * @return $this
+     */
     public function setDataReceiver(DataReceiver $receiver): DataSender;
     public function getDataReceiver(): ?DataReceiver;
     public function sendData(): void;

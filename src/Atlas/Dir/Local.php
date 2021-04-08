@@ -108,7 +108,7 @@ class Local implements Dir, Dumpable
             return true;
         }
 
-        foreach (new \DirectoryIterator($this->path) as $item) {
+        foreach (new DirectoryIterator($this->path) as $item) {
             if ($item->isDot()) {
                 continue;
             }
@@ -144,7 +144,7 @@ class Local implements Dir, Dumpable
         foreach ($this->scanRaw(true, true) as $item) {
             if ($item instanceof Dir) {
                 $item->setPermissionsRecursive($mode);
-            } else {
+            } elseif ($item instanceof Node) {
                 $item->setPermissions($mode);
             }
         }
@@ -174,7 +174,7 @@ class Local implements Dir, Dumpable
         foreach ($this->scanRaw(true, true) as $item) {
             if ($item instanceof Dir) {
                 $item->setOwnerRecursive($owner);
-            } else {
+            } elseif ($item instanceof Node) {
                 $item->setOwner($owner);
             }
         }
@@ -204,7 +204,7 @@ class Local implements Dir, Dumpable
         foreach ($this->scanRaw(true, true) as $item) {
             if ($item instanceof Dir) {
                 $item->setGroupRecursive($group);
-            } else {
+            } elseif ($item instanceof Node) {
                 $item->setGroup($group);
             }
         }
@@ -215,6 +215,8 @@ class Local implements Dir, Dumpable
 
     /**
      * Get iterator for flat Directory scanning
+     *
+     * @return Traversable<DirectoryIterator>
      */
     protected function getScannerIterator(bool $files, bool $dirs): Traversable
     {
@@ -224,6 +226,8 @@ class Local implements Dir, Dumpable
 
     /**
      * Get iterator for recursive Directory scanning
+     *
+     * @return Traversable<RecursiveIteratorIterator<RecursiveDirectoryIterator>>
      */
     protected function getRecursiveScannerIterator(bool $files, bool $dirs): Traversable
     {
@@ -462,7 +466,9 @@ class Local implements Dir, Dumpable
         }
 
         foreach ($this->scanRaw(true, true) as $item) {
-            $item->delete();
+            if ($item instanceof Node) {
+                $item->delete();
+            }
         }
 
         rmdir($this->path);
@@ -478,7 +484,9 @@ class Local implements Dir, Dumpable
         }
 
         foreach ($this->scanRaw(true, true) as $item) {
-            $item->delete();
+            if ($item instanceof Node) {
+                $item->delete();
+            }
         }
 
         return $this;
@@ -500,7 +508,7 @@ class Local implements Dir, Dumpable
         $destination = new self($destination);
         $destination->ensureExists($this->getPermissions());
 
-        foreach ($this->scanRawRecursive(true, true) as $subPath => $item) {
+        foreach ($this->scanRecursive() as $subPath => $item) {
             if ($item instanceof self) {
                 // Dir
                 if ($item->isLink()) {
@@ -511,7 +519,7 @@ class Local implements Dir, Dumpable
             } else {
                 // File
                 $item->copy($destination->getPath() . '/' . $subPath)
-                    ->setPermissions($item->getPermissions());
+                    ->setPermissions((int)$item->getPermissions());
             }
         }
 

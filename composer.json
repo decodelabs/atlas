@@ -10,6 +10,7 @@
     }],
     "require": {
         "php": "^7.2|^8.0",
+        "symfony/polyfill-php80": "^1.22",
 
         "decodelabs/veneer": "^0.7",
         "decodelabs/exceptional": "^0.3",
@@ -24,8 +25,8 @@
         "decodelabs/phpstan-decodelabs": "^0.4",
         "symplify/easy-coding-standard": "^8.3",
 
-        "guzzlehttp/guzzle": "^6.4",
-        "decodelabs/collections": "^0.6"
+        "guzzlehttp/guzzle": "^7.0",
+        "decodelabs/collections": "^0.6.1"
     },
     "suggest": {
         "ext-event": "Faster and more reliable event loops",

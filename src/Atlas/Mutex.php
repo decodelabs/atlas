@@ -14,6 +14,10 @@ interface Mutex
     public function getName(): string;
 
     public function lock(int $timeout = null): bool;
+
+    /**
+     * @return $this
+     */
     public function unlock(): Mutex;
 
     public function isLocked(): bool;

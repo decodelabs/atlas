@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
+use DateInterval;
+use DateTime;
+
 trait NodeTrait
 {
     /**
@@ -73,8 +76,8 @@ trait NodeTrait
             return $this->hasChanged((int)$timeout);
         }
 
-        $date = new \DateTime('now');
-        $interval = \DateInterval::createFromDateString($timeout);
+        $date = new DateTime('now');
+        $interval = DateInterval::createFromDateString($timeout);
         $ts = $date->sub($interval)->getTimestamp();
 
         if (!$mod = $this->getLastModified()) {

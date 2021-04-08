@@ -20,6 +20,7 @@ use DecodeLabs\Exceptional;
 use DecodeLabs\Veneer\Plugin;
 
 use Generator;
+use Stringable;
 
 class Fs implements Plugin
 {
@@ -28,7 +29,11 @@ class Fs implements Plugin
      */
     public function newTempFile(): File
     {
-        return new LocalFile(tmpfile());
+        if (!$resource = tmpfile()) {
+            throw Exceptional::Runtime('Unable to open temp file');
+        }
+
+        return new LocalFile($resource);
     }
 
     /**
@@ -62,6 +67,8 @@ class Fs implements Plugin
 
     /**
      * Get node, return file or dir depending on what's on disk
+     *
+     * @param string|Stringable|Node $path
      */
     public function get($path): Node
     {
@@ -90,24 +97,30 @@ class Fs implements Plugin
 
     /**
      * Check if modified time is within $seconds
+     *
+     * @param string|Stringable|Node $path
      */
-    public function hasChanged(string $path, int $seconds = 30): bool
+    public function hasChanged($path, int $seconds = 30): bool
     {
         return $this->get($path)->hasChanged($seconds);
     }
 
     /**
      * Set file permissions on file or dir
+     *
+     * @param string|Stringable|Node $path
      */
-    public function setPermissions(string $path, int $permissions): Node
+    public function setPermissions($path, int $permissions): Node
     {
         return $this->get($path)->setPermissions($permissions);
     }
 
     /**
      * Set file permissions on file or dir recursively
+     *
+     * @param string|Stringable|Node $path
      */
-    public function setPermissionsRecursive(string $path, int $permissions): Node
+    public function setPermissionsRecursive($path, int $permissions): Node
     {
         $node = $this->get($path);
 
@@ -122,64 +135,80 @@ class Fs implements Plugin
 
     /**
      * Set owner for file or dir
+     *
+     * @param string|Stringable|Node $path
      */
-    public function setOwner(string $path, int $owner): Node
+    public function setOwner($path, int $owner): Node
     {
         return $this->get($path)->setOwner($owner);
     }
 
     /**
      * Set group for file or dir
+     *
+     * @param string|Stringable|Node $path
      */
-    public function setGroup(string $path, int $group): Node
+    public function setGroup($path, int $group): Node
     {
         return $this->get($path)->setGroup($group);
     }
 
     /**
      * Copy file or dir to $destinationPath
+     *
+     * @param string|Stringable|Node $path
      */
-    public function copy(string $path, string $destinationPath): Node
+    public function copy($path, string $destinationPath): Node
     {
         return $this->get($path)->copy($destinationPath);
     }
 
     /**
      * Copy file or dir to $destinationDir, rename basename to $newName if set
+     *
+     * @param string|Stringable|Node $path
      */
-    public function copyTo(string $path, string $destinationDir, string $newName = null): Node
+    public function copyTo($path, string $destinationDir, string $newName = null): Node
     {
         return $this->get($path)->copyTo($destinationDir, $newName);
     }
 
     /**
      * Rename basename of file or dir
+     *
+     * @param string|Stringable|Node $path
      */
-    public function rename(string $path, string $newName): Node
+    public function rename($path, string $newName): Node
     {
         return $this->get($path)->renameTo($newName);
     }
 
     /**
      * Move file or dir to $destinationPath
+     *
+     * @param string|Stringable|Node $path
      */
-    public function move(string $path, string $destinationPath): Node
+    public function move($path, string $destinationPath): Node
     {
         return $this->get($path)->move($destinationPath);
     }
 
     /**
      * Move file or dir to $destinationDir, rename basename to $newName if set
+     *
+     * @param string|Stringable|Node $path
      */
-    public function moveTo(string $path, string $destinationDir, string $newName = null): Node
+    public function moveTo($path, string $destinationDir, string $newName = null): Node
     {
         return $this->get($path)->moveTo($destinationDir, $newName);
     }
 
     /**
      * Delete file or dir
+     *
+     * @param string|Stringable|Node $path
      */
-    public function delete(string $path): void
+    public function delete($path): void
     {
         $this->get($path)->delete();
     }
@@ -188,6 +217,8 @@ class Fs implements Plugin
 
     /**
      * Load file from $path, open if $mode is set
+     *
+     * @param string|Stringable|File $path
      */
     public function file($path, string $mode = null): File
     {
@@ -204,6 +235,8 @@ class Fs implements Plugin
 
     /**
      * Load existing file from $path, open if $mode is set
+     *
+     * @param string|Stringable|File $path
      */
     public function existingFile($path, string $mode = null): ?File
     {
@@ -234,40 +267,51 @@ class Fs implements Plugin
 
     /**
      * Create a new file with $data
+     *
+     * @param string|Stringable|File $path
+     * @param mixed $data
      */
-    public function createFile(string $path, $data): File
+    public function createFile($path, $data): File
     {
         return $this->file($path)->putContents($data);
     }
 
     /**
      * Get contents of file at $path
+     *
+     * @param string|Stringable|File $path
      */
-    public function getContents(string $path)
+    public function getContents($path): string
     {
         return $this->file($path)->getContents();
     }
 
     /**
      * Check file last modified within $seconds
+     *
+     * @param string|Stringable|File $path
      */
-    public function hasFileChanged(string $path, int $seconds = 30): bool
+    public function hasFileChanged($path, int $seconds = 30): bool
     {
         return $this->file($path)->hasChanged($seconds);
     }
 
     /**
      * Check file last modified within $time
+     *
+     * @param string|Stringable|File $path
      */
-    public function hasFileChangedIn(string $path, string $timeout): bool
+    public function hasFileChangedIn($path, string $timeout): bool
     {
         return $this->file($path)->hasChangedIn($timeout);
     }
 
     /**
      * Set permissions of file
+     *
+     * @param string|Stringable|File $path
      */
-    public function setFilePermissions(string $path, int $permissions): File
+    public function setFilePermissions($path, int $permissions): File
     {
         $file = $this->file($path);
         $file->setPermissions($permissions);
@@ -276,8 +320,10 @@ class Fs implements Plugin
 
     /**
      * Set owner of file
+     *
+     * @param string|Stringable|File $path
      */
-    public function setFileOwner(string $path, int $owner): File
+    public function setFileOwner($path, int $owner): File
     {
         $file = $this->file($path);
         $file->setOwner($owner);
@@ -286,8 +332,10 @@ class Fs implements Plugin
 
     /**
      * Set group of file
+     *
+     * @param string|Stringable|File $path
      */
-    public function setFileGroup(string $path, int $group): File
+    public function setFileGroup($path, int $group): File
     {
         $file = $this->file($path);
         $file->setGroup($group);
@@ -296,8 +344,10 @@ class Fs implements Plugin
 
     /**
      * Copy file to $destinationPath
+     *
+     * @param string|Stringable|File $path
      */
-    public function copyFile(string $path, string $destinationPath): File
+    public function copyFile($path, string $destinationPath): File
     {
         $file = $this->file($path);
         $output = $file->copy($destinationPath);
@@ -315,8 +365,10 @@ class Fs implements Plugin
 
     /**
      * Copy file to $destinationDir, rename basename to $newName if set
+     *
+     * @param string|Stringable|File $path
      */
-    public function copyFileTo(string $path, string $destinationDir, string $newName = null): File
+    public function copyFileTo($path, string $destinationDir, string $newName = null): File
     {
         $file = $this->file($path);
         $output = $file->copyTo($destinationDir, $newName);
@@ -334,8 +386,10 @@ class Fs implements Plugin
 
     /**
      * Rename basename of file
+     *
+     * @param string|Stringable|File $path
      */
-    public function renameFile(string $path, string $newName): File
+    public function renameFile($path, string $newName): File
     {
         $file = $this->file($path);
         $file->renameTo($newName);
@@ -344,8 +398,10 @@ class Fs implements Plugin
 
     /**
      * Move file to $destinationPath
+     *
+     * @param string|Stringable|File $path
      */
-    public function moveFile(string $path, string $destinationPath): File
+    public function moveFile($path, string $destinationPath): File
     {
         $file = $this->file($path);
         $file->move($destinationPath);
@@ -354,8 +410,10 @@ class Fs implements Plugin
 
     /**
      * Move file to $destinationDir, rename basename to $newName if set
+     *
+     * @param string|Stringable|File $path
      */
-    public function moveFileTo(string $path, string $destinationDir, string $newName = null): File
+    public function moveFileTo($path, string $destinationDir, string $newName = null): File
     {
         $file = $this->file($path);
         $file->moveTo($destinationDir, $newName);
@@ -364,8 +422,10 @@ class Fs implements Plugin
 
     /**
      * Delete file
+     *
+     * @param string|Stringable|File $path
      */
-    public function deleteFile(string $path): void
+    public function deleteFile($path): void
     {
         $this->file($path)->delete();
     }
@@ -374,6 +434,8 @@ class Fs implements Plugin
 
     /**
      * Load dir from path
+     *
+     * @param string|Stringable|Dir $path
      */
     public function dir($path): Dir
     {
@@ -386,6 +448,8 @@ class Fs implements Plugin
 
     /**
      * Load existing dir from path
+     *
+     * @param string|Stringable|Dir $path
      */
     public function existingDir($path): ?Dir
     {
@@ -404,8 +468,10 @@ class Fs implements Plugin
 
     /**
      * Ensure directory at $path exists with $permissions
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function createDir(string $path, int $permissions = null): Dir
+    public function createDir($path, int $permissions = null): Dir
     {
         return $this->dir($path)->ensureExists($permissions);
     }
@@ -420,24 +486,30 @@ class Fs implements Plugin
 
     /**
      * Check last modified of dir within $seconds
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function hasDirChanged(string $path, int $seconds = 30): bool
+    public function hasDirChanged($path, int $seconds = 30): bool
     {
         return $this->dir($path)->hasChanged($seconds);
     }
 
     /**
      * Check dir last modified within $time
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function hasDirChangedIn(string $path, string $timeout): bool
+    public function hasDirChangedIn($path, string $timeout): bool
     {
         return $this->dir($path)->hasChangedIn($timeout);
     }
 
     /**
      * Set permissions on dir
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function setDirPermissions(string $path, int $permissions): Dir
+    public function setDirPermissions($path, int $permissions): Dir
     {
         $dir = $this->dir($path);
         $dir->setPermissions($permissions);
@@ -446,8 +518,10 @@ class Fs implements Plugin
 
     /**
      * Set permissions on dir recursively
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function setDirPermissionsRecursive(string $path, int $permissions): Dir
+    public function setDirPermissionsRecursive($path, int $permissions): Dir
     {
         $dir = $this->dir($path);
         $dir->setPermissionsRecursive($permissions);
@@ -456,8 +530,10 @@ class Fs implements Plugin
 
     /**
      * Set owner of dir
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function setDirOwner(string $path, int $owner): Dir
+    public function setDirOwner($path, int $owner): Dir
     {
         $dir = $this->dir($path);
         $dir->setOwner($owner);
@@ -466,8 +542,10 @@ class Fs implements Plugin
 
     /**
      * Set owner of dir recursively
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function setDirOwnerRecursive(string $path, int $owner): Dir
+    public function setDirOwnerRecursive($path, int $owner): Dir
     {
         $dir = $this->dir($path);
         $dir->setOwnerRecursive($owner);
@@ -476,8 +554,10 @@ class Fs implements Plugin
 
     /**
      * Set group of dir
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function setDirGroup(string $path, int $group): Dir
+    public function setDirGroup($path, int $group): Dir
     {
         $dir = $this->dir($path);
         $dir->setGroup($group);
@@ -486,8 +566,10 @@ class Fs implements Plugin
 
     /**
      * Set group of dir recursively
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function setDirGroupRecursive(string $path, int $group): Dir
+    public function setDirGroupRecursive($path, int $group): Dir
     {
         $dir = $this->dir($path);
         $dir->setGroupRecursive($group);
@@ -499,56 +581,76 @@ class Fs implements Plugin
 
     /**
      * Scan all children as File or Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, Node>
      */
-    public function scan(string $path, callable $filter = null): Generator
+    public function scan($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scan($filter);
     }
 
     /**
      * List all children as File or Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, Node>
      */
-    public function list(string $path, callable $filter = null): array
+    public function list($path, callable $filter = null): array
     {
         return $this->dir($path)->list($filter);
     }
 
     /**
      * Scan all children as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string>
      */
-    public function scanNames(string $path, callable $filter = null): Generator
+    public function scanNames($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanNames($filter);
     }
 
     /**
      * List all children as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string>
      */
-    public function listNames(string $path, callable $filter = null): array
+    public function listNames($path, callable $filter = null): array
     {
         return $this->dir($path)->listNames($filter);
     }
 
     /**
      * Scan all children as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, string>
      */
-    public function scanPaths(string $path, callable $filter = null): Generator
+    public function scanPaths($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanPaths($filter);
     }
 
     /**
      * List all children as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, string>
      */
-    public function listPaths(string $path, callable $filter = null): array
+    public function listPaths($path, callable $filter = null): array
     {
         return $this->dir($path)->listPaths($filter);
     }
 
     /**
      * Count all children
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function countContents(string $path, callable $filter = null): int
+    public function countContents($path, callable $filter = null): int
     {
         return $this->dir($path)->countContents($filter);
     }
@@ -556,56 +658,76 @@ class Fs implements Plugin
 
     /**
      * Scan all files as File objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, File>
      */
-    public function scanFiles(string $path, callable $filter = null): Generator
+    public function scanFiles($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanFiles($filter);
     }
 
     /**
      * List all files as File objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, File>
      */
-    public function listFiles(string $path, callable $filter = null): array
+    public function listFiles($path, callable $filter = null): array
     {
         return $this->dir($path)->listFiles($filter);
     }
 
     /**
      * Scan all files as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string>
      */
-    public function scanFileNames(string $path, callable $filter = null): Generator
+    public function scanFileNames($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanFileNames($filter);
     }
 
     /**
      * List all files as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string>
      */
-    public function listFileNames(string $path, callable $filter = null): array
+    public function listFileNames($path, callable $filter = null): array
     {
         return $this->dir($path)->listFileNames($filter);
     }
 
     /**
      * Scan all files as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, string>
      */
-    public function scanFilePaths(string $path, callable $filter = null): Generator
+    public function scanFilePaths($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanFilePaths($filter);
     }
 
     /**
      * List all files as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, string>
      */
-    public function listFilePaths(string $path, callable $filter = null): array
+    public function listFilePaths($path, callable $filter = null): array
     {
         return $this->dir($path)->listFilePaths($filter);
     }
 
     /**
      * Count all files
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function countFiles(string $path, callable $filter = null): int
+    public function countFiles($path, callable $filter = null): int
     {
         return $this->dir($path)->countFiles($filter);
     }
@@ -613,56 +735,76 @@ class Fs implements Plugin
 
     /**
      * Scan all dirs as Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, Dir>
      */
-    public function scanDirs(string $path, callable $filter = null): Generator
+    public function scanDirs($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanDirs($filter);
     }
 
     /**
      * List all dirs as Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, Dir>
      */
-    public function listDirs(string $path, callable $filter = null): array
+    public function listDirs($path, callable $filter = null): array
     {
         return $this->dir($path)->listDirs($filter);
     }
 
     /**
      * Scan all dirs as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string>
      */
-    public function scanDirNames(string $path, callable $filter = null): Generator
+    public function scanDirNames($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanDirNames($filter);
     }
 
     /**
      * List all dirs as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string>
      */
-    public function listDirNames(string $path, callable $filter = null): array
+    public function listDirNames($path, callable $filter = null): array
     {
         return $this->dir($path)->listDirNames($filter);
     }
 
     /**
      * Scan all dirs as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, string>
      */
-    public function scanDirPaths(string $path, callable $filter = null): Generator
+    public function scanDirPaths($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanDirPaths($filter);
     }
 
     /**
      * List all dirs as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, string>
      */
-    public function listDirPaths(string $path, callable $filter = null): array
+    public function listDirPaths($path, callable $filter = null): array
     {
         return $this->dir($path)->listDirPaths($filter);
     }
 
     /**
      * Count all dirs
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function countDirs(string $path, callable $filter = null): int
+    public function countDirs($path, callable $filter = null): int
     {
         return $this->dir($path)->countDirs($filter);
     }
@@ -670,56 +812,76 @@ class Fs implements Plugin
 
     /**
      * Scan all children recursively as File or Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, Node>
      */
-    public function scanRecursive(string $path, callable $filter = null): Generator
+    public function scanRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanRecursive($filter);
     }
 
     /**
      * List all children recursively as File or Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, Node>
      */
-    public function listRecursive(string $path, callable $filter = null): array
+    public function listRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listRecursive($filter);
     }
 
     /**
      * Scan all children recursively as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string>
      */
-    public function scanNamesRecursive(string $path, callable $filter = null): Generator
+    public function scanNamesRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanNamesRecursive($filter);
     }
 
     /**
      * List all children recursively as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string>
      */
-    public function listNamesRecursive(string $path, callable $filter = null): array
+    public function listNamesRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listNamesRecursive($filter);
     }
 
     /**
      * Scan all children recursively as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, string>
      */
-    public function scanPathsRecursive(string $path, callable $filter = null): Generator
+    public function scanPathsRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanPathsRecursive($filter);
     }
 
     /**
      * List all children recursively as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, string>
      */
-    public function listPathsRecursive(string $path, callable $filter = null): array
+    public function listPathsRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listPathsRecursive($filter);
     }
 
     /**
      * Count all children recursively
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function countContentsRecursive(string $path, callable $filter = null): int
+    public function countContentsRecursive($path, callable $filter = null): int
     {
         return $this->dir($path)->countContentsRecursive($filter);
     }
@@ -727,56 +889,76 @@ class Fs implements Plugin
 
     /**
      * Scan all files recursively as File objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, File>
      */
-    public function scanFilesRecursive(string $path, callable $filter = null): Generator
+    public function scanFilesRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanFilesRecursive($filter);
     }
 
     /**
      * List all files recursively as File objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, File>
      */
-    public function listFilesRecursive(string $path, callable $filter = null): array
+    public function listFilesRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listFilesRecursive($filter);
     }
 
     /**
      * Scan all files recursively as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string>
      */
-    public function scanFileNamesRecursive(string $path, callable $filter = null): Generator
+    public function scanFileNamesRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanFileNamesRecursive($filter);
     }
 
     /**
      * List all files recursively as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string>
      */
-    public function listFileNamesRecursive(string $path, callable $filter = null): array
+    public function listFileNamesRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listFileNamesRecursive($filter);
     }
 
     /**
      * Scan all files recursively as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, string>
      */
-    public function scanFilePathsRecursive(string $path, callable $filter = null): Generator
+    public function scanFilePathsRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanFilePathsRecursive($filter);
     }
 
     /**
      * List all files recursively as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, string>
      */
-    public function listFilePathsRecursive(string $path, callable $filter = null): array
+    public function listFilePathsRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listFilePathsRecursive($filter);
     }
 
     /**
      * Count all files recursively
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function countFilesRecursive(string $path, callable $filter = null): int
+    public function countFilesRecursive($path, callable $filter = null): int
     {
         return $this->dir($path)->countFilesRecursive($filter);
     }
@@ -784,56 +966,76 @@ class Fs implements Plugin
 
     /**
      * Scan all dirs recursively as Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, Dir>
      */
-    public function scanDirsRecursive(string $path, callable $filter = null): Generator
+    public function scanDirsRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanDirsRecursive($filter);
     }
 
     /**
      * List all dirs recursively as Dir objects
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, Dir>
      */
-    public function listDirsRecursive(string $path, callable $filter = null): array
+    public function listDirsRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listDirsRecursive($filter);
     }
 
     /**
      * Scan all dirs recursively as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string>
      */
-    public function scanDirNamesRecursive(string $path, callable $filter = null): Generator
+    public function scanDirNamesRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanDirNamesRecursive($filter);
     }
 
     /**
      * List all dirs recursively as names
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string>
      */
-    public function listDirNamesRecursive(string $path, callable $filter = null): array
+    public function listDirNamesRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listDirNamesRecursive($filter);
     }
 
     /**
      * Scan all dirs recursively as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return Generator<string, string>
      */
-    public function scanDirPathsRecursive(string $path, callable $filter = null): Generator
+    public function scanDirPathsRecursive($path, callable $filter = null): Generator
     {
         return $this->dir($path)->scanDirPathsRecursive($filter);
     }
 
     /**
      * List all dirs recursively as paths
+     *
+     * @param string|Stringable|Dir $path
+     * @return array<string, string>
      */
-    public function listDirPathsRecursive(string $path, callable $filter = null): array
+    public function listDirPathsRecursive($path, callable $filter = null): array
     {
         return $this->dir($path)->listDirPathsRecursive($filter);
     }
 
     /**
      * Count all dirs recursively
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function countDirsRecursive(string $path, callable $filter = null): int
+    public function countDirsRecursive($path, callable $filter = null): int
     {
         return $this->dir($path)->countDirsRecursive($filter);
     }
@@ -845,8 +1047,10 @@ class Fs implements Plugin
 
     /**
      * Copy dir to $destinationPath
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function copyDir(string $path, string $destinationPath): Dir
+    public function copyDir($path, string $destinationPath): Dir
     {
         $dir = $this->dir($path);
         $output = $dir->copy($destinationPath);
@@ -864,8 +1068,10 @@ class Fs implements Plugin
 
     /**
      * Copy dir to $destinationDir, rename basename to $newName if set
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function copyDirTo(string $path, string $destinationDir, string $newName = null): Dir
+    public function copyDirTo($path, string $destinationDir, string $newName = null): Dir
     {
         $dir = $this->dir($path);
         $output = $dir->copyTo($destinationDir, $newName);
@@ -883,8 +1089,10 @@ class Fs implements Plugin
 
     /**
      * Rename basename of dir
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function renameDir(string $path, string $newName): Dir
+    public function renameDir($path, string $newName): Dir
     {
         $dir = $this->dir($path);
         $dir->renameTo($newName);
@@ -893,8 +1101,10 @@ class Fs implements Plugin
 
     /**
      * Move dir to $destinationPath
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function moveDir(string $path, string $destinationPath): Dir
+    public function moveDir($path, string $destinationPath): Dir
     {
         $dir = $this->dir($path);
         $dir->move($destinationPath);
@@ -903,8 +1113,10 @@ class Fs implements Plugin
 
     /**
      * Move dir to $destinationDir, rename basename to $newName if set
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function moveDirTo(string $path, string $destinationDir, string $newName = null): Dir
+    public function moveDirTo($path, string $destinationDir, string $newName = null): Dir
     {
         $dir = $this->dir($path);
         $dir->moveTo($destinationDir, $newName);
@@ -913,24 +1125,30 @@ class Fs implements Plugin
 
     /**
      * Delete dir and contents
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function deleteDir(string $path): void
+    public function deleteDir($path): void
     {
         $this->dir($path)->delete();
     }
 
     /**
      * Delete contents of dir
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function emptyOut(string $path): Dir
+    public function emptyOut($path): Dir
     {
         return $this->dir($path)->emptyOut();
     }
 
     /**
      * Merge contents of dir into $destination dir
+     *
+     * @param string|Stringable|Dir $path
      */
-    public function merge(string $path, string $destination): Dir
+    public function merge($path, string $destination): Dir
     {
         return $this->dir($path)->mergeInto($destination);
     }
@@ -939,6 +1157,8 @@ class Fs implements Plugin
 
     /**
      * Normalize node input
+     *
+     * @param string|Stringable|Node $path
      */
     protected function normalizeInput(&$path, string $type): ?Node
     {

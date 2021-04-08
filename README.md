@@ -14,8 +14,14 @@ Easy filesystem and io functions for PHP
 Install via Composer:
 
 ```bash
-composer install decodelabs/atlas
+composer require decodelabs/atlas
 ```
+
+### PHP version
+
+_Please note, the final v1 releases of all Decode Labs libraries will target **PHP8** or above._
+
+Current support for earlier versions of PHP will be phased out in the coming months.
 
 
 ## Usage

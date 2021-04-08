@@ -11,6 +11,7 @@ namespace DecodeLabs\Atlas\Dir;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
+use DecodeLabs\Atlas\Node;
 
 use Generator;
 use Traversable;
@@ -22,6 +23,9 @@ trait ScannerTrait
      */
     public function scan(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, Node>
+         */
         return $this->scanRaw(true, true, $filter, true);
     }
 
@@ -38,6 +42,9 @@ trait ScannerTrait
      */
     public function scanNames(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string>
+         */
         return $this->scanRaw(true, true, $filter, null);
     }
 
@@ -54,6 +61,9 @@ trait ScannerTrait
      */
     public function scanPaths(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, string>
+         */
         return $this->scanRaw(true, true, $filter, false);
     }
 
@@ -79,6 +89,9 @@ trait ScannerTrait
      */
     public function scanFiles(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, File>
+         */
         return $this->scanRaw(true, false, $filter, true);
     }
 
@@ -95,6 +108,9 @@ trait ScannerTrait
      */
     public function scanFileNames(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string>
+         */
         return $this->scanRaw(true, false, $filter, null);
     }
 
@@ -111,6 +127,9 @@ trait ScannerTrait
      */
     public function scanFilePaths(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, string>
+         */
         return $this->scanRaw(true, false, $filter, false);
     }
 
@@ -138,6 +157,9 @@ trait ScannerTrait
      */
     public function scanDirs(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, Dir>
+         */
         return $this->scanRaw(false, true, $filter, true);
     }
 
@@ -154,6 +176,9 @@ trait ScannerTrait
      */
     public function scanDirNames(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string>
+         */
         return $this->scanRaw(false, true, $filter, null);
     }
 
@@ -170,6 +195,9 @@ trait ScannerTrait
      */
     public function scanDirPaths(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, string>
+         */
         return $this->scanRaw(false, true, $filter, false);
     }
 
@@ -192,6 +220,8 @@ trait ScannerTrait
 
     /**
      * Raw scan generator
+     *
+     * @return Generator<int|string, Node|string>
      */
     protected function scanRaw(bool $files, bool $dirs, callable $filter = null, ?bool $wrap = true): Generator
     {
@@ -250,6 +280,9 @@ trait ScannerTrait
      */
     public function scanRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, Node>
+         */
         return $this->scanRawRecursive(true, true, $filter, true);
     }
 
@@ -266,6 +299,9 @@ trait ScannerTrait
      */
     public function scanNamesRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string>
+         */
         return $this->scanRawRecursive(true, true, $filter, null);
     }
 
@@ -282,6 +318,9 @@ trait ScannerTrait
      */
     public function scanPathsRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, string>
+         */
         return $this->scanRawRecursive(true, true, $filter, false);
     }
 
@@ -307,6 +346,9 @@ trait ScannerTrait
      */
     public function scanFilesRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, File>
+         */
         return $this->scanRawRecursive(true, false, $filter, true);
     }
 
@@ -323,6 +365,9 @@ trait ScannerTrait
      */
     public function scanFileNamesRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string>
+         */
         return $this->scanRawRecursive(true, false, $filter, null);
     }
 
@@ -339,6 +384,9 @@ trait ScannerTrait
      */
     public function scanFilePathsRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, string>
+         */
         return $this->scanRawRecursive(true, false, $filter, false);
     }
 
@@ -364,6 +412,9 @@ trait ScannerTrait
      */
     public function scanDirsRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, Dir>
+         */
         return $this->scanRawRecursive(false, true, $filter, true);
     }
 
@@ -380,6 +431,9 @@ trait ScannerTrait
      */
     public function scanDirNamesRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string>
+         */
         return $this->scanRawRecursive(false, true, $filter, null);
     }
 
@@ -396,6 +450,9 @@ trait ScannerTrait
      */
     public function scanDirPathsRecursive(callable $filter = null): Generator
     {
+        /**
+         * @var Generator<string, string>
+         */
         return $this->scanRawRecursive(false, true, $filter, false);
     }
 
@@ -420,6 +477,8 @@ trait ScannerTrait
 
     /**
      * Raw recursive scan generator
+     *
+     * @return Generator<int|string, Node|string>
      */
     protected function scanRawRecursive(bool $files, bool $dirs, callable $filter = null, ?bool $wrap = true): Generator
     {
@@ -475,6 +534,10 @@ trait ScannerTrait
 
     /**
      * Get count of generator yields
+     *
+     * @template TKey
+     * @template TValue
+     * @param Generator<TKey, TValue> $generator
      */
     protected function countGenerator(Generator $generator): int
     {

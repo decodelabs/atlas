@@ -19,9 +19,24 @@ class Buffer implements Channel
     use DataProviderTrait;
     use DataReceiverTrait;
 
+    /**
+     * @var string
+     */
     protected $buffer;
+
+    /**
+     * @var bool
+     */
     protected $open = true;
+
+    /**
+     * @var bool
+     */
     protected $readable = true;
+
+    /**
+     * @var bool
+     */
     protected $writable = true;
 
     /**

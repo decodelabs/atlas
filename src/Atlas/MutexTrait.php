@@ -11,7 +11,14 @@ namespace DecodeLabs\Atlas;
 
 trait MutexTrait
 {
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var int
+     */
     protected $counter = 0;
 
     /**

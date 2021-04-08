@@ -36,6 +36,8 @@ class Mime implements Plugin
 
     /**
      * Get list of extensions for type
+     *
+     * @return array<string>
      */
     public function getExtensions(string $type): array
     {
@@ -43,7 +45,7 @@ class Mime implements Plugin
 
         foreach (self::TYPES as $ext => $testType) {
             if ($type === $testType) {
-                $output[] = $ext;
+                $output[] = (string)$ext;
             }
         }
 

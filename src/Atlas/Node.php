@@ -23,26 +23,47 @@ interface Node
     public function getLinkTarget(): ?Node;
     public function createLink(string $path): Node;
 
+
+    /**
+     * @return $this
+     */
     public function clearStatCache(): Node;
+
     public function getLastModified(): ?int;
     public function hasChanged(int $timeout = 30): bool;
     public function hasChangedIn(string $timeout): bool;
 
+
+    /**
+     * @return $this
+     */
     public function setPermissions(int $mode): Node;
+
     public function getPermissions(): ?int;
     public function getPermissionsOct(): ?string;
     public function getPermissionsString(): ?string;
-    public function setOwner(int $owner): Node;
-    public function getOwner(): ?int;
-    public function setGroup(int $group): Node;
-    public function getGroup(): ?int;
 
+    /**
+     * @return $this
+     */
+    public function setOwner(int $owner): Node;
+
+    public function getOwner(): ?int;
+
+    /**
+     * @return $this
+     */
+    public function setGroup(int $group): Node;
+
+    public function getGroup(): ?int;
     public function getParent(): ?Dir;
+
 
     public function copy(string $path): Node;
     public function copyTo(string $destinationDir, string $newName = null): Node;
     public function renameTo(string $newName): Node;
     public function move(string $path): Node;
     public function moveTo(string $destinationDir, string $newName = null): Node;
+
     public function delete(): void;
 }

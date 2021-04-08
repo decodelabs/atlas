@@ -16,8 +16,19 @@ class Proxy implements DataReceiver
 {
     use DataReceiverTrait;
 
+    /**
+     * @var object
+     */
     protected $receiver;
+
+    /**
+     * @var callable
+     */
     protected $writer;
+
+    /**
+     * @var bool
+     */
     protected $writable = true;
 
     /**
