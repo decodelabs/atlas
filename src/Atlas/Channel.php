@@ -11,6 +11,13 @@ namespace DecodeLabs\Atlas;
 
 interface Channel extends DataProvider, DataReceiver
 {
+    /**
+     * @return resource|object|null
+     */
     public function getResource();
+
+    /**
+     * @return $this
+     */
     public function close(): Channel;
 }

@@ -22,36 +22,54 @@ class Stream implements Channel
     use DataProviderTrait;
     use DataReceiverTrait;
 
+    /**
+     * @var resource|null
+     */
     protected $resource;
+
+    /**
+     * @var string|null
+     */
     protected $mode = null;
+
+    /**
+     * @var bool|null
+     */
     protected $readable = null;
+
+    /**
+     * @var bool|null
+     */
     protected $writable = null;
 
     /**
      * Init with stream path
+     *
+     * @param string|resource $stream
      */
-    public function __construct($path, ?string $mode = 'a+')
+    public function __construct($stream, ?string $mode = 'a+')
     {
-        if (empty($path)) {
+        if (empty($stream)) {
             return;
         }
 
-        $isResource = is_resource($path);
+        $isResource = is_resource($stream);
 
         if ($mode === null && !$isResource) {
             return;
         }
 
         if ($isResource) {
-            $this->resource = $path;
+            $this->resource = $stream;
             $this->mode = stream_get_meta_data($this->resource)['mode'];
         } else {
-            if (!$this->resource = fopen($path, (string)$mode)) {
+            if (!$resource = fopen($stream, (string)$mode)) {
                 throw Exceptional::Io(
                     'Unable to open stream'
                 );
             }
 
+            $this->resource = $resource;
             $this->mode = $mode;
         }
     }
@@ -78,7 +96,7 @@ class Stream implements Channel
      */
     public function setReadBlocking(bool $flag): DataProvider
     {
-        if (!$this->resource) {
+        if ($this->resource === null) {
             throw Exceptional::Logic(
                 'Cannot set blocking, resource not open'
             );
@@ -93,7 +111,7 @@ class Stream implements Channel
      */
     public function isReadBlocking(): bool
     {
-        if (!$this->resource) {
+        if ($this->resource === null) {
             return false;
         }
 
@@ -111,6 +129,10 @@ class Stream implements Channel
         }
 
         if ($this->readable === null) {
+            if ($this->mode === null) {
+                return false;
+            }
+
             $this->readable = (
                 strstr($this->mode, 'r') ||
                 strstr($this->mode, '+')
@@ -126,6 +148,10 @@ class Stream implements Channel
     public function read(int $length): ?string
     {
         $this->checkReadable();
+
+        if ($this->resource === null) {
+            return null;
+        }
 
         try {
             $output = fread($this->resource, $length);
@@ -147,6 +173,10 @@ class Stream implements Channel
     {
         $this->checkReadable();
 
+        if ($this->resource === null) {
+            return null;
+        }
+
         try {
             $output = fgetc($this->resource);
         } catch (Throwable $e) {
@@ -166,6 +196,10 @@ class Stream implements Channel
     public function readLine(): ?string
     {
         $this->checkReadable();
+
+        if ($this->resource === null) {
+            return null;
+        }
 
         try {
             $output = fgets($this->resource);
@@ -192,6 +226,10 @@ class Stream implements Channel
         }
 
         if ($this->writable === null) {
+            if ($this->mode === null) {
+                return false;
+            }
+
             $this->writable = (
                 strstr($this->mode, 'x') ||
                 strstr($this->mode, 'w') ||
@@ -210,6 +248,10 @@ class Stream implements Channel
     public function write(?string $data, int $length = null): int
     {
         $this->checkWritable();
+
+        if ($this->resource === null) {
+            return 0;
+        }
 
         if ($length !== null) {
             $output = fwrite($this->resource, (string)$data, $length);
@@ -233,7 +275,7 @@ class Stream implements Channel
      */
     public function isAtEnd(): bool
     {
-        if (!$this->resource) {
+        if ($this->resource === null) {
             return true;
         }
 
@@ -245,7 +287,7 @@ class Stream implements Channel
      */
     public function close(): Channel
     {
-        if ($this->resource) {
+        if ($this->resource !== null) {
             try {
                 fclose($this->resource);
             } catch (Throwable $e) {

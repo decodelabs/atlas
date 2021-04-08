@@ -22,7 +22,11 @@ class Memory extends Local
      */
     public static function create(string $key = 'temp'): Memory
     {
-        return new self(fopen('php://' . $key, 'w+b'));
+        if (!$resource = fopen('php://' . $key, 'w+b')) {
+            throw Exceptional::Runtime('Unable to open memory stream');
+        }
+
+        return new self($resource);
     }
 
     /**

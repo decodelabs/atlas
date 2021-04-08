@@ -31,16 +31,21 @@ class Local extends Stream implements File, Dumpable
 
     /**
      * Init with file path, if mode is set, open file
+     *
+     * @param string|resource $stream
      */
-    public function __construct($path, string $mode = null)
+    public function __construct($stream, string $mode = null)
     {
-        if (is_resource($path)) {
-            parent::__construct($path, null);
-            $this->path = stream_get_meta_data($this->resource)['uri'];
+        if (is_resource($stream)) {
+            parent::__construct($stream, null);
+
+            if ($this->resource !== null) {
+                $this->path = stream_get_meta_data($this->resource)['uri'];
+            }
         } else {
-            $path = (string)$path;
-            parent::__construct($path, null);
-            $this->path = $path;
+            $stream = (string)$stream;
+            parent::__construct($stream, null);
+            $this->path = $stream;
 
             if ($mode !== null) {
                 $this->open($mode);
@@ -146,7 +151,13 @@ class Local extends Stream implements File, Dumpable
             return null;
         }
 
-        return hash_file($type, $this->path);
+        $output = hash_file($type, $this->path);
+
+        if ($output === false) {
+            $output = null;
+        }
+
+        return $output;
     }
 
     /**
@@ -158,7 +169,13 @@ class Local extends Stream implements File, Dumpable
             return null;
         }
 
-        return hash_file($type, $this->path, true);
+        $output = hash_file($type, $this->path, true);
+
+        if ($output === false) {
+            $output = null;
+        }
+
+        return $output;
     }
 
 
@@ -291,7 +308,7 @@ class Local extends Stream implements File, Dumpable
             }
         }
 
-        if (!$this->resource = fopen($this->path, $mode)) {
+        if (!$resource = fopen($this->path, $mode)) {
             throw Exceptional::Io(
                 'Unable to open file',
                 null,
@@ -299,6 +316,7 @@ class Local extends Stream implements File, Dumpable
             );
         }
 
+        $this->resource = $resource;
         return $this;
     }
 

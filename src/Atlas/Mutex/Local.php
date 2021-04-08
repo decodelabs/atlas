@@ -21,6 +21,9 @@ class Local implements Mutex, Dumpable
         MutexTrait::__construct as private __mutexConstruct;
     }
 
+    /**
+     * @var LocalFile
+     */
     protected $file;
 
     /**

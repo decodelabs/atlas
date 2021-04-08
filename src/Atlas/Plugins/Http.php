@@ -25,6 +25,9 @@ use Psr\Http\Message\StreamInterface;
 
 class Http implements Plugin
 {
+    /**
+     * @var Context
+     */
     protected $context;
 
     /**
@@ -37,6 +40,8 @@ class Http implements Plugin
 
     /**
      * Create new HTTP client
+     *
+     * @param array<string, mixed> $options
      */
     public function newClient(array $options = []): HttpClient
     {
@@ -51,6 +56,8 @@ class Http implements Plugin
 
     /**
      * Fetch HTTP URL to memory file
+     *
+     * @param array<string, mixed> $options
      */
     public function get(string $url, array $options = []): File
     {
@@ -60,6 +67,8 @@ class Http implements Plugin
 
     /**
      * Fetch HTTP URL to string
+     *
+     * @param array<string, mixed> $options
      */
     public function getString(string $url, array $options = []): string
     {
@@ -69,6 +78,8 @@ class Http implements Plugin
 
     /**
      * Fetch HTTL URL and save to disk
+     *
+     * @param array<string, mixed> $options
      */
     public function getFile(string $url, string $path, array $options = []): File
     {
@@ -78,6 +89,8 @@ class Http implements Plugin
 
     /**
      * Fetch HTTL URL and save to disk as temp file
+     *
+     * @param array<string, mixed> $options
      */
     public function getTempFile(string $url, array $options = []): File
     {
@@ -87,6 +100,9 @@ class Http implements Plugin
 
     /**
      * Fetch json file over HTTP
+     *
+     * @param array<string, mixed> $options
+     * @return Tree<mixed>
      */
     public function getJson(string $url, array $options = []): Tree
     {

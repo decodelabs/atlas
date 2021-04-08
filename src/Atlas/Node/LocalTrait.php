@@ -21,6 +21,9 @@ trait LocalTrait
 {
     use NodeTrait;
 
+    /**
+     * @var string
+     */
     protected $path;
 
 
@@ -50,7 +53,7 @@ trait LocalTrait
             return null;
         }
 
-        $path = readlink($this->path);
+        $path = (string)readlink($this->path);
 
         if (substr($path, 0, 1) == '.') {
             $path = dirname($this->path) . '/' . $path;

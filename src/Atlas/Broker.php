@@ -10,12 +10,22 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Channel\Buffer;
-use DecodeLabs\Exceptional;
 
 class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 {
+    /**
+     * @var array<int, DataProvider>
+     */
     protected $input = [];
+
+    /**
+     * @var array<int, DataReceiver>
+     */
     protected $output = [];
+
+    /**
+     * @var array<int, DataReceiver>
+     */
     protected $error = [];
 
     /**
@@ -50,6 +60,8 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
     /**
      * Get list of input providers
+     *
+     * @return array<int, DataProvider>
      */
     public function getInputProviders(): array
     {
@@ -101,6 +113,8 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
     /**
      * Get list of output receivers
+     *
+     * @return array<int, DataReceiver>
      */
     public function getOutputReceivers(): array
     {
@@ -152,6 +166,8 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
     /**
      * Get list of error receivers
+     *
+     * @return array<int, DataReceiver>
      */
     public function getErrorReceivers(): array
     {
@@ -268,6 +284,8 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
     /**
      * Get channel resource
+     *
+     * @return resource|object|null
      */
     public function getResource()
     {
@@ -439,14 +457,6 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
             for ($written = 0; $written < $length; $written += $result) {
                 $result = $receiver->write(substr($data, $written), $length - $written);
-
-                if ($result === null) {
-                    throw Exceptional::Overflow(
-                        'Could not write buffer to output',
-                        null,
-                        $data
-                    );
-                }
             }
         }
 
@@ -502,14 +512,6 @@ class Broker implements DataProvider, DataReceiver, ErrorDataReceiver
 
             for ($written = 0; $written < $length; $written += $result) {
                 $result = $receiver->write(substr($data, $written), $length - $written);
-
-                if ($result === null) {
-                    throw Exceptional::Overflow(
-                        'Could not write buffer to output',
-                        null,
-                        $data
-                    );
-                }
             }
         }
 
