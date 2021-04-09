@@ -9,7 +9,8 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
-use DecodeLabs\Atlas\Channel\Buffer;
+use DecodeLabs\Deliverance\Channel;
+use DecodeLabs\Deliverance\Channel\Buffer;
 
 interface File extends Node, Channel
 {

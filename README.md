@@ -40,12 +40,12 @@ See [Fs.php](./src/Atlas/Plugins/Fs.php), [File/Local.php](./src/Atlas/File/Loca
 ```php
 use DecodeLabs\Atlas;
 
-Atlas::$fs->get('/path/to/dir_or_file')
+Atlas::get('/path/to/dir_or_file')
     ->copyTo('/another/path/');
 
-Atlas::$fs->createDir('some/dir/path', 0770);
+Atlas::createDir('some/dir/path', 0770);
 
-Atlas::$fs->getFile('my/file')
+Atlas::getFile('my/file')
     ->renameTo('file.txt')
     ->setOwner('user');
 ```
@@ -59,15 +59,15 @@ Replace "scan" for "list" to return an array rather than a <code>Generator</code
 ```php
 use DecodeLabs\Atlas;
 
-foreach(Atlas::$fs->scan('my/dir') as $name => $fileOrDir) {
+foreach(Atlas::scan('my/dir') as $name => $fileOrDir) {
     // All files and dirs in my/dir
 }
 
-foreach(Atlas::$fs->scanDirs('my/dir') as $name => $dir) {
+foreach(Atlas::scanDirs('my/dir') as $name => $dir) {
     // All dirs in my/dir
 }
 
-foreach(Atlas::$fs->listFilesRecursive('my/dir', function($name, $file) {
+foreach(Atlas::listFilesRecursive('my/dir', function($name, $file) {
     // Return true if you want the file to be output
     return $name !== 'BadFile.php';
 }) as $name => $file) {
@@ -126,32 +126,9 @@ Once grouped, the Channels in an IO broker can be used as the interface between 
 
 ### Mime types
 
-Detect a mime type for a file path:
+Looking for the mime type detection stuff that used to be here?
 
-```php
-use DecodeLabs\Atlas;
-
-echo Atlas::$mime->detect(__FILE__);
-// application/x-php
-```
-
-Get known extensions for a type:
-
-```php
-use DecodeLabs\Atlas;
-
-$exts = Atlas::$mime->getExtensions('text/plain');
-// txt, text, conf, def, list, log, in
-```
-
-Suggest an extension for a mime type:
-
-```php
-use DecodeLabs\Atlas;
-
-echo Atlas::$mime->suggestExtension('text/plain');
-//txt
-```
+This has been moved to its own project, [Typify](https://github.com/decodelabs/typify/).
 
 ## Licensing
 Atlas is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.

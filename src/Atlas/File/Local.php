@@ -9,15 +9,16 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas\File;
 
-use DecodeLabs\Atlas\Channel;
-use DecodeLabs\Atlas\Channel\Buffer;
-use DecodeLabs\Atlas\Channel\Stream;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
+
+use DecodeLabs\Deliverance\Channel;
+use DecodeLabs\Deliverance\Channel\Buffer;
+use DecodeLabs\Deliverance\Channel\Stream;
 
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;

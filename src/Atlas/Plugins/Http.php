@@ -10,10 +10,10 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas\Plugins;
 
 use DecodeLabs\Atlas\Context;
-use DecodeLabs\Atlas\DataReceiver;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
+use DecodeLabs\Deliverance\DataReceiver;
 
 use DecodeLabs\Exceptional;
 use DecodeLabs\Veneer\Plugin;
@@ -126,7 +126,7 @@ class Http implements Plugin
      */
     public function saveResponse(ResponseInterface $response, string $path): File
     {
-        $file = $this->context->fs->file($path, 'wb');
+        $file = $this->context->file($path, 'wb');
         $this->transferStream($response->getBody(), $file);
 
         $file->close();
@@ -138,7 +138,7 @@ class Http implements Plugin
      */
     public function saveTempResponse(ResponseInterface $response): File
     {
-        $file = $this->context->fs->newTempFile();
+        $file = $this->context->newTempFile();
         $this->transferStream($response->getBody(), $file);
 
         $file->close();
@@ -150,7 +150,7 @@ class Http implements Plugin
      */
     public function importResponse(ResponseInterface $response): File
     {
-        $file = $this->context->fs->newMemoryFile();
+        $file = $this->context->newMemoryFile();
         $this->transferStream($response->getBody(), $file);
 
         $file->setPosition(0);
