@@ -40,12 +40,12 @@ See [Fs.php](./src/Atlas/Plugins/Fs.php), [File/Local.php](./src/Atlas/File/Loca
 ```php
 use DecodeLabs\Atlas;
 
-Atlas::$fs->get('/path/to/dir_or_file')
+Atlas::get('/path/to/dir_or_file')
     ->copyTo('/another/path/');
 
-Atlas::$fs->createDir('some/dir/path', 0770);
+Atlas::createDir('some/dir/path', 0770);
 
-Atlas::$fs->getFile('my/file')
+Atlas::getFile('my/file')
     ->renameTo('file.txt')
     ->setOwner('user');
 ```
@@ -59,15 +59,15 @@ Replace "scan" for "list" to return an array rather than a <code>Generator</code
 ```php
 use DecodeLabs\Atlas;
 
-foreach(Atlas::$fs->scan('my/dir') as $name => $fileOrDir) {
+foreach(Atlas::scan('my/dir') as $name => $fileOrDir) {
     // All files and dirs in my/dir
 }
 
-foreach(Atlas::$fs->scanDirs('my/dir') as $name => $dir) {
+foreach(Atlas::scanDirs('my/dir') as $name => $dir) {
     // All dirs in my/dir
 }
 
-foreach(Atlas::$fs->listFilesRecursive('my/dir', function($name, $file) {
+foreach(Atlas::listFilesRecursive('my/dir', function($name, $file) {
     // Return true if you want the file to be output
     return $name !== 'BadFile.php';
 }) as $name => $file) {
