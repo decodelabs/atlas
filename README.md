@@ -35,7 +35,7 @@ You can access all the primary functionality via this static frontage without co
 ### Basic local filesystem functions
 
 There are many standard filesystem functions represented by either <code>File</code> or <code>Dir</code> objects.
-See [Fs.php](./src/Atlas/Plugins/Fs.php), [File/Local.php](./src/Atlas/File/Local.php) and [Dir/Local.php](./src/Atlas/Dir/Local.php) for the full list.
+See [Context.php](./src/Atlas/Context.php), [File/Local.php](./src/Atlas/File/Local.php) and [Dir/Local.php](./src/Atlas/Dir/Local.php) for the full list.
 
 ```php
 use DecodeLabs\Atlas;
