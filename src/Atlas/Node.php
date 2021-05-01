@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
+/**
+ * @template T of Dir|File
+ */
 interface Node
 {
     public function getPath(): string;
@@ -20,7 +23,15 @@ interface Node
     public function isDir(): bool;
 
     public function isLink(): bool;
+
+    /**
+     * @return T
+     */
     public function getLinkTarget(): ?Node;
+
+    /**
+     * @return T
+     */
     public function createLink(string $path): Node;
 
 
@@ -59,10 +70,29 @@ interface Node
     public function getParent(): ?Dir;
 
 
+    /**
+     * @return T
+     */
     public function copy(string $path): Node;
+
+    /**
+     * @return T
+     */
     public function copyTo(string $destinationDir, string $newName = null): Node;
+
+    /**
+     * @return T
+     */
     public function renameTo(string $newName): Node;
+
+    /**
+     * @return T
+     */
     public function move(string $path): Node;
+
+    /**
+     * @return T
+     */
     public function moveTo(string $destinationDir, string $newName = null): Node;
 
     public function delete(): void;

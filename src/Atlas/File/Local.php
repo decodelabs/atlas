@@ -28,6 +28,9 @@ use Throwable;
 
 class Local extends Stream implements File, Dumpable
 {
+    /**
+     * @use LocalTrait<File>
+     */
     use LocalTrait;
 
     /**

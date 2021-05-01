@@ -27,6 +27,9 @@ use Traversable;
 
 class Local implements Dir, Dumpable
 {
+    /**
+     * @use LocalTrait<Dir>
+     */
     use LocalTrait;
     use ScannerTrait;
 
@@ -274,7 +277,7 @@ class Local implements Dir, Dumpable
     /**
      * Ensure a child item is deleted
      */
-    public function deleteChild(string $name): Node
+    public function deleteChild(string $name): Dir
     {
         if ($child = $this->getChild($name)) {
             $child->delete();
