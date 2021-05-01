@@ -11,7 +11,6 @@ namespace DecodeLabs\Atlas\Dir;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
-use DecodeLabs\Atlas\Node;
 
 use Generator;
 use Traversable;
@@ -24,7 +23,7 @@ trait ScannerTrait
     public function scan(callable $filter = null): Generator
     {
         /**
-         * @var Generator<string, Node>
+         * @var Generator<string, Dir|File>
          */
         return $this->scanRaw(true, true, $filter, true);
     }
@@ -221,7 +220,7 @@ trait ScannerTrait
     /**
      * Raw scan generator
      *
-     * @return Generator<int|string, Node|string>
+     * @return Generator<int|string, Dir|File|string>
      */
     protected function scanRaw(bool $files, bool $dirs, callable $filter = null, ?bool $wrap = true): Generator
     {
@@ -281,7 +280,7 @@ trait ScannerTrait
     public function scanRecursive(callable $filter = null): Generator
     {
         /**
-         * @var Generator<string, Node>
+         * @var Generator<string, Dir|File>
          */
         return $this->scanRawRecursive(true, true, $filter, true);
     }
@@ -478,7 +477,7 @@ trait ScannerTrait
     /**
      * Raw recursive scan generator
      *
-     * @return Generator<int|string, Node|string>
+     * @return Generator<int|string, Dir|File|string>
      */
     protected function scanRawRecursive(bool $files, bool $dirs, callable $filter = null, ?bool $wrap = true): Generator
     {

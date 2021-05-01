@@ -11,6 +11,9 @@ namespace DecodeLabs\Atlas;
 
 use Generator;
 
+/**
+ * @extends Node<Dir>
+ */
 interface Dir extends Node
 {
     /**
@@ -36,12 +39,12 @@ interface Dir extends Node
 
 
     /**
-     * @return Generator<string, Node>
+     * @return Generator<string, Dir|File>
      */
     public function scan(callable $filter = null): Generator;
 
     /**
-     * @return array<string, Node>
+     * @return array<string, Dir|File>
      */
     public function list(callable $filter = null): array;
 
@@ -135,12 +138,12 @@ interface Dir extends Node
 
 
     /**
-     * @return Generator<string, Node>
+     * @return Generator<string, Dir|File>
      */
     public function scanRecursive(callable $filter = null): Generator;
 
     /**
-     * @return array<string, Node>
+     * @return array<string, Dir|File>
      */
     public function listRecursive(callable $filter = null): array;
 
@@ -232,9 +235,16 @@ interface Dir extends Node
 
     public function countDirsRecursive(callable $filter = null): int;
 
+    /**
+     * @return Dir|File|null
+     */
     public function getChild(string $name): ?Node;
     public function hasChild(string $name): bool;
-    public function deleteChild(string $name): Node;
+
+    /**
+     * @return $this
+     */
+    public function deleteChild(string $name): Dir;
 
     public function createDir(string $name, int $permissions = null): Dir;
     public function hasDir(string $name): bool;

@@ -11,12 +11,16 @@ namespace DecodeLabs\Atlas\Node;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
+use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\NodeTrait;
 
 use DecodeLabs\Exceptional;
 use ErrorException;
 
+/**
+ * @template T of Dir|File
+ */
 trait LocalTrait
 {
     use NodeTrait;
@@ -252,6 +256,8 @@ trait LocalTrait
 
     /**
      * Copy symlink
+     *
+     * @return T
      */
     protected function copySymlink(string $path): Node
     {

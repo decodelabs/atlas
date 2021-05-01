@@ -35,7 +35,7 @@ You can access all the primary functionality via this static frontage without co
 ### Basic local filesystem functions
 
 There are many standard filesystem functions represented by either <code>File</code> or <code>Dir</code> objects.
-See [Fs.php](./src/Atlas/Plugins/Fs.php), [File/Local.php](./src/Atlas/File/Local.php) and [Dir/Local.php](./src/Atlas/Dir/Local.php) for the full list.
+See [Context.php](./src/Atlas/Context.php), [File/Local.php](./src/Atlas/File/Local.php) and [Dir/Local.php](./src/Atlas/Dir/Local.php) for the full list.
 
 ```php
 use DecodeLabs\Atlas;
@@ -78,51 +78,11 @@ foreach(Atlas::listFilesRecursive('my/dir', function($name, $file) {
 See [Fs.php](./src/Atlas/Plugins/Fs.php) or [Dir/Local.php](./src/Atlas/Dir/ScannerTrait.php) for all scanning options.
 
 
-### Channels
+### Channels & IO Broker
 
-Channels represent simple in / out handlers and can be written to and read from:
+Looking for the IO Broker and Channel transfer interfaces?
 
-```php
-use DecodeLabs\Atlas;
-
-$stream = Atlas::openStream('path/to/file');
-$stream->writeLine('Hello world');
-
-$stream = Atlas::openCliOutputStream(); // Same as Atlas::openStream(STDOUT);
-
-$buffer = Atlas::newBuffer();
-$buffer->write('Some text to buffer');
-echo $buffer->read(6); // "Some t"
-```
-
-
-### IO Broker
-
-Channels can be grouped together and managed by an <code>IO Broker</code> -
-
-```php
-use DecodeLabs\Atlas;
-
-// Create a CLI IO handler
-$broker = new Atlas::newBroker()
-    ->addInputProvider(Atlas::openStream(STDIN))
-    ->addOutputReceiver(Atlas::openStream(STDOUT))
-    ->addErrorReceiver(Atlas::openStream(STDERR));
-
-// Shortcut to the above:
-$broker = Atlas::newCliBroker();
-
-
-// Read line from CLI
-$broker->setReadBlocking(true);
-$text = $broker->readLine();
-
-// Write it back to output
-$broker->writeLine('INPUT: '.$text);
-```
-
-Once grouped, the Channels in an IO broker can be used as the interface between many different information sources; see [Systemic Unix process launcher](https://github.com/decodelabs/systemic/blob/develop/src/Systemic/Process/Launcher/Unix.php) for an example of an IO Broker managing input and output with <code>proc_open()</code>.
-
+This has been moved to its own project, [Deliverance](https://github.com/decodelabs/deliverance/).
 
 ### Mime types
 

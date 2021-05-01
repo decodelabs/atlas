@@ -12,6 +12,9 @@ namespace DecodeLabs\Atlas;
 use DecodeLabs\Deliverance\Channel;
 use DecodeLabs\Deliverance\Channel\Buffer;
 
+/**
+ * @extends Node<File>
+ */
 interface File extends Node, Channel
 {
     public function getSize(): ?int;
