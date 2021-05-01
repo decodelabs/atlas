@@ -117,7 +117,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Get node, return file or dir depending on what's on disk
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function get($path): Node
@@ -150,7 +150,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Check if modified time is within $seconds
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      */
     public function hasChanged($path, int $seconds = 30): bool
     {
@@ -160,7 +160,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Set file permissions on file or dir
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function setPermissions($path, int $permissions): Node
@@ -171,7 +171,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Set file permissions on file or dir recursively
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function setPermissionsRecursive($path, int $permissions): Node
@@ -190,7 +190,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Set owner for file or dir
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function setOwner($path, int $owner): Node
@@ -201,7 +201,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Set group for file or dir
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function setGroup($path, int $group): Node
@@ -212,7 +212,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Copy file or dir to $destinationPath
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function copy($path, string $destinationPath): Node
@@ -223,7 +223,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Copy file or dir to $destinationDir, rename basename to $newName if set
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function copyTo($path, string $destinationDir, string $newName = null): Node
@@ -234,7 +234,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Rename basename of file or dir
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function rename($path, string $newName): Node
@@ -245,7 +245,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Move file or dir to $destinationPath
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function move($path, string $destinationPath): Node
@@ -256,7 +256,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Move file or dir to $destinationDir, rename basename to $newName if set
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @return Dir|File
      */
     public function moveTo($path, string $destinationDir, string $newName = null): Node
@@ -267,7 +267,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Delete file or dir
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      */
     public function delete($path): void
     {
@@ -1219,7 +1219,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
     /**
      * Normalize node input
      *
-     * @param string|Stringable|Node $path
+     * @param string|Stringable|Dir|File $path
      * @param class-string $type
      * @return Dir|File|null
      */
