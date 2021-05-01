@@ -1,3 +1,7 @@
+## v0.9.1 (2021-05-01)
+* Improved return type hints
+* Added check for incorrect fs types
+
 ## v0.9.0 (2021-04-09)
 * Moved mime plugin to Typify
 * Moved transfer interfaces to Deliverance
