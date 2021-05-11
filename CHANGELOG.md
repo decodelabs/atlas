@@ -1,3 +1,6 @@
+## v0.9.2 (2021-05-11)
+* Added Veneer IDE support stub
+
 ## v0.9.1 (2021-05-01)
 * Improved return type hints
 * Added check for incorrect fs types
