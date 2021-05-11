@@ -27,7 +27,9 @@
         "symplify/easy-coding-standard": "^8.3",
 
         "guzzlehttp/guzzle": "^7.0",
-        "decodelabs/collections": "^0.6.1"
+        "decodelabs/collections": "^0.6.1",
+
+        "decodelabs/terminus": "^0.7"
     },
     "suggest": {
         "guzzlehttp/guzzle": "Communication over HTTP",
