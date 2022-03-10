@@ -115,7 +115,15 @@ class Http implements Plugin
         $response = $this->newClient()->get($url, $options);
         $json = json_decode((string)$response->getBody(), true);
 
-        return new NativeTree($json);
+        if (is_iterable($json)) {
+            /** @var iterable<int|string, mixed> $json */
+            $output = new NativeTree($json);
+        } else {
+            $output = new NativeTree(null, $json);
+        }
+
+        /** @var Tree<mixed> $output */
+        return $output;
     }
 
     //public function getXml($url, $options): XmlNode;

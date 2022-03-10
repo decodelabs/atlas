@@ -1,3 +1,7 @@
+## v0.9.4 (2022-03-10)
+* Transitioned from Travis to GHA
+* Updated PHPStan and ECS dependencies
+
 ## v0.9.3 (2021-10-20)
 * Updated Veneer dependency
 

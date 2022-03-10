@@ -16,6 +16,7 @@ use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
 
+use DecodeLabs\Coercion;
 use DecodeLabs\Deliverance\Channel;
 use DecodeLabs\Deliverance\Channel\Buffer;
 use DecodeLabs\Deliverance\Channel\Stream;
@@ -193,7 +194,7 @@ class Local extends Stream implements File, Dumpable
 
         if (!$data instanceof Channel) {
             $file = new LocalFile('php://temp', 'w+');
-            $file->write((string)$data);
+            $file->write(Coercion::forceString($data));
             $file->setPosition(0);
             $data = $file;
             $closeData = true;
@@ -586,6 +587,8 @@ class Local extends Stream implements File, Dumpable
 
     /**
      * Seek and read
+     *
+     * @param int<0, max> $length
      */
     public function readFrom(int $position, int $length): ?string
     {
@@ -619,6 +622,8 @@ class Local extends Stream implements File, Dumpable
 
     /**
      * Truncate a file to $size bytes
+     *
+     * @param int<0, max> $size
      */
     public function truncate(int $size = 0): File
     {

@@ -1,11 +1,11 @@
 # Atlas
 
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
-[![Latest Version](https://img.shields.io/packagist/v/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
-[![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
-[![Build Status](https://img.shields.io/travis/com/decodelabs/atlas/main.svg?style=flat-square)](https://travis-ci.com/decodelabs/atlas)
-[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat-square)](https://github.com/phpstan/phpstan)
-[![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat-square)](https://packagist.org/packages/decodelabs/atlas)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/atlas?style=flat)](https://packagist.org/packages/decodelabs/atlas)
+[![Latest Version](https://img.shields.io/packagist/v/decodelabs/atlas.svg?style=flat)](https://packagist.org/packages/decodelabs/atlas)
+[![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat)](https://packagist.org/packages/decodelabs/atlas)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/decodelabs/atlas/PHP%20Composer)](https://github.com/decodelabs/atlas/actions/workflows/php.yml)
+[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat)](https://github.com/phpstan/phpstan)
+[![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat)](https://packagist.org/packages/decodelabs/atlas)
 
 Easy filesystem and io functions for PHP
 

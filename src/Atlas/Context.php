@@ -60,6 +60,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
             );
         }
 
+        /** @var class-string<VeneerPlugin> $class */
         $class = '\\DecodeLabs\\Atlas\\Plugins\\' . ucfirst($name);
         return new $class($this);
     }
