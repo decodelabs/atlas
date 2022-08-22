@@ -536,7 +536,7 @@ trait ScannerTrait
      *
      * @template TKey
      * @template TValue
-     * @param Generator<TKey, TValue> $generator
+     * @phpstan-param Generator<TKey, TValue> $generator
      */
     protected function countGenerator(Generator $generator): int
     {

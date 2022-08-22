@@ -257,7 +257,7 @@ trait LocalTrait
     /**
      * Copy symlink
      *
-     * @return T
+     * @phpstan-return T
      */
     protected function copySymlink(string $path): Node
     {
