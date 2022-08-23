@@ -222,8 +222,12 @@ trait ScannerTrait
      *
      * @return Generator<int|string, Dir|File|string>
      */
-    protected function scanRaw(bool $files, bool $dirs, callable $filter = null, ?bool $wrap = true): Generator
-    {
+    protected function scanRaw(
+        bool $files,
+        bool $dirs,
+        callable $filter = null,
+        ?bool $wrap = true
+    ): Generator {
         if (!$this->exists()) {
             return;
         }
@@ -269,7 +273,10 @@ trait ScannerTrait
         }
     }
 
-    abstract protected function getScannerIterator(bool $files, bool $dirs): Traversable;
+    abstract protected function getScannerIterator(
+        bool $files,
+        bool $dirs
+    ): Traversable;
 
 
 
@@ -479,8 +486,12 @@ trait ScannerTrait
      *
      * @return Generator<int|string, Dir|File|string>
      */
-    protected function scanRawRecursive(bool $files, bool $dirs, callable $filter = null, ?bool $wrap = true): Generator
-    {
+    protected function scanRawRecursive(
+        bool $files,
+        bool $dirs,
+        callable $filter = null,
+        ?bool $wrap = true
+    ): Generator {
         if (!$this->exists()) {
             return;
         }
@@ -526,7 +537,10 @@ trait ScannerTrait
         }
     }
 
-    abstract protected function getRecursiveScannerIterator(bool $files, bool $dirs): Traversable;
+    abstract protected function getRecursiveScannerIterator(
+        bool $files,
+        bool $dirs
+    ): Traversable;
 
 
 

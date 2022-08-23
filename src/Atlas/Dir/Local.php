@@ -25,7 +25,9 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Traversable;
 
-class Local implements Dir, Dumpable
+class Local implements
+    Dir,
+    Dumpable
 {
     /**
      * @use LocalTrait<Dir>
@@ -221,8 +223,10 @@ class Local implements Dir, Dumpable
      *
      * @return Traversable<DirectoryIterator>
      */
-    protected function getScannerIterator(bool $files, bool $dirs): Traversable
-    {
+    protected function getScannerIterator(
+        bool $files,
+        bool $dirs
+    ): Traversable {
         return new DirectoryIterator($this->path);
     }
 
@@ -232,8 +236,10 @@ class Local implements Dir, Dumpable
      *
      * @return Traversable<RecursiveIteratorIterator<RecursiveDirectoryIterator>>
      */
-    protected function getRecursiveScannerIterator(bool $files, bool $dirs): Traversable
-    {
+    protected function getRecursiveScannerIterator(
+        bool $files,
+        bool $dirs
+    ): Traversable {
         return new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
                 $this->path,
@@ -252,7 +258,7 @@ class Local implements Dir, Dumpable
     /**
      * Get a child File or Dir if it exists
      */
-    public function getChild(string $name): ?Node
+    public function getChild(string $name): Dir|File|null
     {
         $path = $this->path . '/' . ltrim($name, '/');
 
@@ -290,8 +296,10 @@ class Local implements Dir, Dumpable
     /**
      * Create a dir as a child
      */
-    public function createDir(string $name, int $permissions = null): Dir
-    {
+    public function createDir(
+        string $name,
+        int $permissions = null
+    ): Dir {
         return $this->getDir($name)->ensureExists($permissions);
     }
 
@@ -341,16 +349,20 @@ class Local implements Dir, Dumpable
     /**
      * Create a file with content
      */
-    public function createFile(string $name, string $content): File
-    {
+    public function createFile(
+        string $name,
+        string $content
+    ): File {
         return $this->getFile($name)->putContents($content);
     }
 
     /**
      * Open a child file
      */
-    public function openFile(string $name, string $mode): File
-    {
+    public function openFile(
+        string $name,
+        string $mode
+    ): File {
         return $this->getFile($name)->open($mode);
     }
 
@@ -400,7 +412,7 @@ class Local implements Dir, Dumpable
     /**
      * Copy dir to $destinationPath
      */
-    public function copy(string $path): Node
+    public function copy(string $path): Dir
     {
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
@@ -421,7 +433,7 @@ class Local implements Dir, Dumpable
     /**
      * Move dir to $destinationDir, rename basename to $newName if set
      */
-    public function move(string $path): Node
+    public function move(string $path): Dir
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
@@ -511,6 +523,7 @@ class Local implements Dir, Dumpable
         $destination = new self($destination);
         $destination->ensureExists($this->getPermissions());
 
+        /** @var string $subPath */
         foreach ($this->scanRecursive() as $subPath => $item) {
             if ($item instanceof self) {
                 // Dir

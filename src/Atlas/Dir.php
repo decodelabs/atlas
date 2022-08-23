@@ -234,11 +234,7 @@ interface Dir extends Node
     public function listDirPathsRecursive(callable $filter = null): array;
 
     public function countDirsRecursive(callable $filter = null): int;
-
-    /**
-     * @return Dir|File|null
-     */
-    public function getChild(string $name): ?Node;
+    public function getChild(string $name): Dir|File|null;
     public function hasChild(string $name): bool;
 
     /**

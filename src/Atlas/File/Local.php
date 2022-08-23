@@ -13,7 +13,6 @@ use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\Local as LocalFile;
-use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
 
 use DecodeLabs\Coercion;
@@ -27,7 +26,9 @@ use DecodeLabs\Glitch\Proxy;
 
 use Throwable;
 
-class Local extends Stream implements File, Dumpable
+class Local extends Stream implements
+    File,
+    Dumpable
 {
     /**
      * @use LocalTrait<File>
@@ -39,8 +40,10 @@ class Local extends Stream implements File, Dumpable
      *
      * @param string|resource $stream
      */
-    public function __construct($stream, string $mode = null)
-    {
+    public function __construct(
+        $stream,
+        string $mode = null
+    ) {
         if (is_resource($stream)) {
             parent::__construct($stream, null);
 
@@ -75,7 +78,9 @@ class Local extends Stream implements File, Dumpable
             return true;
         }
 
-        return file_exists($this->path) || is_link($this->path);
+        return
+            file_exists($this->path) ||
+            is_link($this->path);
     }
 
 
@@ -188,7 +193,7 @@ class Local extends Stream implements File, Dumpable
     /**
      * Write content to file
      */
-    public function putContents($data): File
+    public function putContents(mixed $data): File
     {
         $closeData = $closeAfter = false;
 
@@ -200,7 +205,10 @@ class Local extends Stream implements File, Dumpable
             $closeData = true;
         }
 
-        if ($data instanceof File && !$data->isOpen()) {
+        if (
+            $data instanceof File &&
+            !$data->isOpen()
+        ) {
             $data->open('r');
             $closeData = true;
         }
@@ -409,7 +417,7 @@ class Local extends Stream implements File, Dumpable
     /**
      * Copy file to $destinationPath
      */
-    public function copy(string $path): Node
+    public function copy(string $path): File
     {
         if ($path === $this->path) {
             return $this;
@@ -457,7 +465,7 @@ class Local extends Stream implements File, Dumpable
     /**
      * Move file to $destinationPath
      */
-    public function move(string $path): Node
+    public function move(string $path): File
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
@@ -537,8 +545,10 @@ class Local extends Stream implements File, Dumpable
     /**
      * Move file pointer to offset
      */
-    public function movePosition(int $offset, bool $fromEnd = false): File
-    {
+    public function movePosition(
+        int $offset,
+        bool $fromEnd = false
+    ): File {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot seek file, file not open',
@@ -590,8 +600,10 @@ class Local extends Stream implements File, Dumpable
      *
      * @param int<0, max> $length
      */
-    public function readFrom(int $position, int $length): ?string
-    {
+    public function readFrom(
+        int $position,
+        int $length
+    ): ?string {
         $this->setPosition($position);
         return $this->read($length);
     }

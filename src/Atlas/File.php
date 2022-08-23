@@ -15,7 +15,9 @@ use DecodeLabs\Deliverance\Channel\Buffer;
 /**
  * @extends Node<File>
  */
-interface File extends Node, Channel
+interface File extends
+    Node,
+    Channel
 {
     public function getSize(): ?int;
     public function isOnDisk(): bool;
@@ -23,10 +25,9 @@ interface File extends Node, Channel
     public function getRawHash(string $type): ?string;
 
     /**
-     * @param mixed $data
      * @return $this
      */
-    public function putContents($data): File;
+    public function putContents(mixed $data): File;
 
     public function getContents(): string;
     public function bufferContents(): Buffer;
