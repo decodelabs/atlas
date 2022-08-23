@@ -11,7 +11,6 @@ namespace DecodeLabs\Atlas\File;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
-use DecodeLabs\Atlas\Node;
 
 use DecodeLabs\Exceptional;
 
@@ -32,7 +31,7 @@ class Memory extends Local
     /**
      * Create symbolic link
      */
-    public function createLink(string $path): Node
+    public function createLink(string $path): Dir|File
     {
         throw Exceptional::Forbidden(
             'Unable to create symbolic link to php://temp stream'
@@ -128,7 +127,7 @@ class Memory extends Local
     /**
      * Move file to $destinationPath
      */
-    public function move(string $path): Node
+    public function move(string $path): File
     {
         $output = $this->copy($path);
         $this->close();

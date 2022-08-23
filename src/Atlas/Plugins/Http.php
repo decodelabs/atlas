@@ -25,10 +25,7 @@ use Psr\Http\Message\StreamInterface;
 
 class Http implements Plugin
 {
-    /**
-     * @var Context
-     */
-    protected $context;
+    protected Context $context;
 
     /**
      * Init with context
@@ -59,8 +56,10 @@ class Http implements Plugin
      *
      * @param array<string, mixed> $options
      */
-    public function get(string $url, array $options = []): File
-    {
+    public function get(
+        string $url,
+        array $options = []
+    ): File {
         $response = $this->newClient()->get($url, $options);
         return $this->importResponse($response);
     }
@@ -70,8 +69,10 @@ class Http implements Plugin
      *
      * @param array<string, mixed> $options
      */
-    public function getString(string $url, array $options = []): string
-    {
+    public function getString(
+        string $url,
+        array $options = []
+    ): string {
         $response = $this->newClient()->get($url, $options);
         return (string)$response->getBody();
     }
@@ -81,8 +82,11 @@ class Http implements Plugin
      *
      * @param array<string, mixed> $options
      */
-    public function getFile(string $url, string $path, array $options = []): File
-    {
+    public function getFile(
+        string $url,
+        string $path,
+        array $options = []
+    ): File {
         $response = $this->newClient()->get($url, $options);
         return $this->saveResponse($response, $path);
     }
@@ -92,8 +96,10 @@ class Http implements Plugin
      *
      * @param array<string, mixed> $options
      */
-    public function getTempFile(string $url, array $options = []): File
-    {
+    public function getTempFile(
+        string $url,
+        array $options = []
+    ): File {
         $response = $this->newClient()->get($url, $options);
         return $this->saveTempResponse($response);
     }
@@ -104,8 +110,10 @@ class Http implements Plugin
      * @param array<string, mixed> $options
      * @return Tree<mixed>
      */
-    public function getJson(string $url, array $options = []): Tree
-    {
+    public function getJson(
+        string $url,
+        array $options = []
+    ): Tree {
         if (!class_exists(NativeTree::class)) {
             throw Exceptional::ComponentUnavailable(
                 'Cannot expand JSON response without decodelabs/collections'
@@ -132,8 +140,10 @@ class Http implements Plugin
     /**
      * Save PSR7 response to disk
      */
-    public function saveResponse(ResponseInterface $response, string $path): File
-    {
+    public function saveResponse(
+        ResponseInterface $response,
+        string $path
+    ): File {
         $file = $this->context->file($path, 'wb');
         $this->transferStream($response->getBody(), $file);
 
@@ -168,8 +178,10 @@ class Http implements Plugin
     /**
      * Transfer PSR7 stream to DataReceiver
      */
-    public function transferStream(StreamInterface $stream, DataReceiver $receiver): DataReceiver
-    {
+    public function transferStream(
+        StreamInterface $stream,
+        DataReceiver $receiver
+    ): DataReceiver {
         while (!$stream->eof()) {
             $receiver->write($stream->read(8192));
         }

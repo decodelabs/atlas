@@ -15,22 +15,23 @@ use DecodeLabs\Atlas\MutexTrait;
 
 use DecodeLabs\Glitch\Dumpable;
 
-class Local implements Mutex, Dumpable
+class Local implements
+    Mutex,
+    Dumpable
 {
     use MutexTrait {
         MutexTrait::__construct as private __mutexConstruct;
     }
 
-    /**
-     * @var LocalFile
-     */
-    protected $file;
+    protected LocalFile $file;
 
     /**
      * Init with name and path
      */
-    public function __construct(string $name, string $dir)
-    {
+    public function __construct(
+        string $name,
+        string $dir
+    ) {
         $this->__mutexConstruct($name);
         $this->file = new LocalFile($dir . '/' . $name . '.lock');
     }

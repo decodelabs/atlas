@@ -25,10 +25,7 @@ trait LocalTrait
 {
     use NodeTrait;
 
-    /**
-     * @var string
-     */
-    protected $path;
+    protected string $path = '';
 
 
     /**
@@ -51,7 +48,7 @@ trait LocalTrait
     /**
      * Get item pointed to by link
      */
-    public function getLinkTarget(): ?Node
+    public function getLinkTarget(): Dir|File|null
     {
         if (!$this->isLink()) {
             return null;
@@ -69,7 +66,7 @@ trait LocalTrait
     /**
      * Create a symlink to this node
      */
-    public function createLink(string $path): Node
+    public function createLink(string $path): Dir|File
     {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
@@ -95,7 +92,13 @@ trait LocalTrait
             );
         }
 
-        return new self($path);
+        /**
+         * @var Node
+         * @phpstan-var T
+         */
+        $output = new self($path);
+
+        return $output;
     }
 
     /**
@@ -259,7 +262,7 @@ trait LocalTrait
      *
      * @phpstan-return T
      */
-    protected function copySymlink(string $path): Node
+    protected function copySymlink(string $path): Dir|File
     {
         (new LocalDir(dirname($path)))->ensureExists();
 
@@ -275,15 +278,23 @@ trait LocalTrait
             );
         }
 
-        return new self($path);
+        /**
+         * @var Node
+         * @phpstan-var T
+         * */
+        $output = new self($path);
+
+        return $output;
     }
 
 
     /**
      * Copy file to $destinationDir, rename basename to $newName if set
      */
-    public function copyTo(string $destinationDir, string $newName = null): Node
-    {
+    public function copyTo(
+        string $destinationDir,
+        string $newName = null
+    ): Dir|File {
         $newName = $this->normalizeNewName($newName);
         $destination = rtrim($destinationDir, '/') . '/' . $newName;
         return $this->copy($destination);
@@ -292,7 +303,7 @@ trait LocalTrait
     /**
      * Rename file within current dir
      */
-    public function renameTo(string $newName): Node
+    public function renameTo(string $newName): Dir|File
     {
         return $this->moveTo(dirname($this->path), $newName);
     }
@@ -300,8 +311,10 @@ trait LocalTrait
     /**
      * Move file to $destinationDir, rename basename to $newName if set
      */
-    public function moveTo(string $destinationDir, string $newName = null): Node
-    {
+    public function moveTo(
+        string $destinationDir,
+        string $newName = null
+    ): Dir|File {
         $newName = $this->normalizeNewName($newName);
         $destination = rtrim($destinationDir, '/') . '/' . $newName;
         return $this->move($destination);
