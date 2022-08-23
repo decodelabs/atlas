@@ -60,7 +60,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
             );
         }
 
-        /** @var class-string<VeneerPlugin> $class */
+        /** @phpstan-var class-string<VeneerPlugin> $class */
         $class = '\\DecodeLabs\\Atlas\\Plugins\\' . ucfirst($name);
         return new $class($this);
     }
@@ -1221,7 +1221,7 @@ class Context implements VeneerPluginProvider, VeneerPluginAccessTarget
      * Normalize node input
      *
      * @param string|Stringable|Dir|File $path
-     * @param class-string $type
+     * @phpstan-param class-string $type
      * @return Dir|File|null
      */
     protected function normalizeInput(&$path, string $type): ?Node
