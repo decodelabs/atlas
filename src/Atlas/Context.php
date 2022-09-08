@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas;
 
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
+use DecodeLabs\Atlas\File\GzLocal as GzFile;
+use DecodeLabs\Atlas\File\GzOpenable;
 use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
@@ -287,6 +289,23 @@ class Context implements
 
         return new LocalFile($path, $mode);
     }
+
+    /**
+     * Load file from $path, open if $mode is set
+     */
+    public function gzFile(
+        string|Stringable|File $path,
+        string $mode
+    ): File {
+        $node = $this->normalizeInput($path, File::class);
+
+        if ($node instanceof GzOpenable) {
+            return $node->gzOpen($mode);
+        }
+
+        return new GzFile($path, $mode);
+    }
+
 
     /**
      * Load existing file from $path, open if $mode is set

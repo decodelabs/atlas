@@ -38,6 +38,12 @@ class Memory extends Local
         );
     }
 
+
+    public function gzOpen(string $mode): Gz
+    {
+        throw Exceptional::Runtime('Memory file cannot be opened in GZ mode');
+    }
+
     /**
      * Get mtime of file
      */
