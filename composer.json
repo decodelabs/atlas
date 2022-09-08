@@ -13,7 +13,7 @@
 
         "decodelabs/coercion": "^0.2",
         "decodelabs/exceptional": "^0.4",
-        "decodelabs/deliverance": "^0.2",
+        "decodelabs/deliverance": "^0.2.4",
         "decodelabs/glitch-support": "^0.4",
         "decodelabs/veneer": "^0.9",
 

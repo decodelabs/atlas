@@ -28,6 +28,7 @@ use Throwable;
 
 class Local extends Stream implements
     File,
+    GzOpenable,
     Dumpable
 {
     /**
@@ -321,7 +322,7 @@ class Local extends Stream implements
             }
         }
 
-        if (!$resource = fopen($this->path, $mode)) {
+        if (!$resource = $this->fopen($mode)) {
             throw Exceptional::Io(
                 'Unable to open file',
                 null,
@@ -332,6 +333,22 @@ class Local extends Stream implements
         $this->resource = $resource;
         return $this;
     }
+
+    /**
+     * @return resource|false
+     */
+    protected function fopen(string $mode)
+    {
+        return fopen($this->path, $mode);
+    }
+
+
+    public function gzOpen(string $mode): Gz
+    {
+        $this->close();
+        return new GzLocal($this->path, $mode);
+    }
+
 
     /**
      * Has this file been opened?
@@ -531,7 +548,7 @@ class Local extends Stream implements
             );
         }
 
-        if (0 !== fseek($this->resource, $offset, SEEK_SET)) {
+        if (0 !== $this->fseek($offset, SEEK_SET)) {
             throw Exceptional::Io(
                 'Failed to seek file',
                 null,
@@ -541,6 +558,7 @@ class Local extends Stream implements
 
         return $this;
     }
+
 
     /**
      * Move file pointer to offset
@@ -568,6 +586,17 @@ class Local extends Stream implements
         return $this;
     }
 
+    protected function fseek(
+        int $offset,
+        int $flags
+    ): int {
+        if ($this->resource === null) {
+            return -1;
+        }
+
+        return fseek($this->resource, $offset, $flags);
+    }
+
 
     /**
      * Get location of file pointer
@@ -582,7 +611,7 @@ class Local extends Stream implements
             );
         }
 
-        $output = ftell($this->resource);
+        $output = $this->ftell();
 
         if ($output === false) {
             throw Exceptional::Io(
@@ -593,6 +622,15 @@ class Local extends Stream implements
         }
 
         return $output;
+    }
+
+    protected function ftell(): int|false
+    {
+        if ($this->resource === null) {
+            return false;
+        }
+
+        return ftell($this->resource);
     }
 
     /**
