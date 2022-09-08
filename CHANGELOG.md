@@ -1,3 +1,6 @@
+## v0.10.3 (2022-09-08)
+* Added Gz File support
+
 ## v0.10.2 (2022-09-08)
 * Updated Collections dependency
 * Updated CI environment
