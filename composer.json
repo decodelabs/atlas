@@ -23,10 +23,11 @@
         "phpunit/phpunit": "^9",
         "phpstan/phpstan": "^1",
         "phpstan/extension-installer": "^1.0",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
         "symplify/easy-coding-standard": "^11",
 
         "decodelabs/phpstan-decodelabs": "^0.6",
-        "decodelabs/collections": "^0.7",
+        "decodelabs/collections": "^0.8",
 
         "guzzlehttp/guzzle": "^7.0"
     },
@@ -54,7 +55,19 @@
     },
     "scripts": {
         "analyze": "phpstan analyze --no-progress",
-        "psr12": "ecs check --no-progress-bar",
-        "psr12-fix": "ecs check --no-progress-bar --fix"
+        "ecs": "ecs check --no-progress-bar",
+        "ecs-fix": "ecs check --no-progress-bar --fix",
+        "lint": "parallel-lint src/ ecs.php stubs/",
+        "eclint": "eclint check src/ ecs.php stubs/",
+        "eclint-fix": "eclint fix src/ ecs.php stubs/",
+        "non-ascii": "! LC_ALL=C.UTF-8 find src/ -type f -name \"*.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'",
+        "check": [
+            "@composer update",
+            "@analyze",
+            "@ecs",
+            "@lint",
+            "@eclint",
+            "@non-ascii"
+        ]
     }
 }
