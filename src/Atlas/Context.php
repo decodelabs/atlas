@@ -19,55 +19,17 @@ use DecodeLabs\Atlas\Plugins\Http as HttpPlugin;
 
 use DecodeLabs\Exceptional;
 
-use DecodeLabs\Veneer\Plugin\AccessTarget as VeneerPluginAccessTarget;
-use DecodeLabs\Veneer\Plugin\AccessTargetTrait as VeneerPluginAccessTargetTrait;
-use DecodeLabs\Veneer\Plugin as VeneerPlugin;
-use DecodeLabs\Veneer\Plugin\Provider as VeneerPluginProvider;
-use DecodeLabs\Veneer\Plugin\ProviderTrait as VeneerPluginProviderTrait;
+use DecodeLabs\Veneer\LazyLoad;
+use DecodeLabs\Veneer\Plugin;
 
 use Generator;
 use Stringable;
 
-/**
- * @property HttpPlugin $http
- */
-class Context implements
-    VeneerPluginProvider,
-    VeneerPluginAccessTarget
+class Context
 {
-    use VeneerPluginProviderTrait;
-    use VeneerPluginAccessTargetTrait;
-
-    public const PLUGINS = [
-        'http'
-    ];
-
-
-    /**
-     * Stub to get empty plugin list to avoid broken targets
-     */
-    public function getVeneerPluginNames(): array
-    {
-        return static::PLUGINS;
-    }
-
-
-    /**
-     * Load factory plugins
-     */
-    public function loadVeneerPlugin(string $name): VeneerPlugin
-    {
-        if (!in_array($name, self::PLUGINS)) {
-            throw Exceptional::InvalidArgument(
-                $name . ' is not a recognised Veneer plugin'
-            );
-        }
-
-        /** @phpstan-var class-string<VeneerPlugin> $class */
-        $class = '\\DecodeLabs\\Atlas\\Plugins\\' . ucfirst($name);
-        return new $class($this);
-    }
-
+    #[Plugin]
+    #[LazyLoad]
+    public HttpPlugin $http;
 
     /**
      * Create a new local Mutex

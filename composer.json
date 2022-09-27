@@ -15,7 +15,7 @@
         "decodelabs/exceptional": "^0.4",
         "decodelabs/deliverance": "^0.2.4",
         "decodelabs/glitch-support": "^0.4",
-        "decodelabs/veneer": "^0.9",
+        "decodelabs/veneer": "^0.10",
 
         "psr/http-message": "^1.0"
     },

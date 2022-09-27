@@ -16,14 +16,13 @@ use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
 use DecodeLabs\Deliverance\DataReceiver;
 
 use DecodeLabs\Exceptional;
-use DecodeLabs\Veneer\Plugin;
 
 use GuzzleHttp\Client as HttpClient;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-class Http implements Plugin
+class Http
 {
     protected Context $context;
 
