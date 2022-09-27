@@ -1,3 +1,6 @@
+## v0.10.4 (2022-09-27)
+* Converted Veneer plugins to load with Attributes
+
 ## v0.10.3 (2022-09-08)
 * Added Gz File support
 
