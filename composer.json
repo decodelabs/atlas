@@ -15,7 +15,7 @@
         "decodelabs/exceptional": "^0.4",
         "decodelabs/deliverance": "^0.2.4",
         "decodelabs/glitch-support": "^0.4",
-        "decodelabs/veneer": "^0.10",
+        "decodelabs/veneer": "^0.10.7",
 
         "psr/http-message": "^1.0"
     },
@@ -28,6 +28,7 @@
 
         "decodelabs/phpstan-decodelabs": "^0.6",
         "decodelabs/collections": "^0.8",
+        "decodelabs/terminus": "^0.8.4",
 
         "guzzlehttp/guzzle": "^7.0"
     },
@@ -55,16 +56,20 @@
     },
     "scripts": {
         "analyze": "phpstan analyze --no-progress",
+        "clear-phpstan": "phpstan clear-result-cache",
         "ecs": "ecs check --no-progress-bar",
         "ecs-fix": "ecs check --no-progress-bar --fix",
         "lint": "parallel-lint src/ ecs.php stubs/",
         "eclint": "eclint check src/ ecs.php stubs/",
         "eclint-fix": "eclint fix src/ ecs.php stubs/",
         "non-ascii": "! LC_ALL=C.UTF-8 find src/ -type f -name \"*.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'",
+        "veneer-stub": "vendor/bin/veneer-stub",
         "check": [
             "@composer update",
+            "@veneer-stub",
+            "@clear-phpstan",
             "@analyze",
-            "@ecs",
+            "@ecs-fix",
             "@lint",
             "@eclint",
             "@non-ascii"
