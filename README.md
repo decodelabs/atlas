@@ -81,6 +81,8 @@ foreach(Atlas::listFilesRecursive('my/dir', function($name, $file) {
 See [Fs.php](./src/Atlas/Plugins/Fs.php) or [Dir/Local.php](./src/Atlas/Dir/ScannerTrait.php) for all scanning options.
 
 
+---
+
 ### Channels & IO Broker
 
 Looking for the IO Broker and Channel transfer interfaces?
