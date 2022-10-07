@@ -7,7 +7,13 @@
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat)](https://github.com/phpstan/phpstan)
 [![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat)](https://packagist.org/packages/decodelabs/atlas)
 
-Easy filesystem and io functions for PHP
+### Easy filesystem and io functions for PHP
+
+Atlas provides an easy and accessible interface to file system interaction. Read, write, copy and move files without breaking a sweat.
+
+_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
+
+---
 
 ## Installation
 
