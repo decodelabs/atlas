@@ -95,5 +95,7 @@ Looking for the mime type detection stuff that used to be here?
 
 This has been moved to its own project, [Typify](https://github.com/decodelabs/typify/).
 
+---
+
 ## Licensing
 Atlas is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.
