@@ -63,7 +63,7 @@
         "eclint-fix": "eclint fix src/ ecs.php stubs/",
         "non-ascii": "! LC_ALL=C.UTF-8 find src/ -type f -name \"*.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'",
         "veneer-stub": "vendor/bin/veneer-stub",
-        "check": [
+        "prep": [
             "@composer update",
             "@veneer-stub",
             "@clear-phpstan",
