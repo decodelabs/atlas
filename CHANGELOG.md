@@ -1,4 +1,5 @@
 * Fixed PHP8.1 testing
+* Migrated to use effigy in CI workflow
 
 ## v0.10.5 (2022-09-27)
 * Updated Veneer stub
