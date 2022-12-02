@@ -486,7 +486,9 @@ class Local implements
             }
         }
 
-        rmdir($this->path);
+        if ($this->exists()) {
+            rmdir($this->path);
+        }
     }
 
     /**

@@ -1,3 +1,4 @@
+* Ensure dir exists before rmdir()
 * Fixed PHP8.1 testing
 * Migrated to use effigy in CI workflow
 
