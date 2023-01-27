@@ -5,8 +5,8 @@
  */
 namespace DecodeLabs;
 
-use DecodeLabs\Veneer\Proxy;
-use DecodeLabs\Veneer\ProxyTrait;
+use DecodeLabs\Veneer\Proxy as Proxy;
+use DecodeLabs\Veneer\ProxyTrait as ProxyTrait;
 use DecodeLabs\Atlas\Context as Inst;
 use DecodeLabs\Atlas\Plugins\Http as HttpPlugin;
 use DecodeLabs\Veneer\Plugin\Wrapper as PluginWrapper;
@@ -21,7 +21,7 @@ class Atlas implements Proxy
 {
     use ProxyTrait;
 
-    const VENEER = 'DecodeLabs\Atlas';
+    const VENEER = 'DecodeLabs\\Atlas';
     const VENEER_TARGET = Inst::class;
 
     public static Inst $instance;
