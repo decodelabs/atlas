@@ -486,7 +486,10 @@ class Local implements
             }
         }
 
-        rmdir($this->path);
+        /** @phpstan-ignore-next-line */
+        if ($this->exists()) {
+            rmdir($this->path);
+        }
     }
 
     /**

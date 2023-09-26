@@ -65,6 +65,8 @@ trait LocalTrait
 
     /**
      * Create a symlink to this node
+     *
+     * @return T
      */
     public function createLink(string $path): Dir|File
     {
@@ -260,7 +262,7 @@ trait LocalTrait
     /**
      * Copy symlink
      *
-     * @phpstan-return T
+     * @return T
      */
     protected function copySymlink(string $path): Dir|File
     {

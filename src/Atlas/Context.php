@@ -1228,7 +1228,7 @@ class Context
     /**
      * Normalize node input
      *
-     * @phpstan-param class-string $type
+     * @param class-string $type
      */
     protected function normalizeInput(
         string|Stringable|Dir|File &$path,

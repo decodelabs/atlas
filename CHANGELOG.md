@@ -1,3 +1,9 @@
+## v0.10.6 (2023-09-26)
+* Converted phpstan doc comments to generic
+* Ensure dir exists before rmdir()
+* Fixed PHP8.1 testing
+* Migrated to use effigy in CI workflow
+
 ## v0.10.5 (2022-09-27)
 * Updated Veneer stub
 * Updated composer check script

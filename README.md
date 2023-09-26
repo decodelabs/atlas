@@ -3,11 +3,17 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/atlas?style=flat)](https://packagist.org/packages/decodelabs/atlas)
 [![Latest Version](https://img.shields.io/packagist/v/decodelabs/atlas.svg?style=flat)](https://packagist.org/packages/decodelabs/atlas)
 [![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/atlas.svg?style=flat)](https://packagist.org/packages/decodelabs/atlas)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/decodelabs/atlas/Integrate)](https://github.com/decodelabs/atlas/actions/workflows/integrate.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/decodelabs/atlas/integrate.yml?branch=develop)](https://github.com/decodelabs/atlas/actions/workflows/integrate.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat)](https://github.com/phpstan/phpstan)
 [![License](https://img.shields.io/packagist/l/decodelabs/atlas?style=flat)](https://packagist.org/packages/decodelabs/atlas)
 
-Easy filesystem and io functions for PHP
+### Easy filesystem and IO functions for PHP
+
+Atlas provides an easy and accessible interface to file system interaction. Read, write, copy and move files without breaking a sweat.
+
+_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
+
+---
 
 ## Installation
 
@@ -75,6 +81,8 @@ foreach(Atlas::listFilesRecursive('my/dir', function($name, $file) {
 See [Fs.php](./src/Atlas/Plugins/Fs.php) or [Dir/Local.php](./src/Atlas/Dir/ScannerTrait.php) for all scanning options.
 
 
+---
+
 ### Channels & IO Broker
 
 Looking for the IO Broker and Channel transfer interfaces?
@@ -86,6 +94,8 @@ This has been moved to its own project, [Deliverance](https://github.com/decodel
 Looking for the mime type detection stuff that used to be here?
 
 This has been moved to its own project, [Typify](https://github.com/decodelabs/typify/).
+
+---
 
 ## Licensing
 Atlas is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.
