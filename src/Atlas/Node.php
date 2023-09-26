@@ -25,12 +25,12 @@ interface Node
     public function isLink(): bool;
 
     /**
-     * @phpstan-return T
+     * @return T
      */
     public function getLinkTarget(): Dir|File|null;
 
     /**
-     * @phpstan-return T
+     * @return T
      */
     public function createLink(string $path): Dir|File;
 
@@ -71,12 +71,12 @@ interface Node
 
 
     /**
-     * @phpstan-return T
+     * @return T
      */
     public function copy(string $path): Dir|File;
 
     /**
-     * @phpstan-return T
+     * @return T
      */
     public function copyTo(
         string $destinationDir,
@@ -84,17 +84,17 @@ interface Node
     ): Dir|File;
 
     /**
-     * @phpstan-return T
+     * @return T
      */
     public function renameTo(string $newName): Dir|File;
 
     /**
-     * @phpstan-return T
+     * @return T
      */
     public function move(string $path): Dir|File;
 
     /**
-     * @phpstan-return T
+     * @return T
      */
     public function moveTo(
         string $destinationDir,
