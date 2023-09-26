@@ -1,3 +1,4 @@
+## v0.10.6 (2023-09-26)
 * Converted phpstan doc comments to generic
 * Ensure dir exists before rmdir()
 * Fixed PHP8.1 testing
