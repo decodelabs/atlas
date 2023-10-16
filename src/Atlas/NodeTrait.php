@@ -11,6 +11,7 @@ namespace DecodeLabs\Atlas;
 
 use DateInterval;
 use DateTime;
+use DecodeLabs\Exceptional;
 
 trait NodeTrait
 {
@@ -77,7 +78,11 @@ trait NodeTrait
         }
 
         $date = new DateTime('now');
-        $interval = DateInterval::createFromDateString($timeout);
+
+        if (!$interval = DateInterval::createFromDateString($timeout)) {
+            throw Exceptional::InvalidArgument('Invalid interval string: ' . $timeout);
+        }
+
         $ts = $date->sub($interval)->getTimestamp();
 
         if (!$mod = $this->getLastModified()) {
