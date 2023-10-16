@@ -1,3 +1,4 @@
+## v0.10.7 (2023-10-16)
 * Updated HTTP Message dependency
 * Fixed timestamp type check
 
