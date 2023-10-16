@@ -8,8 +8,6 @@ namespace DecodeLabs;
 use DecodeLabs\Veneer\Proxy as Proxy;
 use DecodeLabs\Veneer\ProxyTrait as ProxyTrait;
 use DecodeLabs\Atlas\Context as Inst;
-use DecodeLabs\Atlas\Plugins\Http as HttpPlugin;
-use DecodeLabs\Veneer\Plugin\Wrapper as PluginWrapper;
 use DecodeLabs\Atlas\Mutex\Local as Ref0;
 use DecodeLabs\Atlas\File as Ref1;
 use DecodeLabs\Atlas\File\Memory as Ref2;
@@ -25,8 +23,6 @@ class Atlas implements Proxy
     const VENEER_TARGET = Inst::class;
 
     public static Inst $instance;
-    /** @var HttpPlugin|PluginWrapper<HttpPlugin> $http */
-    public static HttpPlugin|PluginWrapper $http;
 
     public static function newMutex(string $name, string $dir): Ref0 {
         return static::$instance->newMutex(...func_get_args());

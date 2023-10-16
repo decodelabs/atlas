@@ -15,19 +15,10 @@
         "decodelabs/exceptional": "^0.4",
         "decodelabs/deliverance": "^0.2.11",
         "decodelabs/glitch-support": "^0.4",
-        "decodelabs/veneer": "^0.10.10",
-
-        "psr/http-message": "^2.0"
+        "decodelabs/veneer": "^0.10.10"
     },
     "require-dev": {
-        "decodelabs/phpstan-decodelabs": "^0.6",
-        "decodelabs/collections": "^0.8",
-
-        "guzzlehttp/guzzle": "^7.0"
-    },
-    "suggest": {
-        "guzzlehttp/guzzle": "Communication over HTTP",
-        "decodelabs/collections": "Fetch JSON files over HTTP"
+        "decodelabs/phpstan-decodelabs": "^0.6"
     },
     "autoload": {
         "psr-4": {
@@ -39,7 +30,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.10.x-dev"
+            "dev-develop": "0.11.x-dev"
         }
     }
 }

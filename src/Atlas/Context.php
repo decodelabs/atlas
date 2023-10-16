@@ -15,22 +15,13 @@ use DecodeLabs\Atlas\File\GzOpenable;
 use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
-use DecodeLabs\Atlas\Plugins\Http as HttpPlugin;
-
 use DecodeLabs\Exceptional;
-
-use DecodeLabs\Veneer\LazyLoad;
-use DecodeLabs\Veneer\Plugin;
 
 use Generator;
 use Stringable;
 
 class Context
 {
-    #[Plugin]
-    #[LazyLoad]
-    public HttpPlugin $http;
-
     /**
      * Create a new local Mutex
      */
