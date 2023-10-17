@@ -22,10 +22,10 @@
     },
     "autoload": {
         "psr-4": {
-            "DecodeLabs\\Atlas\\": "src/Atlas"
+            "DecodeLabs\\Atlas\\": "src/"
         },
         "files": [
-            "src/global.php"
+            "src/Context.php"
         ]
     },
     "extra": {

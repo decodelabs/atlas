@@ -1,3 +1,5 @@
+* Refactored package file structure
+
 ## v0.11.0 (2023-10-16)
 * Moved HTTP plugin to Hydro package
 

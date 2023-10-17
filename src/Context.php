@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
+use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File\GzLocal as GzFile;
 use DecodeLabs\Atlas\File\GzOpenable;
@@ -16,9 +17,13 @@ use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Veneer;
 
 use Generator;
 use Stringable;
+
+// Register the Veneer facade
+Veneer::register(Context::class, Atlas::class);
 
 class Context
 {
