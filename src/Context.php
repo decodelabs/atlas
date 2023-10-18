@@ -22,9 +22,6 @@ use DecodeLabs\Veneer;
 use Generator;
 use Stringable;
 
-// Register the Veneer facade
-Veneer::register(Context::class, Atlas::class);
-
 class Context
 {
     /**
@@ -1288,3 +1285,6 @@ class Context
         return null;
     }
 }
+
+// Register the Veneer facade
+Veneer::register(Context::class, Atlas::class);
