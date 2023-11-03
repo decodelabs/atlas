@@ -32,7 +32,9 @@ interface Node
     /**
      * @return T
      */
-    public function createLink(string $path): Dir|File;
+    public function createLink(
+        string $path
+    ): Dir|File;
 
 
     /**
@@ -41,14 +43,23 @@ interface Node
     public function clearStatCache(): Node;
 
     public function getLastModified(): ?int;
-    public function hasChanged(int $timeout = 30): bool;
-    public function hasChangedIn(string $timeout): bool;
+
+    public function hasChanged(
+        int $timeout = 30
+    ): bool;
+
+    public function hasChangedIn(
+        string $timeout
+    ): bool;
+
 
 
     /**
      * @return $this
      */
-    public function setPermissions(int $mode): Node;
+    public function setPermissions(
+        int $mode
+    ): Node;
 
     public function getPermissions(): ?int;
     public function getPermissionsOct(): ?string;
@@ -57,14 +68,18 @@ interface Node
     /**
      * @return $this
      */
-    public function setOwner(int $owner): Node;
+    public function setOwner(
+        int $owner
+    ): Node;
 
     public function getOwner(): ?int;
 
     /**
      * @return $this
      */
-    public function setGroup(int $group): Node;
+    public function setGroup(
+        int $group
+    ): Node;
 
     public function getGroup(): ?int;
     public function getParent(): ?Dir;
@@ -73,7 +88,9 @@ interface Node
     /**
      * @return T
      */
-    public function copy(string $path): Dir|File;
+    public function copy(
+        string $path
+    ): Dir|File;
 
     /**
      * @return T
@@ -86,12 +103,16 @@ interface Node
     /**
      * @return T
      */
-    public function renameTo(string $newName): Dir|File;
+    public function renameTo(
+        string $newName
+    ): Dir|File;
 
     /**
      * @return T
      */
-    public function move(string $path): Dir|File;
+    public function move(
+        string $path
+    ): Dir|File;
 
     /**
      * @return T

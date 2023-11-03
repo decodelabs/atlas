@@ -35,8 +35,9 @@ trait NodeTrait
     /**
      * Normalize dots in a path
      */
-    protected function normalizePath(string $path): string
-    {
+    protected function normalizePath(
+        string $path
+    ): string {
         $root = $path[0] === '/' ? '/' : '';
         $parts = explode('/', trim($path, '/'));
         $output = [];
@@ -59,8 +60,9 @@ trait NodeTrait
     /**
      * Compare last modified
      */
-    public function hasChanged(int $seconds = 30): bool
-    {
+    public function hasChanged(
+        int $seconds = 30
+    ): bool {
         if (!$this->exists()) {
             return false;
         }
@@ -71,8 +73,9 @@ trait NodeTrait
     /**
      * Compare with interval string
      */
-    public function hasChangedIn(string $timeout): bool
-    {
+    public function hasChangedIn(
+        string $timeout
+    ): bool {
         if (preg_match('/^[0-9]+$/', $timeout)) {
             return $this->hasChanged((int)$timeout);
         }

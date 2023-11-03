@@ -38,8 +38,9 @@ class Local implements
     /**
      * Init with path
      */
-    public function __construct(string $path)
-    {
+    public function __construct(
+        string $path
+    ) {
         $this->path = rtrim($path, '/');
     }
 
@@ -54,8 +55,9 @@ class Local implements
     /**
      * Create dir if it doesn't exist
      */
-    public function ensureExists(int $permissions = null): Dir
-    {
+    public function ensureExists(
+        int $permissions = null
+    ): Dir {
         if (!is_dir($this->path)) {
             if (file_exists($this->path)) {
                 throw Exceptional::Io(
@@ -130,8 +132,9 @@ class Local implements
     /**
      * Set permission on dir and children if $recursive
      */
-    public function setPermissionsRecursive(int $mode): Dir
-    {
+    public function setPermissionsRecursive(
+        int $mode
+    ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Cannot set permissions, dir does not exist',
@@ -160,8 +163,9 @@ class Local implements
     /**
      * Set owner on dir and children if $recursive
      */
-    public function setOwnerRecursive(int $owner): Dir
-    {
+    public function setOwnerRecursive(
+        int $owner
+    ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Cannot set owner, dir does not exist',
@@ -190,8 +194,9 @@ class Local implements
     /**
      * Set group on dir and children if $recursive
      */
-    public function setGroupRecursive(int $group): Dir
-    {
+    public function setGroupRecursive(
+        int $group
+    ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Cannot set group, dir does not exist',
@@ -258,8 +263,9 @@ class Local implements
     /**
      * Get a child File or Dir if it exists
      */
-    public function getChild(string $name): Dir|File|null
-    {
+    public function getChild(
+        string $name
+    ): Dir|File|null {
         $path = $this->path . '/' . ltrim($name, '/');
 
         if (is_dir($path)) {
@@ -274,8 +280,9 @@ class Local implements
     /**
      * Is there an existing child by $name?
      */
-    public function hasChild(string $name): bool
-    {
+    public function hasChild(
+        string $name
+    ): bool {
         $path = $this->path . '/' . ltrim($name, '/');
         return file_exists($path);
     }
@@ -283,8 +290,9 @@ class Local implements
     /**
      * Ensure a child item is deleted
      */
-    public function deleteChild(string $name): Dir
-    {
+    public function deleteChild(
+        string $name
+    ): Dir {
         if ($child = $this->getChild($name)) {
             $child->delete();
         }
@@ -306,24 +314,27 @@ class Local implements
     /**
      * Does child dir exist?
      */
-    public function hasDir(string $name): bool
-    {
+    public function hasDir(
+        string $name
+    ): bool {
         return $this->getDir($name)->exists();
     }
 
     /**
      * Get a child dir
      */
-    public function getDir(string $name): Dir
-    {
+    public function getDir(
+        string $name
+    ): Dir {
         return new self($this->path . '/' . ltrim($name, '/'));
     }
 
     /**
      * Get a child dir if it exists
      */
-    public function getExistingDir(string $name): ?Dir
-    {
+    public function getExistingDir(
+        string $name
+    ): ?Dir {
         $output = new self($this->path . '/' . ltrim($name, '/'));
 
         if (!$output->exists()) {
@@ -336,8 +347,9 @@ class Local implements
     /**
      * Delete child if its a dir
      */
-    public function deleteDir(string $name): Dir
-    {
+    public function deleteDir(
+        string $name
+    ): Dir {
         if ($dir = $this->getExistingDir($name)) {
             $dir->delete();
         }
@@ -369,24 +381,27 @@ class Local implements
     /**
      * Does child file exist?
      */
-    public function hasFile(string $name): bool
-    {
+    public function hasFile(
+        string $name
+    ): bool {
         return $this->getFile($name)->exists();
     }
 
     /**
      * Get a child file
      */
-    public function getFile(string $name): File
-    {
+    public function getFile(
+        string $name
+    ): File {
         return $this->wrapFile($this->path . '/' . ltrim($name, '/'));
     }
 
     /**
      * Get a child file if it exists
      */
-    public function getExistingFile(string $name): ?File
-    {
+    public function getExistingFile(
+        string $name
+    ): ?File {
         $output = $this->wrapFile($this->path . '/' . ltrim($name, '/'));
 
         if (!$output->exists()) {
@@ -399,8 +414,9 @@ class Local implements
     /**
      * Delete child if its a file
      */
-    public function deleteFile(string $name): Dir
-    {
+    public function deleteFile(
+        string $name
+    ): Dir {
         if ($file = $this->getExistingFile($name)) {
             $file->delete();
         }
@@ -412,8 +428,9 @@ class Local implements
     /**
      * Copy dir to $destinationPath
      */
-    public function copy(string $path): Dir
-    {
+    public function copy(
+        string $path
+    ): Dir {
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
                 'Destination dir already exists',
@@ -433,8 +450,9 @@ class Local implements
     /**
      * Move dir to $destinationDir, rename basename to $newName if set
      */
-    public function move(string $path): Dir
-    {
+    public function move(
+        string $path
+    ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Source dir does not exist',
@@ -513,8 +531,9 @@ class Local implements
     /**
      * Merge this dir and its contents into another dir
      */
-    public function mergeInto(string $destination): Dir
-    {
+    public function mergeInto(
+        string $destination
+    ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Source dir does not exist',
@@ -549,8 +568,9 @@ class Local implements
     /**
      * Wrap a file path into File object
      */
-    protected function wrapFile(string $path): File
-    {
+    protected function wrapFile(
+        string $path
+    ): File {
         return new LocalFile($path);
     }
 

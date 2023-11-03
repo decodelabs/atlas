@@ -17,8 +17,9 @@ trait MutexTrait
     /**
      * Init with name
      */
-    public function __construct(string $name)
-    {
+    public function __construct(
+        string $name
+    ) {
         $this->name = $name;
     }
 
@@ -46,9 +47,13 @@ trait MutexTrait
     /**
      * Acquire lock (with count), bail after $timeout seconds
      */
-    public function lock(int $timeout = null): bool
-    {
-        if ($this->counter > 0 || $this->waitForLock($timeout)) {
+    public function lock(
+        int $timeout = null
+    ): bool {
+        if (
+            $this->counter > 0 ||
+            $this->waitForLock($timeout)
+        ) {
             $this->counter++;
             return true;
         }
@@ -59,8 +64,9 @@ trait MutexTrait
     /**
      * Keep attempting to lock until $timeout or success
      */
-    protected function waitForLock(int $timeout = null): bool
-    {
+    protected function waitForLock(
+        int $timeout = null
+    ): bool {
         $blocking = $timeout === null;
         $start = microtime(true);
         $end = $start + $timeout / 1000;
@@ -108,6 +114,9 @@ trait MutexTrait
         return $this->counter;
     }
 
-    abstract protected function acquireLock(bool $blocking): bool;
+    abstract protected function acquireLock(
+        bool $blocking
+    ): bool;
+
     abstract protected function releaseLock(): void;
 }

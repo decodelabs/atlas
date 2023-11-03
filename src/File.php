@@ -21,13 +21,22 @@ interface File extends
 {
     public function getSize(): ?int;
     public function isOnDisk(): bool;
-    public function getHash(string $type): ?string;
-    public function getRawHash(string $type): ?string;
+
+    public function getHash(
+        string $type
+    ): ?string;
+
+    public function getRawHash(
+        string $type
+    ): ?string;
+
 
     /**
      * @return $this
      */
-    public function putContents(mixed $data): File;
+    public function putContents(
+        mixed $data
+    ): File;
 
     public function getContents(): string;
     public function bufferContents(): Buffer;
@@ -41,8 +50,14 @@ interface File extends
     public function isLink(): bool;
     public function getIoMode(): ?string;
 
-    public function lock(bool $nonBlocking = false): bool;
-    public function lockExclusive(bool $nonBlocking = false): bool;
+    public function lock(
+        bool $nonBlocking = false
+    ): bool;
+
+    public function lockExclusive(
+        bool $nonBlocking = false
+    ): bool;
+
 
     /**
      * @return $this
@@ -52,15 +67,24 @@ interface File extends
     /**
      * @return $this
      */
-    public function setPosition(int $position): File;
+    public function setPosition(
+        int $position
+    ): File;
 
     /**
      * @return $this
      */
-    public function movePosition(int $position, bool $fromEnd = false): File;
+    public function movePosition(
+        int $position,
+        bool $fromEnd = false
+    ): File;
 
     public function getPosition(): int;
-    public function readFrom(int $position, int $length): ?string;
+
+    public function readFrom(
+        int $position,
+        int $length
+    ): ?string;
 
     /**
      * @return $this
@@ -70,5 +94,7 @@ interface File extends
     /**
      * @return $this
      */
-    public function truncate(int $size = 0): File;
+    public function truncate(
+        int $size = 0
+    ): File;
 }

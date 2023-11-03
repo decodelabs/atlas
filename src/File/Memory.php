@@ -19,8 +19,9 @@ class Memory extends Local
     /**
      * Create from string key in php://
      */
-    public static function create(string $key = 'temp'): Memory
-    {
+    public static function create(
+        string $key = 'temp'
+    ): Memory {
         if (!$resource = fopen('php://' . $key, 'w+b')) {
             throw Exceptional::Runtime('Unable to open memory stream');
         }
@@ -31,16 +32,18 @@ class Memory extends Local
     /**
      * Create symbolic link
      */
-    public function createLink(string $path): Dir|File
-    {
+    public function createLink(
+        string $path
+    ): Dir|File {
         throw Exceptional::Forbidden(
             'Unable to create symbolic link to php://temp stream'
         );
     }
 
 
-    public function gzOpen(string $mode): Gz
-    {
+    public function gzOpen(
+        string $mode
+    ): Gz {
         throw Exceptional::Runtime('Memory file cannot be opened in GZ mode');
     }
 
@@ -92,8 +95,9 @@ class Memory extends Local
     /**
      * Attempt to shared lock file
      */
-    public function lock(bool $nonBlocking = false): bool
-    {
+    public function lock(
+        bool $nonBlocking = false
+    ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot lock file, file not open',
@@ -108,8 +112,9 @@ class Memory extends Local
     /**
      * Attempt to exclusive lock file
      */
-    public function lockExclusive(bool $nonBlocking = false): bool
-    {
+    public function lockExclusive(
+        bool $nonBlocking = false
+    ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot lock file, file not open',
@@ -133,8 +138,9 @@ class Memory extends Local
     /**
      * Move file to $destinationPath
      */
-    public function move(string $path): File
-    {
+    public function move(
+        string $path
+    ): File {
         $output = $this->copy($path);
         $this->close();
         return $output;
