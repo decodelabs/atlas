@@ -11,7 +11,8 @@ namespace DecodeLabs\Atlas;
 
 use DateInterval;
 use DateTime;
-use DecodeLabs\Exceptional;
+use DecodeLabs\Coercion;
+use Stringable;
 
 trait NodeTrait
 {
@@ -74,18 +75,14 @@ trait NodeTrait
      * Compare with interval string
      */
     public function hasChangedIn(
-        string $timeout
+        DateInterval|string|Stringable|int $timeout
     ): bool {
-        if (preg_match('/^[0-9]+$/', $timeout)) {
+        if (is_int($timeout)) {
             return $this->hasChanged((int)$timeout);
         }
 
         $date = new DateTime('now');
-
-        if (!$interval = DateInterval::createFromDateString($timeout)) {
-            throw Exceptional::InvalidArgument('Invalid interval string: ' . $timeout);
-        }
-
+        $interval = Coercion::toDateInterval($timeout);
         $ts = $date->sub($interval)->getTimestamp();
 
         if (!$mod = $this->getLastModified()) {

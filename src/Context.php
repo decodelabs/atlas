@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
+use DateInterval;
 use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File\GzLocal as GzFile;
@@ -18,7 +19,6 @@ use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Veneer;
-
 use Generator;
 use Stringable;
 
@@ -331,7 +331,7 @@ class Context
      */
     public function hasFileChangedIn(
         string|Stringable|File $path,
-        string $timeout
+        DateInterval|string|Stringable|int $timeout
     ): bool {
         return $this->file($path)->hasChangedIn($timeout);
     }
@@ -528,7 +528,7 @@ class Context
      */
     public function hasDirChangedIn(
         string|Stringable|Dir $path,
-        string $timeout
+        DateInterval|string|Stringable|int $timeout
     ): bool {
         return $this->dir($path)->hasChangedIn($timeout);
     }

@@ -1,3 +1,5 @@
+* Allow DateInterval formats for hasChangedIn()
+* Rewind data file in putContents()
 * Made PHP8.1 minimum version
 * Refactored package file structure
 

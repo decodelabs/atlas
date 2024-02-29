@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
+use DateInterval;
+use Stringable;
+
 /**
  * @template T of Dir|File
  */
@@ -49,7 +52,7 @@ interface Node
     ): bool;
 
     public function hasChangedIn(
-        string $timeout
+        DateInterval|string|Stringable|int $timeout
     ): bool;
 
 

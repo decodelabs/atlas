@@ -13,7 +13,8 @@ use DecodeLabs\Atlas\File as Ref1;
 use DecodeLabs\Atlas\File\Memory as Ref2;
 use Stringable as Ref3;
 use DecodeLabs\Atlas\Dir as Ref4;
-use Generator as Ref5;
+use DateInterval as Ref5;
+use Generator as Ref6;
 
 class Atlas implements Proxy
 {
@@ -94,7 +95,7 @@ class Atlas implements Proxy
     public static function hasFileChanged(Ref3|Ref1|string $path, int $seconds = 30): bool {
         return static::$instance->hasFileChanged(...func_get_args());
     }
-    public static function hasFileChangedIn(Ref3|Ref1|string $path, string $timeout): bool {
+    public static function hasFileChangedIn(Ref3|Ref1|string $path, Ref5|Ref3|string|int $timeout): bool {
         return static::$instance->hasFileChangedIn(...func_get_args());
     }
     public static function setFilePermissions(Ref3|Ref1|string $path, int $permissions): Ref1 {
@@ -137,7 +138,7 @@ class Atlas implements Proxy
     public static function hasDirChanged(Ref3|Ref4|string $path, int $seconds = 30): bool {
         return static::$instance->hasDirChanged(...func_get_args());
     }
-    public static function hasDirChangedIn(Ref3|Ref4|string $path, string $timeout): bool {
+    public static function hasDirChangedIn(Ref3|Ref4|string $path, Ref5|Ref3|string|int $timeout): bool {
         return static::$instance->hasDirChangedIn(...func_get_args());
     }
     public static function setDirPermissions(Ref3|Ref4|string $path, int $permissions): Ref4 {
@@ -158,19 +159,19 @@ class Atlas implements Proxy
     public static function setDirGroupRecursive(Ref3|Ref4|string $path, int $group): Ref4 {
         return static::$instance->setDirGroupRecursive(...func_get_args());
     }
-    public static function scan(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scan(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scan(...func_get_args());
     }
     public static function list(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->list(...func_get_args());
     }
-    public static function scanNames(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanNames(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanNames(...func_get_args());
     }
     public static function listNames(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listNames(...func_get_args());
     }
-    public static function scanPaths(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanPaths(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanPaths(...func_get_args());
     }
     public static function listPaths(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
@@ -179,19 +180,19 @@ class Atlas implements Proxy
     public static function countContents(Ref3|Ref4|string $path, ?callable $filter = NULL): int {
         return static::$instance->countContents(...func_get_args());
     }
-    public static function scanFiles(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanFiles(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanFiles(...func_get_args());
     }
     public static function listFiles(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listFiles(...func_get_args());
     }
-    public static function scanFileNames(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanFileNames(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanFileNames(...func_get_args());
     }
     public static function listFileNames(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listFileNames(...func_get_args());
     }
-    public static function scanFilePaths(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanFilePaths(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanFilePaths(...func_get_args());
     }
     public static function listFilePaths(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
@@ -200,19 +201,19 @@ class Atlas implements Proxy
     public static function countFiles(Ref3|Ref4|string $path, ?callable $filter = NULL): int {
         return static::$instance->countFiles(...func_get_args());
     }
-    public static function scanDirs(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanDirs(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanDirs(...func_get_args());
     }
     public static function listDirs(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listDirs(...func_get_args());
     }
-    public static function scanDirNames(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanDirNames(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanDirNames(...func_get_args());
     }
     public static function listDirNames(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listDirNames(...func_get_args());
     }
-    public static function scanDirPaths(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanDirPaths(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanDirPaths(...func_get_args());
     }
     public static function listDirPaths(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
@@ -221,19 +222,19 @@ class Atlas implements Proxy
     public static function countDirs(Ref3|Ref4|string $path, ?callable $filter = NULL): int {
         return static::$instance->countDirs(...func_get_args());
     }
-    public static function scanRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanRecursive(...func_get_args());
     }
     public static function listRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listRecursive(...func_get_args());
     }
-    public static function scanNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanNamesRecursive(...func_get_args());
     }
     public static function listNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listNamesRecursive(...func_get_args());
     }
-    public static function scanPathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanPathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanPathsRecursive(...func_get_args());
     }
     public static function listPathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
@@ -242,19 +243,19 @@ class Atlas implements Proxy
     public static function countContentsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): int {
         return static::$instance->countContentsRecursive(...func_get_args());
     }
-    public static function scanFilesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanFilesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanFilesRecursive(...func_get_args());
     }
     public static function listFilesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listFilesRecursive(...func_get_args());
     }
-    public static function scanFileNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanFileNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanFileNamesRecursive(...func_get_args());
     }
     public static function listFileNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listFileNamesRecursive(...func_get_args());
     }
-    public static function scanFilePathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanFilePathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanFilePathsRecursive(...func_get_args());
     }
     public static function listFilePathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
@@ -263,19 +264,19 @@ class Atlas implements Proxy
     public static function countFilesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): int {
         return static::$instance->countFilesRecursive(...func_get_args());
     }
-    public static function scanDirsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanDirsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanDirsRecursive(...func_get_args());
     }
     public static function listDirsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listDirsRecursive(...func_get_args());
     }
-    public static function scanDirNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanDirNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanDirNamesRecursive(...func_get_args());
     }
     public static function listDirNamesRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {
         return static::$instance->listDirNamesRecursive(...func_get_args());
     }
-    public static function scanDirPathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref5 {
+    public static function scanDirPathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): Ref6 {
         return static::$instance->scanDirPathsRecursive(...func_get_args());
     }
     public static function listDirPathsRecursive(Ref3|Ref4|string $path, ?callable $filter = NULL): array {

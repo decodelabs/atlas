@@ -209,12 +209,13 @@ class Local extends Stream implements
             $closeData = true;
         }
 
-        if (
-            $data instanceof File &&
-            !$data->isOpen()
-        ) {
-            $data->open('r');
-            $closeData = true;
+        if ($data instanceof File) {
+            if (!$data->isOpen()) {
+                $data->open('r');
+                $closeData = true;
+            }
+
+            $data->setPosition(0);
         }
 
         if ($this->resource === null) {
