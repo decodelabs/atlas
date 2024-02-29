@@ -40,8 +40,9 @@ class Local implements
     /**
      * Create file and lock it
      */
-    protected function acquireLock(bool $blocking): bool
-    {
+    protected function acquireLock(
+        bool $blocking
+    ): bool {
         if ($this->file->exists()) {
             return false;
         }

@@ -1,3 +1,9 @@
+## v0.11.1 (2024-02-29)
+* Allow DateInterval formats for hasChangedIn()
+* Rewind data file in putContents()
+* Made PHP8.1 minimum version
+* Refactored package file structure
+
 ## v0.11.0 (2023-10-16)
 * Moved HTTP plugin to Hydro package
 

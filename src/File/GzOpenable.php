@@ -11,5 +11,7 @@ namespace DecodeLabs\Atlas\File;
 
 interface GzOpenable
 {
-    public function gzOpen(string $mode): Gz;
+    public function gzOpen(
+        string $mode
+    ): Gz;
 }

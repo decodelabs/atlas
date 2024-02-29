@@ -156,8 +156,9 @@ class Local extends Stream implements
     /**
      * Get hash of file contents
      */
-    public function getHash(string $type): ?string
-    {
+    public function getHash(
+        string $type
+    ): ?string {
         if (!$this->exists()) {
             return null;
         }
@@ -174,8 +175,9 @@ class Local extends Stream implements
     /**
      * Get hash of file contents
      */
-    public function getRawHash(string $type): ?string
-    {
+    public function getRawHash(
+        string $type
+    ): ?string {
         if (!$this->exists()) {
             return null;
         }
@@ -194,8 +196,9 @@ class Local extends Stream implements
     /**
      * Write content to file
      */
-    public function putContents(mixed $data): File
-    {
+    public function putContents(
+        mixed $data
+    ): File {
         $closeData = $closeAfter = false;
 
         if (!$data instanceof Channel) {
@@ -206,12 +209,13 @@ class Local extends Stream implements
             $closeData = true;
         }
 
-        if (
-            $data instanceof File &&
-            !$data->isOpen()
-        ) {
-            $data->open('r');
-            $closeData = true;
+        if ($data instanceof File) {
+            if (!$data->isOpen()) {
+                $data->open('r');
+                $closeData = true;
+            }
+
+            $data->setPosition(0);
         }
 
         if ($this->resource === null) {
@@ -287,8 +291,9 @@ class Local extends Stream implements
     /**
      * Open file for reading and writing
      */
-    public function open(string $mode): File
-    {
+    public function open(
+        string $mode
+    ): File {
         if ($this->resource !== null) {
             if ($this->mode === $mode) {
                 return $this;
@@ -337,14 +342,16 @@ class Local extends Stream implements
     /**
      * @return resource|false
      */
-    protected function fopen(string $mode)
-    {
+    protected function fopen(
+        string $mode
+    ) {
         return fopen($this->path, $mode);
     }
 
 
-    public function gzOpen(string $mode): Gz
-    {
+    public function gzOpen(
+        string $mode
+    ): Gz {
         $this->close();
         return new GzLocal($this->path, $mode);
     }
@@ -371,8 +378,9 @@ class Local extends Stream implements
     /**
      * Attempt to shared lock file
      */
-    public function lock(bool $nonBlocking = false): bool
-    {
+    public function lock(
+        bool $nonBlocking = false
+    ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot lock file, file not open',
@@ -391,8 +399,9 @@ class Local extends Stream implements
     /**
      * Attempt to exclusive lock file
      */
-    public function lockExclusive(bool $nonBlocking = false): bool
-    {
+    public function lockExclusive(
+        bool $nonBlocking = false
+    ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot lock file, file not open',
@@ -434,8 +443,9 @@ class Local extends Stream implements
     /**
      * Copy file to $destinationPath
      */
-    public function copy(string $path): File
-    {
+    public function copy(
+        string $path
+    ): File {
         if ($path === $this->path) {
             return $this;
         }
@@ -482,8 +492,9 @@ class Local extends Stream implements
     /**
      * Move file to $destinationPath
      */
-    public function move(string $path): File
-    {
+    public function move(
+        string $path
+    ): File {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Source file does not exist',
@@ -538,8 +549,9 @@ class Local extends Stream implements
     /**
      * Seek file pointer to offset
      */
-    public function setPosition(int $offset): File
-    {
+    public function setPosition(
+        int $offset
+    ): File {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot seek file, file not open',
@@ -675,8 +687,9 @@ class Local extends Stream implements
      *
      * @param int<0, max> $size
      */
-    public function truncate(int $size = 0): File
-    {
+    public function truncate(
+        int $size = 0
+    ): File {
         if ($this->resource !== null) {
             ftruncate($this->resource, $size);
         } else {

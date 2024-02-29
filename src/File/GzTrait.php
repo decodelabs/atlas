@@ -14,16 +14,18 @@ use DecodeLabs\Exceptional;
 
 trait GzTrait
 {
-    public function gzOpen(string $mode): Gz
-    {
+    public function gzOpen(
+        string $mode
+    ): Gz {
         return $this->open($mode);
     }
 
     /**
      * @return resource|false
      */
-    protected function fopen(string $mode)
-    {
+    protected function fopen(
+        string $mode
+    ) {
         return gzopen($this->path, $mode);
     }
 
@@ -50,8 +52,9 @@ trait GzTrait
     /**
      * @param int<0, max> $length
      */
-    protected function fread(int $length): string|false
-    {
+    protected function fread(
+        int $length
+    ): string|false {
         if ($this->resource === null) {
             return false;
         }
@@ -71,8 +74,9 @@ trait GzTrait
     /**
      * @param int<0, max>|null $length
      */
-    protected function fgets(?int $length = null): string|false
-    {
+    protected function fgets(
+        ?int $length = null
+    ): string|false {
         if ($this->resource === null) {
             return false;
         }
@@ -114,8 +118,9 @@ trait GzTrait
     /**
      * Attempt to shared lock file
      */
-    public function lock(bool $nonBlocking = false): bool
-    {
+    public function lock(
+        bool $nonBlocking = false
+    ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot lock file, file not open',
@@ -130,8 +135,9 @@ trait GzTrait
     /**
      * Attempt to exclusive lock file
      */
-    public function lockExclusive(bool $nonBlocking = false): bool
-    {
+    public function lockExclusive(
+        bool $nonBlocking = false
+    ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
                 'Cannot lock file, file not open',

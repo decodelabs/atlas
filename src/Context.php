@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
+use DateInterval;
+use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File\GzLocal as GzFile;
 use DecodeLabs\Atlas\File\GzOpenable;
@@ -16,7 +18,7 @@ use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\File\Memory as MemoryFile;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
 use DecodeLabs\Exceptional;
-
+use DecodeLabs\Veneer;
 use Generator;
 use Stringable;
 
@@ -47,8 +49,9 @@ class Context
     /**
      * Create a new temp file
      */
-    public function createTempFile(?string $data): File
-    {
+    public function createTempFile(
+        ?string $data
+    ): File {
         $file = $this->newTempFile();
         $file->write($data);
         return $file;
@@ -57,8 +60,9 @@ class Context
     /**
      * Create a new empty memory file
      */
-    public function newMemoryFile(string $key = 'temp'): MemoryFile
-    {
+    public function newMemoryFile(
+        string $key = 'temp'
+    ): MemoryFile {
         return MemoryFile::create($key);
     }
 
@@ -95,8 +99,9 @@ class Context
     /**
      * Get existing node, return file or dir depending on what's on disk
      */
-    public function getExisting(string $path): Dir|File|null
-    {
+    public function getExisting(
+        string $path
+    ): Dir|File|null {
         if (is_dir($path)) {
             return $this->existingDir($path);
         } else {
@@ -326,7 +331,7 @@ class Context
      */
     public function hasFileChangedIn(
         string|Stringable|File $path,
-        string $timeout
+        DateInterval|string|Stringable|int $timeout
     ): bool {
         return $this->file($path)->hasChangedIn($timeout);
     }
@@ -523,7 +528,7 @@ class Context
      */
     public function hasDirChangedIn(
         string|Stringable|Dir $path,
-        string $timeout
+        DateInterval|string|Stringable|int $timeout
     ): bool {
         return $this->dir($path)->hasChangedIn($timeout);
     }
@@ -1283,3 +1288,6 @@ class Context
         return null;
     }
 }
+
+// Register the Veneer facade
+Veneer::register(Context::class, Atlas::class);

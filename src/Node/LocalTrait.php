@@ -68,8 +68,9 @@ trait LocalTrait
      *
      * @return T
      */
-    public function createLink(string $path): Dir|File
-    {
+    public function createLink(
+        string $path
+    ): Dir|File {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Source node does not exist',
@@ -136,8 +137,9 @@ trait LocalTrait
     /**
      * Set permissions on file
      */
-    public function setPermissions(int $mode): Node
-    {
+    public function setPermissions(
+        int $mode
+    ): Node {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Cannot set permissions, file does not exist',
@@ -174,8 +176,9 @@ trait LocalTrait
     /**
      * Set owner of file
      */
-    public function setOwner(int $owner): Node
-    {
+    public function setOwner(
+        int $owner
+    ): Node {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Cannot set owner, file does not exist',
@@ -211,8 +214,9 @@ trait LocalTrait
     /**
      * Set group of file
      */
-    public function setGroup(int $group): Node
-    {
+    public function setGroup(
+        int $group
+    ): Node {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
                 'Cannot set owner, file does not exist',
@@ -264,8 +268,9 @@ trait LocalTrait
      *
      * @return T
      */
-    protected function copySymlink(string $path): Dir|File
-    {
+    protected function copySymlink(
+        string $path
+    ): Dir|File {
         (new LocalDir(dirname($path)))->ensureExists();
 
         if (!$target = $this->getLinkTarget()) {
@@ -325,8 +330,9 @@ trait LocalTrait
     /**
      * Normalize new name for copy / move functions
      */
-    protected function normalizeNewName(?string $newName): string
-    {
+    protected function normalizeNewName(
+        ?string $newName
+    ): string {
         if ($newName === null) {
             $newName = basename($this->path);
         }
