@@ -23,6 +23,7 @@ use DirectoryIterator;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Throwable;
 use Traversable;
 
 class Local implements
@@ -80,7 +81,10 @@ class Local implements
             }
         } else {
             if ($permissions !== null) {
-                chmod($this->path, $permissions);
+                try {
+                    chmod($this->path, $permissions);
+                } catch (Throwable $e) {
+                }
             }
         }
 
