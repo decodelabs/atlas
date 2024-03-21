@@ -1,3 +1,4 @@
+## v0.11.2 (2024-03-21)
 * Catch chmod issues in ensureExists()
 
 ## v0.11.1 (2024-02-29)
