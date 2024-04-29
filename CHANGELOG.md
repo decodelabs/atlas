@@ -1,3 +1,6 @@
+## v0.11.3 (2024-04-29)
+* Fixed Veneer stubs in gitattributes
+
 ## v0.11.2 (2024-03-21)
 * Catch chmod issues in ensureExists()
 
