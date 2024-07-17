@@ -49,6 +49,8 @@ class Local extends Stream implements
             parent::__construct($stream, null);
 
             if ($this->resource !== null) {
+                // Docs mismatch
+                // @phpstan-ignore-next-line
                 $this->path = stream_get_meta_data($this->resource)['uri'];
             }
         } else {
