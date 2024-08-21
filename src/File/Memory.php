@@ -11,7 +11,7 @@ namespace DecodeLabs\Atlas\File;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
-
+use DecodeLabs\Atlas\Mode;
 use DecodeLabs\Exceptional;
 
 class Memory extends Local
@@ -42,7 +42,7 @@ class Memory extends Local
 
 
     public function gzOpen(
-        string $mode
+        string|Mode $mode
     ): Gz {
         throw Exceptional::Runtime('Memory file cannot be opened in GZ mode');
     }

@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas\File;
 
+use DecodeLabs\Atlas\Mode;
+
 interface GzOpenable
 {
     public function gzOpen(
-        string $mode
+        string|Mode $mode
     ): Gz;
 }

@@ -12,13 +12,12 @@ namespace DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\Local as LocalFile;
+use DecodeLabs\Atlas\Mode;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
-
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Glitch\Proxy;
-
 use DirectoryIterator;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -377,7 +376,7 @@ class Local implements
      */
     public function openFile(
         string $name,
-        string $mode
+        string|Mode $mode
     ): File {
         return $this->getFile($name)->open($mode);
     }

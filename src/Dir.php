@@ -376,7 +376,7 @@ interface Dir extends Node
 
     public function openFile(
         string $name,
-        string $mode
+        string|Mode $mode
     ): File;
 
     public function hasFile(

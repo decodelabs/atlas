@@ -14,7 +14,6 @@ use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\NodeTrait;
-
 use DecodeLabs\Exceptional;
 use ErrorException;
 

@@ -9,14 +9,19 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
-interface Mode
+use DecodeLabs\Enumerable\Backed\ValueString;
+use DecodeLabs\Enumerable\Backed\ValueStringTrait;
+
+enum Mode: string implements ValueString
 {
-    public const READ_ONLY = 'rb';
-    public const READ_WRITE = 'r+b';
-    public const WRITE_TRUNCATE = 'wb';
-    public const READ_WRITE_TRUNCATE = 'w+b';
-    public const WRITE_APPEND = 'ab';
-    public const READ_WRITE_APPEND = 'a+b';
-    public const WRITE_NEW = 'xb';
-    public const READ_WRITE_NEW = 'x+b';
+    use ValueStringTrait;
+
+    case ReadOnly = 'rb';
+    case ReadWrite = 'r+b';
+    case WriteTruncate = 'wb';
+    case ReadWriteTruncate = 'w+b';
+    case WriteAppend = 'ab';
+    case ReadWriteAppend = 'a+b';
+    case WriteNew = 'xb';
+    case ReadWriteNew = 'x+b';
 }

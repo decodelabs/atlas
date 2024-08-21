@@ -1,3 +1,4 @@
+* Converted Mode to enum
 * Updated Veneer dependency and Stub
 
 ## v0.11.4 (2024-07-17)

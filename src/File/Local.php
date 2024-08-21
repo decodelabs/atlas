@@ -9,21 +9,18 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas\File;
 
-use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\Local as LocalFile;
+use DecodeLabs\Atlas\Mode;
 use DecodeLabs\Atlas\Node\LocalTrait;
-
 use DecodeLabs\Coercion;
 use DecodeLabs\Deliverance\Channel;
 use DecodeLabs\Deliverance\Channel\Buffer;
 use DecodeLabs\Deliverance\Channel\Stream;
-
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Glitch\Proxy;
-
 use Throwable;
 
 class Local extends Stream implements
@@ -43,7 +40,7 @@ class Local extends Stream implements
      */
     public function __construct(
         $stream,
-        string $mode = null
+        string|Mode $mode = null
     ) {
         if (is_resource($stream)) {
             parent::__construct($stream, null);
@@ -294,8 +291,12 @@ class Local extends Stream implements
      * Open file for reading and writing
      */
     public function open(
-        string $mode
+        string|Mode $mode
     ): File {
+        if ($mode instanceof Mode) {
+            $mode = $mode->getValue();
+        }
+
         if ($this->resource !== null) {
             if ($this->mode === $mode) {
                 return $this;
@@ -352,7 +353,7 @@ class Local extends Stream implements
 
 
     public function gzOpen(
-        string $mode
+        string|Mode $mode
     ): Gz {
         $this->close();
         return new GzLocal($this->path, $mode);
