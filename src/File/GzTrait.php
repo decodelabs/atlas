@@ -10,12 +10,16 @@ declare(strict_types=1);
 namespace DecodeLabs\Atlas\File;
 
 use DecodeLabs\Atlas\File;
+use DecodeLabs\Atlas\Mode;
 use DecodeLabs\Exceptional;
 
+/**
+ * @phpstan-require-implements GzOpenable
+ */
 trait GzTrait
 {
     public function gzOpen(
-        string $mode
+        string|Mode $mode
     ): Gz {
         return $this->open($mode);
     }

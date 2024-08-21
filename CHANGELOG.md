@@ -1,3 +1,7 @@
+## v0.12.0 (2024-08-21)
+* Converted Mode to enum
+* Updated Veneer dependency and Stub
+
 ## v0.11.4 (2024-07-17)
 * Updated Veneer dependency
 

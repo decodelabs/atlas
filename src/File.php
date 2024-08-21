@@ -44,7 +44,9 @@ interface File extends
     /**
      * @return $this
      */
-    public function open(string $mode): File;
+    public function open(
+        string|Mode $mode
+    ): File;
 
     public function isOpen(): bool;
     public function isLink(): bool;

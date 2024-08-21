@@ -235,7 +235,7 @@ class Context
      */
     public function file(
         string|Stringable|File $path,
-        string $mode = null
+        string|Mode|null $mode = null
     ): File {
         if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
             if ($mode !== null) {
@@ -253,7 +253,7 @@ class Context
      */
     public function gzFile(
         string|Stringable|File $path,
-        string $mode
+        string|Mode $mode
     ): File {
         $node = $this->normalizeInput($path, File::class);
 
@@ -270,7 +270,7 @@ class Context
      */
     public function existingFile(
         string|Stringable|File $path,
-        string $mode = null
+        string|Mode|null $mode = null
     ): ?File {
         if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
             if (!$node->exists()) {
