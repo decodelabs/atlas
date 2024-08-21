@@ -20,8 +20,8 @@ class Atlas implements Proxy
 {
     use ProxyTrait;
 
-    const VENEER = 'DecodeLabs\\Atlas';
-    const VENEER_TARGET = Inst::class;
+    const Veneer = 'DecodeLabs\\Atlas';
+    const VeneerTarget = Inst::class;
 
     public static Inst $instance;
 
