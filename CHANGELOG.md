@@ -1,4 +1,5 @@
 * Added @phpstan-require-implements constraints
+* Fixed read length constraint
 
 ## v0.12.0 (2024-08-21)
 * Converted Mode to enum
