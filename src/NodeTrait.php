@@ -14,6 +14,9 @@ use DateTime;
 use DecodeLabs\Coercion;
 use Stringable;
 
+/**
+ * @phpstan-require-implements Node
+ */
 trait NodeTrait
 {
     /**

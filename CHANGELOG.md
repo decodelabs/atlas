@@ -1,3 +1,5 @@
+* Added @phpstan-require-implements constraints
+
 ## v0.12.0 (2024-08-21)
 * Converted Mode to enum
 * Updated Veneer dependency and Stub
