@@ -51,7 +51,7 @@ trait MutexTrait
      * Acquire lock (with count), bail after $timeout seconds
      */
     public function lock(
-        int $timeout = null
+        ?int $timeout = null
     ): bool {
         if (
             $this->counter > 0 ||
@@ -68,7 +68,7 @@ trait MutexTrait
      * Keep attempting to lock until $timeout or success
      */
     protected function waitForLock(
-        int $timeout = null
+        ?int $timeout = null
     ): bool {
         $blocking = $timeout === null;
         $start = microtime(true);

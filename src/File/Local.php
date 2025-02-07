@@ -40,7 +40,7 @@ class Local extends Stream implements
      */
     public function __construct(
         $stream,
-        string|Mode $mode = null
+        string|Mode|null $mode = null
     ) {
         if (is_resource($stream)) {
             parent::__construct($stream, null);

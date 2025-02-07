@@ -99,7 +99,7 @@ interface Node extends Stringable
      */
     public function copyTo(
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir|File;
 
     /**
@@ -121,7 +121,7 @@ interface Node extends Stringable
      */
     public function moveTo(
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir|File;
 
     public function delete(): void;
