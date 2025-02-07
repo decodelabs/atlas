@@ -1,3 +1,5 @@
+## v0.12.1 (2025-02-07)
+* Fixed implicit nullable arguments
 * Added @phpstan-require-implements constraints
 * Fixed read length constraint
 
