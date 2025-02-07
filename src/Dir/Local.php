@@ -56,7 +56,7 @@ class Local implements
      * Create dir if it doesn't exist
      */
     public function ensureExists(
-        int $permissions = null
+        ?int $permissions = null
     ): Dir {
         if (!is_dir($this->path)) {
             if (file_exists($this->path)) {
@@ -309,7 +309,7 @@ class Local implements
      */
     public function createDir(
         string $name,
-        int $permissions = null
+        ?int $permissions = null
     ): Dir {
         return $this->getDir($name)->ensureExists($permissions);
     }

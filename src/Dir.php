@@ -20,7 +20,7 @@ interface Dir extends Node
      * @return $this
      */
     public function ensureExists(
-        int $permissions = null
+        ?int $permissions = null
     ): Dir;
 
     public function isEmpty(): bool;
@@ -51,46 +51,46 @@ interface Dir extends Node
      * @return Generator<string, Dir|File>
      */
     public function scan(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, Dir|File>
      */
     public function list(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string>
      */
     public function scanNames(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string>
      */
     public function listNames(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string, string>
      */
     public function scanPaths(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, string>
      */
     public function listPaths(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     public function countContents(
-        callable $filter = null
+        ?callable $filter = null
     ): int;
 
 
@@ -98,46 +98,46 @@ interface Dir extends Node
      * @return Generator<string, File>
      */
     public function scanFiles(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, File>
      */
     public function listFiles(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string>
      */
     public function scanFileNames(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string>
      */
     public function listFileNames(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string, string>
      */
     public function scanFilePaths(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, string>
      */
     public function listFilePaths(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     public function countFiles(
-        callable $filter = null
+        ?callable $filter = null
     ): int;
 
 
@@ -145,46 +145,46 @@ interface Dir extends Node
      * @return Generator<string, Dir>
      */
     public function scanDirs(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, Dir>
      */
     public function listDirs(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string>
      */
     public function scanDirNames(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string>
      */
     public function listDirNames(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string, string>
      */
     public function scanDirPaths(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, string>
      */
     public function listDirPaths(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     public function countDirs(
-        callable $filter = null
+        ?callable $filter = null
     ): int;
 
 
@@ -192,46 +192,46 @@ interface Dir extends Node
      * @return Generator<string, Dir|File>
      */
     public function scanRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, Dir|File>
      */
     public function listRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string>
      */
     public function scanNamesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string>
      */
     public function listNamesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string, string>
      */
     public function scanPathsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, string>
      */
     public function listPathsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     public function countContentsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): int;
 
 
@@ -239,46 +239,46 @@ interface Dir extends Node
      * @return Generator<string, File>
      */
     public function scanFilesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, File>
      */
     public function listFilesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string>
      */
     public function scanFileNamesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string>
      */
     public function listFileNamesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string, string>
      */
     public function scanFilePathsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, string>
      */
     public function listFilePathsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     public function countFilesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): int;
 
 
@@ -286,46 +286,46 @@ interface Dir extends Node
      * @return Generator<string, Dir>
      */
     public function scanDirsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, Dir>
      */
     public function listDirsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string>
      */
     public function scanDirNamesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string>
      */
     public function listDirNamesRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     /**
      * @return Generator<string, string>
      */
     public function scanDirPathsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): Generator;
 
     /**
      * @return array<string, string>
      */
     public function listDirPathsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): array;
 
     public function countDirsRecursive(
-        callable $filter = null
+        ?callable $filter = null
     ): int;
 
     public function getChild(
@@ -346,7 +346,7 @@ interface Dir extends Node
 
     public function createDir(
         string $name,
-        int $permissions = null
+        ?int $permissions = null
     ): Dir;
 
     public function hasDir(

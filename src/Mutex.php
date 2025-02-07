@@ -14,7 +14,7 @@ interface Mutex
     public function getName(): string;
 
     public function lock(
-        int $timeout = null
+        ?int $timeout = null
     ): bool;
 
     /**

@@ -300,7 +300,7 @@ trait LocalTrait
      */
     public function copyTo(
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir|File {
         $newName = $this->normalizeNewName($newName);
         $destination = rtrim($destinationDir, '/') . '/' . $newName;
@@ -320,7 +320,7 @@ trait LocalTrait
      */
     public function moveTo(
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir|File {
         $newName = $this->normalizeNewName($newName);
         $destination = rtrim($destinationDir, '/') . '/' . $newName;

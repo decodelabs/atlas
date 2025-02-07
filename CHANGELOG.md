@@ -1,3 +1,6 @@
+## v0.12.2 (2025-02-07)
+* Fixed implicit nullable arguments in interfaces
+
 ## v0.12.1 (2025-02-07)
 * Fixed implicit nullable arguments
 * Added @phpstan-require-implements constraints
