@@ -183,7 +183,7 @@ class Context
     public function copyTo(
         string|Stringable|Dir|File $path,
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir|File {
         return $this->get($path)->copyTo($destinationDir, $newName);
     }
@@ -214,7 +214,7 @@ class Context
     public function moveTo(
         string|Stringable|Dir|File $path,
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir|File {
         return $this->get($path)->moveTo($destinationDir, $newName);
     }
@@ -399,7 +399,7 @@ class Context
     public function copyFileTo(
         string|Stringable|File $path,
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): File {
         $file = $this->file($path);
         $output = $file->copyTo($destinationDir, $newName);
@@ -445,7 +445,7 @@ class Context
     public function moveFileTo(
         string|Stringable|File $path,
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): File {
         $file = $this->file($path);
         $file->moveTo($destinationDir, $newName);
@@ -500,7 +500,7 @@ class Context
      */
     public function createDir(
         string|Stringable|Dir $path,
-        int $permissions = null
+        ?int $permissions = null
     ): Dir {
         return $this->dir($path)->ensureExists($permissions);
     }
@@ -615,7 +615,7 @@ class Context
      */
     public function scan(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scan($filter);
     }
@@ -627,7 +627,7 @@ class Context
      */
     public function list(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->list($filter);
     }
@@ -639,7 +639,7 @@ class Context
      */
     public function scanNames(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanNames($filter);
     }
@@ -651,7 +651,7 @@ class Context
      */
     public function listNames(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listNames($filter);
     }
@@ -663,7 +663,7 @@ class Context
      */
     public function scanPaths(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanPaths($filter);
     }
@@ -675,7 +675,7 @@ class Context
      */
     public function listPaths(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listPaths($filter);
     }
@@ -685,7 +685,7 @@ class Context
      */
     public function countContents(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): int {
         return $this->dir($path)->countContents($filter);
     }
@@ -698,7 +698,7 @@ class Context
      */
     public function scanFiles(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanFiles($filter);
     }
@@ -710,7 +710,7 @@ class Context
      */
     public function listFiles(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listFiles($filter);
     }
@@ -722,7 +722,7 @@ class Context
      */
     public function scanFileNames(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanFileNames($filter);
     }
@@ -734,7 +734,7 @@ class Context
      */
     public function listFileNames(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listFileNames($filter);
     }
@@ -746,7 +746,7 @@ class Context
      */
     public function scanFilePaths(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanFilePaths($filter);
     }
@@ -758,7 +758,7 @@ class Context
      */
     public function listFilePaths(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listFilePaths($filter);
     }
@@ -768,7 +768,7 @@ class Context
      */
     public function countFiles(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): int {
         return $this->dir($path)->countFiles($filter);
     }
@@ -781,7 +781,7 @@ class Context
      */
     public function scanDirs(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanDirs($filter);
     }
@@ -793,7 +793,7 @@ class Context
      */
     public function listDirs(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listDirs($filter);
     }
@@ -805,7 +805,7 @@ class Context
      */
     public function scanDirNames(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanDirNames($filter);
     }
@@ -817,7 +817,7 @@ class Context
      */
     public function listDirNames(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listDirNames($filter);
     }
@@ -829,7 +829,7 @@ class Context
      */
     public function scanDirPaths(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanDirPaths($filter);
     }
@@ -841,7 +841,7 @@ class Context
      */
     public function listDirPaths(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listDirPaths($filter);
     }
@@ -851,7 +851,7 @@ class Context
      */
     public function countDirs(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): int {
         return $this->dir($path)->countDirs($filter);
     }
@@ -864,7 +864,7 @@ class Context
      */
     public function scanRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanRecursive($filter);
     }
@@ -876,7 +876,7 @@ class Context
      */
     public function listRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listRecursive($filter);
     }
@@ -888,7 +888,7 @@ class Context
      */
     public function scanNamesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanNamesRecursive($filter);
     }
@@ -900,7 +900,7 @@ class Context
      */
     public function listNamesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listNamesRecursive($filter);
     }
@@ -912,7 +912,7 @@ class Context
      */
     public function scanPathsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanPathsRecursive($filter);
     }
@@ -924,7 +924,7 @@ class Context
      */
     public function listPathsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listPathsRecursive($filter);
     }
@@ -934,7 +934,7 @@ class Context
      */
     public function countContentsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): int {
         return $this->dir($path)->countContentsRecursive($filter);
     }
@@ -947,7 +947,7 @@ class Context
      */
     public function scanFilesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanFilesRecursive($filter);
     }
@@ -959,7 +959,7 @@ class Context
      */
     public function listFilesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listFilesRecursive($filter);
     }
@@ -971,7 +971,7 @@ class Context
      */
     public function scanFileNamesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanFileNamesRecursive($filter);
     }
@@ -983,7 +983,7 @@ class Context
      */
     public function listFileNamesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listFileNamesRecursive($filter);
     }
@@ -995,7 +995,7 @@ class Context
      */
     public function scanFilePathsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanFilePathsRecursive($filter);
     }
@@ -1008,7 +1008,7 @@ class Context
      */
     public function listFilePathsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listFilePathsRecursive($filter);
     }
@@ -1018,7 +1018,7 @@ class Context
      */
     public function countFilesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): int {
         return $this->dir($path)->countFilesRecursive($filter);
     }
@@ -1031,7 +1031,7 @@ class Context
      */
     public function scanDirsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanDirsRecursive($filter);
     }
@@ -1043,7 +1043,7 @@ class Context
      */
     public function listDirsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listDirsRecursive($filter);
     }
@@ -1055,7 +1055,7 @@ class Context
      */
     public function scanDirNamesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanDirNamesRecursive($filter);
     }
@@ -1067,7 +1067,7 @@ class Context
      */
     public function listDirNamesRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listDirNamesRecursive($filter);
     }
@@ -1079,7 +1079,7 @@ class Context
      */
     public function scanDirPathsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): Generator {
         return $this->dir($path)->scanDirPathsRecursive($filter);
     }
@@ -1091,7 +1091,7 @@ class Context
      */
     public function listDirPathsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): array {
         return $this->dir($path)->listDirPathsRecursive($filter);
     }
@@ -1101,7 +1101,7 @@ class Context
      */
     public function countDirsRecursive(
         string|Stringable|Dir $path,
-        callable $filter = null
+        ?callable $filter = null
     ): int {
         return $this->dir($path)->countDirsRecursive($filter);
     }
@@ -1138,7 +1138,7 @@ class Context
     public function copyDirTo(
         string|Stringable|Dir $path,
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir {
         $dir = $this->dir($path);
         $output = $dir->copyTo($destinationDir, $newName);
@@ -1184,7 +1184,7 @@ class Context
     public function moveDirTo(
         string|Stringable|Dir $path,
         string $destinationDir,
-        string $newName = null
+        ?string $newName = null
     ): Dir {
         $dir = $this->dir($path);
         $dir->moveTo($destinationDir, $newName);

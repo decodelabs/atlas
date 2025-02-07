@@ -651,7 +651,7 @@ class Local extends Stream implements
     /**
      * Seek and read
      *
-     * @param int<0, max> $length
+     * @param int<1, max> $length
      */
     public function readFrom(
         int $position,

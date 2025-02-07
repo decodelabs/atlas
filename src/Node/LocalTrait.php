@@ -19,6 +19,7 @@ use ErrorException;
 
 /**
  * @template T of Dir|File
+ * @phpstan-require-implements Node<T>
  */
 trait LocalTrait
 {

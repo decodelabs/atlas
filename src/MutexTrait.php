@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas;
 
+/**
+ * @phpstan-require-implements Mutex
+ */
 trait MutexTrait
 {
     protected string $name;

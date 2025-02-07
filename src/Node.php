@@ -15,10 +15,9 @@ use Stringable;
 /**
  * @template T of Dir|File
  */
-interface Node
+interface Node extends Stringable
 {
     public function getPath(): string;
-    public function __toString(): string;
     public function getName(): string;
     public function exists(): bool;
 

@@ -1,3 +1,8 @@
+## v0.12.1 (2025-02-07)
+* Fixed implicit nullable arguments
+* Added @phpstan-require-implements constraints
+* Fixed read length constraint
+
 ## v0.12.0 (2024-08-21)
 * Converted Mode to enum
 * Updated Veneer dependency and Stub
