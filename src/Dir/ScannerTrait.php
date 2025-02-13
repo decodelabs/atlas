@@ -266,7 +266,10 @@ trait ScannerTrait
                 if ($wrap) {
                     $output = new self($output);
                 }
-            } elseif ($item->isFile() || $item->isLink()) {
+            } elseif (
+                $item->isFile() ||
+                $item->isLink()
+            ) {
                 if (!$files) {
                     continue;
                 }
@@ -282,7 +285,10 @@ trait ScannerTrait
 
             $key = $item->getFilename();
 
-            if ($filter && !$filter($key, $output)) {
+            if (
+                $filter &&
+                !$filter($key, $output)
+            ) {
                 continue;
             }
 
@@ -551,7 +557,10 @@ trait ScannerTrait
                 if ($wrap) {
                     $output = new self($output);
                 }
-            } elseif ($item->isFile() || $item->isLink()) {
+            } elseif (
+                $item->isFile() ||
+                $item->isLink()
+            ) {
                 if (!$files) {
                     continue;
                 }
@@ -567,7 +576,10 @@ trait ScannerTrait
 
             $key = $item->getSubPathname();
 
-            if ($filter && !$filter($key, $output)) {
+            if (
+                $filter &&
+                !$filter($key, $output)
+            ) {
                 continue;
             }
 

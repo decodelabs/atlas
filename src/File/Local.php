@@ -310,7 +310,10 @@ class Local extends Stream implements
             strstr($this->mode, 'a') ||
             strstr($this->mode, '+');
 
-        if ($isWrite && !$this->exists()) {
+        if (
+            $isWrite &&
+            !$this->exists()
+        ) {
             $mkDir = true;
 
             if (false !== strpos($this->path, '://')) {

@@ -121,7 +121,11 @@ class Local implements
                 continue;
             }
 
-            if ($item->isFile() || $item->isLink() || $item->isDir()) {
+            if (
+                $item->isFile() ||
+                $item->isLink() ||
+                $item->isDir()
+            ) {
                 return false;
             }
         }
