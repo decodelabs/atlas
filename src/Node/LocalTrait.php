@@ -73,17 +73,15 @@ trait LocalTrait
     ): Dir|File {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source node does not exist',
-                null,
-                $this
+                message: 'Source node does not exist',
+                data: $this
             );
         }
 
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination file already exists',
-                null,
-                $path
+                message: 'Destination file already exists',
+                data: $path
             );
         }
 
@@ -91,17 +89,11 @@ trait LocalTrait
 
         if (!symlink($this->path, $path)) {
             throw Exceptional::Io(
-                'Unable to copy symlink: ' . $path
+                message: 'Unable to copy symlink: ' . $path
             );
         }
 
-        /**
-         * @var Node
-         * @phpstan-var T
-         */
-        $output = new self($path);
-
-        return $output;
+        return new self($path);
     }
 
     /**
@@ -142,9 +134,8 @@ trait LocalTrait
     ): Node {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set permissions, file does not exist',
-                null,
-                $this
+                message: 'Cannot set permissions, file does not exist',
+                data: $this
             );
         }
 
@@ -181,9 +172,8 @@ trait LocalTrait
     ): Node {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set owner, file does not exist',
-                null,
-                $this
+                message: 'Cannot set owner, file does not exist',
+                data: $this
             );
         }
 
@@ -219,9 +209,8 @@ trait LocalTrait
     ): Node {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set owner, file does not exist',
-                null,
-                $this
+                message: 'Cannot set owner, file does not exist',
+                data: $this
             );
         }
 
@@ -275,23 +264,17 @@ trait LocalTrait
 
         if (!$target = $this->getLinkTarget()) {
             throw Exceptional::Io(
-                'Unable to follow symlink target: ' . $this->getPath()
+                message: 'Unable to follow symlink target: ' . $this->getPath()
             );
         }
 
         if (!symlink($target->getPath(), $path)) {
             throw Exceptional::Io(
-                'Unable to copy symlink: ' . $path
+                message: 'Unable to copy symlink: ' . $path
             );
         }
 
-        /**
-         * @var Node
-         * @phpstan-var T
-         * */
-        $output = new self($path);
-
-        return $output;
+        return new self($path);
     }
 
 
@@ -339,9 +322,8 @@ trait LocalTrait
 
         if ($newName == '' || $newName === '..' || $newName === '.' || strstr($newName, '/')) {
             throw Exceptional::InvalidArgument(
-                'New name is invalid: ' . $newName,
-                null,
-                $this
+                message: 'New name is invalid: ' . $newName,
+                data: $this
             );
         }
 

@@ -46,8 +46,6 @@ class Local extends Stream implements
             parent::__construct($stream, null);
 
             if ($this->resource !== null) {
-                // Docs mismatch
-                // @phpstan-ignore-next-line
                 $this->path = stream_get_meta_data($this->resource)['uri'];
             }
         } else {
@@ -224,9 +222,8 @@ class Local extends Stream implements
 
         if (!$this->lockExclusive()) {
             throw Exceptional::Io(
-                'Unable to lock file for writing',
-                null,
-                $this
+                message: 'Unable to lock file for writing',
+                data: $this
             );
         }
 
@@ -259,9 +256,8 @@ class Local extends Stream implements
 
         if (!$this->lock()) {
             throw Exceptional::Io(
-                'Unable to lock file for reading',
-                null,
-                $this
+                message: 'Unable to lock file for reading',
+                data: $this
             );
         }
 
@@ -332,9 +328,8 @@ class Local extends Stream implements
 
         if (!$resource = $this->fopen($mode)) {
             throw Exceptional::Io(
-                'Unable to open file',
-                null,
-                $this
+                message: 'Unable to open file',
+                data: $this
             );
         }
 
@@ -386,9 +381,8 @@ class Local extends Stream implements
     ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open',
-                null,
-                $this
+                message: 'Cannot lock file, file not open',
+                data: $this
             );
         }
 
@@ -407,9 +401,8 @@ class Local extends Stream implements
     ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open',
-                null,
-                $this
+                message: 'Cannot lock file, file not open',
+                data: $this
             );
         }
 
@@ -432,9 +425,8 @@ class Local extends Stream implements
 
         if (!flock($this->resource, LOCK_UN)) {
             throw Exceptional::Io(
-                'Unable to unlock file',
-                null,
-                $this
+                message: 'Unable to unlock file',
+                data: $this
             );
         }
 
@@ -456,9 +448,8 @@ class Local extends Stream implements
         if ($this->isLink()) {
             if (file_exists($path)) {
                 throw Exceptional::AlreadyExists(
-                    'Destination file already exists',
-                    null,
-                    $this
+                    message: 'Destination file already exists',
+                    data: $this
                 );
             }
 
@@ -500,17 +491,15 @@ class Local extends Stream implements
     ): File {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source file does not exist',
-                null,
-                $this
+                message: 'Source file does not exist',
+                data: $this
             );
         }
 
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination file already exists',
-                null,
-                $path
+                message: 'Destination file already exists',
+                data: $path
             );
         }
 
@@ -518,9 +507,8 @@ class Local extends Stream implements
 
         if (!rename($this->path, $path)) {
             throw Exceptional::Io(
-                'Unable to rename file',
-                null,
-                $this
+                message: 'Unable to rename file',
+                data: $this
             );
         }
 
@@ -557,17 +545,15 @@ class Local extends Stream implements
     ): File {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot seek file, file not open',
-                null,
-                $this
+                message: 'Cannot seek file, file not open',
+                data: $this
             );
         }
 
         if (0 !== $this->fseek($offset, SEEK_SET)) {
             throw Exceptional::Io(
-                'Failed to seek file',
-                null,
-                $this
+                message: 'Failed to seek file',
+                data: $this
             );
         }
 
@@ -584,17 +570,15 @@ class Local extends Stream implements
     ): File {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot seek file, file not open',
-                null,
-                $this
+                message: 'Cannot seek file, file not open',
+                data: $this
             );
         }
 
         if (0 !== fseek($this->resource, $offset, $fromEnd ? SEEK_END : SEEK_CUR)) {
             throw Exceptional::Io(
-                'Failed to seek file',
-                null,
-                $this
+                message: 'Failed to seek file',
+                data: $this
             );
         }
 
@@ -620,9 +604,8 @@ class Local extends Stream implements
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot ftell file, file not open',
-                null,
-                $this
+                message: 'Cannot ftell file, file not open',
+                data: $this
             );
         }
 
@@ -630,9 +613,8 @@ class Local extends Stream implements
 
         if ($output === false) {
             throw Exceptional::Io(
-                'Failed to ftell file',
-                null,
-                $this
+                message: 'Failed to ftell file',
+                data: $this
             );
         }
 
@@ -668,17 +650,15 @@ class Local extends Stream implements
     {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot flush file, file not open',
-                null,
-                $this
+                message: 'Cannot flush file, file not open',
+                data: $this
             );
         }
 
         if (false === fflush($this->resource)) {
             throw Exceptional::Io(
-                'Failed to flush file',
-                null,
-                $this
+                message: 'Failed to flush file',
+                data: $this
             );
         }
 

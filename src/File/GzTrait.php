@@ -127,9 +127,8 @@ trait GzTrait
     ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open',
-                null,
-                $this
+                message: 'Cannot lock file, file not open',
+                data: $this
             );
         }
 
@@ -144,9 +143,8 @@ trait GzTrait
     ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open',
-                null,
-                $this
+                message: 'Cannot lock file, file not open',
+                data: $this
             );
         }
 

@@ -40,7 +40,9 @@ class Context
     public function newTempFile(): File
     {
         if (!$resource = tmpfile()) {
-            throw Exceptional::Runtime('Unable to open temp file');
+            throw Exceptional::Runtime(
+                message: 'Unable to open temp file'
+            );
         }
 
         return new LocalFile($resource);
@@ -89,7 +91,7 @@ class Context
             return $node;
         }
 
-        if (is_dir($path)) {
+        if (is_dir((string)$path)) {
             return $this->dir($path);
         } else {
             return $this->file($path);
@@ -245,7 +247,7 @@ class Context
             return $node;
         }
 
-        return new LocalFile($path, $mode);
+        return new LocalFile((string)$path, $mode);
     }
 
     /**
@@ -261,7 +263,7 @@ class Context
             return $node->gzOpen($mode);
         }
 
-        return new GzFile($path, $mode);
+        return new GzFile((string)$path, $mode);
     }
 
 
@@ -284,7 +286,7 @@ class Context
             return $node;
         }
 
-        $file = new LocalFile($path);
+        $file = new LocalFile((string)$path);
 
         if (!$file->exists()) {
             return null;
@@ -380,17 +382,7 @@ class Context
         string $destinationPath
     ): File {
         $file = $this->file($path);
-        $output = $file->copy($destinationPath);
-
-        if (!$output instanceof File) {
-            throw Exceptional::UnexpectedValue(
-                'Output of file copy() was not a file',
-                null,
-                $output
-            );
-        }
-
-        return $output;
+        return $file->copy($destinationPath);
     }
 
     /**
@@ -402,17 +394,7 @@ class Context
         ?string $newName = null
     ): File {
         $file = $this->file($path);
-        $output = $file->copyTo($destinationDir, $newName);
-
-        if (!$output instanceof File) {
-            throw Exceptional::UnexpectedValue(
-                'Output of file copy() was not a file',
-                null,
-                $output
-            );
-        }
-
-        return $output;
+        return $file->copyTo($destinationDir, $newName);
     }
 
     /**
@@ -473,7 +455,7 @@ class Context
             return $node;
         }
 
-        return new LocalDir($path);
+        return new LocalDir((string)$path);
     }
 
     /**
@@ -486,7 +468,7 @@ class Context
             return $node->exists() ? $node : null;
         }
 
-        $dir = new LocalDir($path);
+        $dir = new LocalDir((string)$path);
 
         if (!$dir->exists()) {
             return null;
@@ -1119,17 +1101,7 @@ class Context
         string $destinationPath
     ): Dir {
         $dir = $this->dir($path);
-        $output = $dir->copy($destinationPath);
-
-        if (!$output instanceof Dir) {
-            throw Exceptional::UnexpectedValue(
-                'Output of dir copy() was not a dir',
-                null,
-                $output
-            );
-        }
-
-        return $output;
+        return $dir->copy($destinationPath);
     }
 
     /**
@@ -1141,17 +1113,7 @@ class Context
         ?string $newName = null
     ): Dir {
         $dir = $this->dir($path);
-        $output = $dir->copyTo($destinationDir, $newName);
-
-        if (!$output instanceof Dir) {
-            throw Exceptional::UnexpectedValue(
-                'Output of dir copy() was not a dir',
-                null,
-                $output
-            );
-        }
-
-        return $output;
+        return $dir->copyTo($destinationDir, $newName);
     }
 
     /**
@@ -1243,24 +1205,13 @@ class Context
 
         if ($path instanceof Node) {
             throw Exceptional::InvalidArgument(
-                'Item is not a ' . $type
+                message: 'Item is not a ' . $type
             );
         }
 
         // Extract path
-        if (
-            is_object($path) &&
-            method_exists($path, '__toString')
-        ) {
+        if ($path instanceof Stringable) {
             $path = (string)$path;
-        }
-
-        if (!is_string($path)) {
-            throw Exceptional::InvalidArgument(
-                'Invalid filesystem node input',
-                null,
-                $path
-            );
         }
 
 
@@ -1270,18 +1221,16 @@ class Context
             is_file($path)
         ) {
             throw Exceptional::Runtime(
-                'Path is a File not a Dir',
-                null,
-                $path
+                message: 'Path is a File not a Dir',
+                data: $path
             );
         } elseif (
             $type === File::class &&
             is_dir($path)
         ) {
             throw Exceptional::Runtime(
-                'Path is a Dir not a File',
-                null,
-                $path
+                message: 'Path is a Dir not a File',
+                data: $path
             );
         }
 
@@ -1290,4 +1239,7 @@ class Context
 }
 
 // Register the Veneer facade
-Veneer::register(Context::class, Atlas::class);
+Veneer\Manager::getGlobalManager()->register(
+    Context::class,
+    Atlas::class
+);

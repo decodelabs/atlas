@@ -23,7 +23,9 @@ class Memory extends Local
         string $key = 'temp'
     ): Memory {
         if (!$resource = fopen('php://' . $key, 'w+b')) {
-            throw Exceptional::Runtime('Unable to open memory stream');
+            throw Exceptional::Runtime(
+                message: 'Unable to open memory stream'
+            );
         }
 
         return new self($resource);
@@ -36,7 +38,7 @@ class Memory extends Local
         string $path
     ): Dir|File {
         throw Exceptional::Forbidden(
-            'Unable to create symbolic link to php://temp stream'
+            message: 'Unable to create symbolic link to php://temp stream'
         );
     }
 
@@ -44,7 +46,9 @@ class Memory extends Local
     public function gzOpen(
         string|Mode $mode
     ): Gz {
-        throw Exceptional::Runtime('Memory file cannot be opened in GZ mode');
+        throw Exceptional::Runtime(
+            message: 'Memory file cannot be opened in GZ mode'
+        );
     }
 
     /**
@@ -100,9 +104,8 @@ class Memory extends Local
     ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open',
-                null,
-                $this
+                message: 'Cannot lock file, file not open',
+                data: $this
             );
         }
 
@@ -117,9 +120,8 @@ class Memory extends Local
     ): bool {
         if ($this->resource === null) {
             throw Exceptional::Io(
-                'Cannot lock file, file not open',
-                null,
-                $this
+                message: 'Cannot lock file, file not open',
+                data: $this
             );
         }
 
