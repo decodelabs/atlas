@@ -61,9 +61,8 @@ class Local implements
         if (!is_dir($this->path)) {
             if (file_exists($this->path)) {
                 throw Exceptional::Io(
-                    'Dir destination exists as file',
-                    null,
-                    $this
+                    message: 'Dir destination exists as file',
+                    data: $this
                 );
             }
 
@@ -73,9 +72,8 @@ class Local implements
 
             if (!mkdir($this->path, $permissions, true)) {
                 throw Exceptional::Io(
-                    'Unable to mkdir',
-                    null,
-                    $this
+                    message: 'Unable to mkdir',
+                    data: $this
                 );
             }
         } else {
@@ -140,9 +138,8 @@ class Local implements
     ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set permissions, dir does not exist',
-                null,
-                $this
+                message: 'Cannot set permissions, dir does not exist',
+                data: $this
             );
         }
 
@@ -171,9 +168,8 @@ class Local implements
     ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set owner, dir does not exist',
-                null,
-                $this
+                message: 'Cannot set owner, dir does not exist',
+                data: $this
             );
         }
 
@@ -202,9 +198,8 @@ class Local implements
     ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Cannot set group, dir does not exist',
-                null,
-                $this
+                message: 'Cannot set group, dir does not exist',
+                data: $this
             );
         }
 
@@ -436,9 +431,8 @@ class Local implements
     ): Dir {
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination dir already exists',
-                null,
-                $this
+                message: 'Destination dir already exists',
+                data: $this
             );
         }
 
@@ -458,9 +452,8 @@ class Local implements
     ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source dir does not exist',
-                null,
-                $this
+                message: 'Source dir does not exist',
+                data: $this
             );
         }
 
@@ -468,17 +461,15 @@ class Local implements
 
         if (file_exists($path)) {
             throw Exceptional::AlreadyExists(
-                'Destination file already exists',
-                null,
-                $path
+                message: 'Destination file already exists',
+                data: $path
             );
         }
 
         if (!rename($this->path, $path)) {
             throw Exceptional::Io(
-                'Unable to rename dir',
-                null,
-                $this
+                message: 'Unable to rename dir',
+                data: $this
             );
         }
 
@@ -539,9 +530,8 @@ class Local implements
     ): Dir {
         if (!$this->exists()) {
             throw Exceptional::NotFound(
-                'Source dir does not exist',
-                null,
-                $this
+                message: 'Source dir does not exist',
+                data: $this
             );
         }
 
