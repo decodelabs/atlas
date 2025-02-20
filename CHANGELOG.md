@@ -1,3 +1,7 @@
+## v0.12.4 (2025-02-20)
+* Upgraded Coercion dependency
+* Tidied boolean logic
+
 ## v0.12.3 (2025-02-13)
 * Upgraded PHPStan to v2
 * Updated dependencies

@@ -320,7 +320,12 @@ trait LocalTrait
             $newName = basename($this->path);
         }
 
-        if ($newName == '' || $newName === '..' || $newName === '.' || strstr($newName, '/')) {
+        if (
+            $newName == '' ||
+            $newName === '..' ||
+            $newName === '.' ||
+            strstr($newName, '/')
+        ) {
             throw Exceptional::InvalidArgument(
                 message: 'New name is invalid: ' . $newName,
                 data: $this
