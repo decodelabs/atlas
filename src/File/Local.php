@@ -200,7 +200,7 @@ class Local extends Stream implements
 
         if (!$data instanceof Channel) {
             $file = new LocalFile('php://temp', 'w+');
-            $file->write(Coercion::forceString($data));
+            $file->write(Coercion::toString($data));
             $file->setPosition(0);
             $data = $file;
             $closeData = true;

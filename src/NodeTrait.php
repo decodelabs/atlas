@@ -85,7 +85,7 @@ trait NodeTrait
         }
 
         $date = new DateTime('now');
-        $interval = Coercion::toDateInterval($timeout);
+        $interval = Coercion::asDateInterval($timeout);
         $ts = $date->sub($interval)->getTimestamp();
 
         if (!$mod = $this->getLastModified()) {
