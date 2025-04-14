@@ -11,8 +11,6 @@
 
 Atlas provides an easy and accessible interface to file system interaction. Read, write, copy and move files without breaking a sweat.
 
-_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
-
 ---
 
 ## Installation
