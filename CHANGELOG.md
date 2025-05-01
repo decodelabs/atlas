@@ -1,3 +1,6 @@
+## v0.12.5 (2025-05-01)
+* Always return Dir from File->getParent()
+
 ## v0.12.4 (2025-02-20)
 * Upgraded Coercion dependency
 * Tidied boolean logic
