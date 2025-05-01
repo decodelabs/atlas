@@ -11,8 +11,6 @@
 
 Atlas provides an easy and accessible interface to file system interaction. Read, write, copy and move files without breaking a sweat.
 
-_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
-
 ---
 
 ## Installation
@@ -25,16 +23,10 @@ composer require decodelabs/atlas
 
 ## Usage
 
-### Importing
-
-Atlas uses [Veneer](https://github.com/decodelabs/veneer) to provide a unified frontage under <code>DecodeLabs\Atlas</code>.
-You can access all the primary functionality via this static frontage without compromising testing and dependency injection.
-
-
 ### Basic local filesystem functions
 
-There are many standard filesystem functions represented by either <code>File</code> or <code>Dir</code> objects.
-See [Context.php](./src/Atlas/Context.php), [File/Local.php](./src/Atlas/File/Local.php) and [Dir/Local.php](./src/Atlas/Dir/Local.php) for the full list.
+There are many standard filesystem functions represented by either `File` or `Dir` objects.
+See [Context.php](./src/Context.php), [File.php](./src/File.php) and [Dir.php](./src/Dir.php) and [Node.php](./src/Node.php) for the full list.
 
 ```php
 use DecodeLabs\Atlas;
@@ -57,7 +49,7 @@ Atlas::gzFile('my/file.gz', 'w')
 ### Dir scanning
 
 Scan the contents of a folder with optional filtering..
-Replace "scan" for "list" to return an array rather than a <code>Generator</code>:
+Replace "scan" for "list" to return an array rather than a `Generator`:
 
 ```php
 use DecodeLabs\Atlas;
@@ -78,24 +70,8 @@ foreach(Atlas::listFilesRecursive('my/dir', function($name, $file) {
 }
 ```
 
-See [Fs.php](./src/Atlas/Plugins/Fs.php) or [Dir/Local.php](./src/Atlas/Dir/ScannerTrait.php) for all scanning options.
+See [Dir/ScannerTrait.php](./src/Dir/ScannerTrait.php) for all scanning options.
 
-
----
-
-### Channels & IO Broker
-
-Looking for the IO Broker and Channel transfer interfaces?
-
-This has been moved to its own project, [Deliverance](https://github.com/decodelabs/deliverance/).
-
-### Mime types
-
-Looking for the mime type detection stuff that used to be here?
-
-This has been moved to its own project, [Typify](https://github.com/decodelabs/typify/).
-
----
 
 ## Licensing
 Atlas is licensed under the MIT License. See [LICENSE](./LICENSE) for the full license text.

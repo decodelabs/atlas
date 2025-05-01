@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Atlas\File;
 
+use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\Local as LocalFile;
@@ -131,6 +132,18 @@ class Local extends Stream implements
         }
 
         return parent::isWritable();
+    }
+
+
+
+    /**
+     * Get parent Dir object
+     *
+     * @return LocalDir
+     */
+    public function getParent(): ?Dir
+    {
+        return new LocalDir(dirname($this->path));
     }
 
 
