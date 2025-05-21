@@ -35,26 +35,17 @@ class Local implements
     use LocalTrait;
     use ScannerTrait;
 
-    /**
-     * Init with path
-     */
     public function __construct(
         string $path
     ) {
         $this->path = rtrim($path, '/');
     }
 
-    /**
-     * Does this dir exist?
-     */
     public function exists(): bool
     {
         return is_dir($this->path);
     }
 
-    /**
-     * Create dir if it doesn't exist
-     */
     public function ensureExists(
         ?int $permissions = null
     ): Dir {
@@ -89,17 +80,11 @@ class Local implements
     }
 
 
-    /**
-     * Is this a file?
-     */
     public function isFile(): bool
     {
         return false;
     }
 
-    /**
-     * Is this a dir?
-     */
     public function isDir(): bool
     {
         return true;
@@ -107,9 +92,6 @@ class Local implements
 
 
 
-    /**
-     * Does this dir contain anything?
-     */
     public function isEmpty(): bool
     {
         if (!$this->exists()) {
@@ -134,9 +116,6 @@ class Local implements
     }
 
 
-    /**
-     * Set permission on dir and children if $recursive
-     */
     public function setPermissionsRecursive(
         int $mode
     ): Dir {
@@ -164,9 +143,6 @@ class Local implements
         return $this;
     }
 
-    /**
-     * Set owner on dir and children if $recursive
-     */
     public function setOwnerRecursive(
         int $owner
     ): Dir {
@@ -194,9 +170,6 @@ class Local implements
         return $this;
     }
 
-    /**
-     * Set group on dir and children if $recursive
-     */
     public function setGroupRecursive(
         int $group
     ): Dir {
@@ -226,8 +199,6 @@ class Local implements
 
 
     /**
-     * Get iterator for flat Directory scanning
-     *
      * @return Traversable<DirectoryIterator>
      */
     protected function getScannerIterator(
@@ -239,8 +210,6 @@ class Local implements
 
 
     /**
-     * Get iterator for recursive Directory scanning
-     *
      * @return Traversable<RecursiveIteratorIterator<RecursiveDirectoryIterator>>
      */
     protected function getRecursiveScannerIterator(
@@ -262,9 +231,6 @@ class Local implements
 
 
 
-    /**
-     * Get a child File or Dir if it exists
-     */
     public function getChild(
         string $name
     ): Dir|File|null {
@@ -279,9 +245,6 @@ class Local implements
         return null;
     }
 
-    /**
-     * Is there an existing child by $name?
-     */
     public function hasChild(
         string $name
     ): bool {
@@ -289,9 +252,6 @@ class Local implements
         return file_exists($path);
     }
 
-    /**
-     * Ensure a child item is deleted
-     */
     public function deleteChild(
         string $name
     ): Dir {
@@ -303,9 +263,6 @@ class Local implements
     }
 
 
-    /**
-     * Create a dir as a child
-     */
     public function createDir(
         string $name,
         ?int $permissions = null
@@ -313,27 +270,18 @@ class Local implements
         return $this->getDir($name)->ensureExists($permissions);
     }
 
-    /**
-     * Does child dir exist?
-     */
     public function hasDir(
         string $name
     ): bool {
         return $this->getDir($name)->exists();
     }
 
-    /**
-     * Get a child dir
-     */
     public function getDir(
         string $name
     ): Dir {
         return new self($this->path . '/' . ltrim($name, '/'));
     }
 
-    /**
-     * Get a child dir if it exists
-     */
     public function getExistingDir(
         string $name
     ): ?Dir {
@@ -346,9 +294,6 @@ class Local implements
         return $output;
     }
 
-    /**
-     * Delete child if its a dir
-     */
     public function deleteDir(
         string $name
     ): Dir {
@@ -360,9 +305,6 @@ class Local implements
     }
 
 
-    /**
-     * Create a file with content
-     */
     public function createFile(
         string $name,
         string $content
@@ -370,9 +312,6 @@ class Local implements
         return $this->getFile($name)->putContents($content);
     }
 
-    /**
-     * Open a child file
-     */
     public function openFile(
         string $name,
         string|Mode $mode
@@ -380,27 +319,18 @@ class Local implements
         return $this->getFile($name)->open($mode);
     }
 
-    /**
-     * Does child file exist?
-     */
     public function hasFile(
         string $name
     ): bool {
         return $this->getFile($name)->exists();
     }
 
-    /**
-     * Get a child file
-     */
     public function getFile(
         string $name
     ): File {
         return $this->wrapFile($this->path . '/' . ltrim($name, '/'));
     }
 
-    /**
-     * Get a child file if it exists
-     */
     public function getExistingFile(
         string $name
     ): ?File {
@@ -413,9 +343,6 @@ class Local implements
         return $output;
     }
 
-    /**
-     * Delete child if its a file
-     */
     public function deleteFile(
         string $name
     ): Dir {
@@ -427,9 +354,6 @@ class Local implements
     }
 
 
-    /**
-     * Copy dir to $destinationPath
-     */
     public function copy(
         string $path
     ): Dir {
@@ -448,9 +372,6 @@ class Local implements
     }
 
 
-    /**
-     * Move dir to $destinationDir, rename basename to $newName if set
-     */
     public function move(
         string $path
     ): Dir {
@@ -482,9 +403,6 @@ class Local implements
     }
 
 
-    /**
-     * Recursively delete dir and its children
-     */
     public function delete(): void
     {
         if (!$this->exists()) {
@@ -508,9 +426,6 @@ class Local implements
         }
     }
 
-    /**
-     * Recursively delete all children
-     */
     public function emptyOut(): Dir
     {
         if (!$this->exists()) {
@@ -526,9 +441,6 @@ class Local implements
         return $this;
     }
 
-    /**
-     * Merge this dir and its contents into another dir
-     */
     public function mergeInto(
         string $destination
     ): Dir {
@@ -547,13 +459,13 @@ class Local implements
             if ($item instanceof self) {
                 // Dir
                 if ($item->isLink()) {
-                    $item->copySymlink($destination->getPath() . '/' . $subPath);
+                    $item->copySymlink($destination->path . '/' . $subPath);
                 } else {
                     $destination->createDir($subPath, $item->getPermissions());
                 }
             } else {
                 // File
-                $item->copy($destination->getPath() . '/' . $subPath)
+                $item->copy($destination->path . '/' . $subPath)
                     ->setPermissions((int)$item->getPermissions());
             }
         }
@@ -562,9 +474,6 @@ class Local implements
     }
 
 
-    /**
-     * Wrap a file path into File object
-     */
     protected function wrapFile(
         string $path
     ): File {
@@ -572,9 +481,6 @@ class Local implements
     }
 
 
-    /**
-     * Export for dump inspection
-     */
     public function glitchDump(): iterable
     {
         yield 'definition' => Proxy::normalizePath($this->path);

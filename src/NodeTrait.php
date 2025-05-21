@@ -19,26 +19,15 @@ use Stringable;
  */
 trait NodeTrait
 {
-    /**
-     * Get path as string
-     */
+    public string $name {
+        get => basename($this->path);
+    }
+
     public function __toString(): string
     {
-        return $this->getPath();
+        return $this->path;
     }
 
-
-    /**
-     * Get basename of item
-     */
-    public function getName(): string
-    {
-        return basename($this->getPath());
-    }
-
-    /**
-     * Normalize dots in a path
-     */
     protected function normalizePath(
         string $path
     ): string {
@@ -61,9 +50,6 @@ trait NodeTrait
         return $root . implode('/', $output);
     }
 
-    /**
-     * Compare last modified
-     */
     public function hasChanged(
         int $seconds = 30
     ): bool {
@@ -74,9 +60,6 @@ trait NodeTrait
         return time() - $this->getLastModified() < $seconds;
     }
 
-    /**
-     * Compare with interval string
-     */
     public function hasChangedIn(
         DateInterval|string|Stringable|int $timeout
     ): bool {
@@ -95,9 +78,6 @@ trait NodeTrait
         return $mod > $ts;
     }
 
-    /**
-     * Get permissions of node as octal string
-     */
     public function getPermissionsOct(): ?string
     {
         if (null === ($perms = $this->getPermissions())) {

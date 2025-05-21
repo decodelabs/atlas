@@ -16,24 +16,18 @@ use DecodeLabs\Exceptional;
 
 class Memory extends Local
 {
-    /**
-     * Create from string key in php://
-     */
     public static function create(
         string $key = 'temp'
     ): Memory {
-        if (!$resource = fopen('php://' . $key, 'w+b')) {
+        if (!$ioResource = fopen('php://' . $key, 'w+b')) {
             throw Exceptional::Runtime(
                 message: 'Unable to open memory stream'
             );
         }
 
-        return new self($resource);
+        return new self($ioResource);
     }
 
-    /**
-     * Create symbolic link
-     */
     public function createLink(
         string $path
     ): Dir|File {
@@ -51,28 +45,19 @@ class Memory extends Local
         );
     }
 
-    /**
-     * Get mtime of file
-     */
     public function getLastModified(): ?int
     {
         return time();
     }
 
-    /**
-     * Can this file be read from disk
-     */
     public function isOnDisk(): bool
     {
         return false;
     }
 
-    /**
-     * Get size of file in bytes
-     */
     public function getSize(): ?int
     {
-        if (!$this->resource) {
+        if (!$this->ioResource) {
             return null;
         }
 
@@ -88,21 +73,15 @@ class Memory extends Local
         return $output;
     }
 
-    /**
-     * Get parent Dir object
-     */
     public function getParent(): ?Dir
     {
         return null;
     }
 
-    /**
-     * Attempt to shared lock file
-     */
     public function lock(
         bool $nonBlocking = false
     ): bool {
-        if ($this->resource === null) {
+        if ($this->ioResource === null) {
             throw Exceptional::Io(
                 message: 'Cannot lock file, file not open',
                 data: $this
@@ -112,13 +91,10 @@ class Memory extends Local
         return true;
     }
 
-    /**
-     * Attempt to exclusive lock file
-     */
     public function lockExclusive(
         bool $nonBlocking = false
     ): bool {
-        if ($this->resource === null) {
+        if ($this->ioResource === null) {
             throw Exceptional::Io(
                 message: 'Cannot lock file, file not open',
                 data: $this
@@ -128,18 +104,12 @@ class Memory extends Local
         return true;
     }
 
-    /**
-     * Unlock file
-     */
     public function unlock(): File
     {
         return $this;
     }
 
 
-    /**
-     * Move file to $destinationPath
-     */
     public function move(
         string $path
     ): File {
@@ -149,9 +119,6 @@ class Memory extends Local
     }
 
 
-    /**
-     * Delete file from filesystem
-     */
     public function delete(): void
     {
         $this->close();

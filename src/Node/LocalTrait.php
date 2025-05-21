@@ -25,29 +25,13 @@ trait LocalTrait
 {
     use NodeTrait;
 
-    protected string $path = '';
+    protected(set) string $path = '';
 
-
-    /**
-     * Get fs path to node
-     */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-
-    /**
-     * Is this a symbolic link?
-     */
     public function isLink(): bool
     {
         return is_link($this->path);
     }
 
-    /**
-     * Get item pointed to by link
-     */
     public function getLinkTarget(): Dir|File|null
     {
         if (!$this->isLink()) {
@@ -64,8 +48,6 @@ trait LocalTrait
     }
 
     /**
-     * Create a symlink to this node
-     *
      * @return T
      */
     public function createLink(
@@ -96,18 +78,12 @@ trait LocalTrait
         return new self($path);
     }
 
-    /**
-     * Clear stat cache for file / dir
-     */
     public function clearStatCache(): Node
     {
-        clearstatcache(true, $this->getPath());
+        clearstatcache(true, $this->path);
         return $this;
     }
 
-    /**
-     * Get mtime of file
-     */
     public function getLastModified(): ?int
     {
         if (!$this->exists()) {
@@ -126,9 +102,6 @@ trait LocalTrait
     }
 
 
-    /**
-     * Set permissions on file
-     */
     public function setPermissions(
         int $mode
     ): Node {
@@ -143,9 +116,6 @@ trait LocalTrait
         return $this;
     }
 
-    /**
-     * Get permissions of node
-     */
     public function getPermissions(): ?int
     {
         if (!$this->exists()) {
@@ -153,7 +123,7 @@ trait LocalTrait
         }
 
         try {
-            if (false === ($output = fileperms($this->getPath()))) {
+            if (false === ($output = fileperms($this->path))) {
                 $output = null;
             }
         } catch (ErrorException $e) {
@@ -164,9 +134,6 @@ trait LocalTrait
     }
 
 
-    /**
-     * Set owner of file
-     */
     public function setOwner(
         int $owner
     ): Node {
@@ -181,9 +148,6 @@ trait LocalTrait
         return $this;
     }
 
-    /**
-     * Get owner of node
-     */
     public function getOwner(): ?int
     {
         if (!$this->exists()) {
@@ -191,7 +155,7 @@ trait LocalTrait
         }
 
         try {
-            if (false === ($output = fileowner($this->getPath()))) {
+            if (false === ($output = fileowner($this->path))) {
                 $output = null;
             }
         } catch (ErrorException $e) {
@@ -201,9 +165,6 @@ trait LocalTrait
         return $output;
     }
 
-    /**
-     * Set group of file
-     */
     public function setGroup(
         int $group
     ): Node {
@@ -218,9 +179,6 @@ trait LocalTrait
         return $this;
     }
 
-    /**
-     * Get group of node
-     */
     public function getGroup(): ?int
     {
         if (!$this->exists()) {
@@ -228,7 +186,7 @@ trait LocalTrait
         }
 
         try {
-            if (false === ($output = filegroup($this->getPath()))) {
+            if (false === ($output = filegroup($this->path))) {
                 $output = null;
             }
         } catch (ErrorException $e) {
@@ -239,9 +197,6 @@ trait LocalTrait
     }
 
 
-    /**
-     * Get parent Dir object
-     */
     public function getParent(): ?Dir
     {
         if (($path = dirname($this->path)) == $this->path) {
@@ -253,8 +208,6 @@ trait LocalTrait
 
 
     /**
-     * Copy symlink
-     *
      * @return T
      */
     protected function copySymlink(
@@ -264,11 +217,11 @@ trait LocalTrait
 
         if (!$target = $this->getLinkTarget()) {
             throw Exceptional::Io(
-                message: 'Unable to follow symlink target: ' . $this->getPath()
+                message: 'Unable to follow symlink target: ' . $this->path
             );
         }
 
-        if (!symlink($target->getPath(), $path)) {
+        if (!symlink($target->path, $path)) {
             throw Exceptional::Io(
                 message: 'Unable to copy symlink: ' . $path
             );
@@ -278,9 +231,6 @@ trait LocalTrait
     }
 
 
-    /**
-     * Copy file to $destinationDir, rename basename to $newName if set
-     */
     public function copyTo(
         string $destinationDir,
         ?string $newName = null
@@ -290,17 +240,11 @@ trait LocalTrait
         return $this->copy($destination);
     }
 
-    /**
-     * Rename file within current dir
-     */
     public function renameTo(string $newName): Dir|File
     {
         return $this->moveTo(dirname($this->path), $newName);
     }
 
-    /**
-     * Move file to $destinationDir, rename basename to $newName if set
-     */
     public function moveTo(
         string $destinationDir,
         ?string $newName = null
@@ -310,9 +254,6 @@ trait LocalTrait
         return $this->move($destination);
     }
 
-    /**
-     * Normalize new name for copy / move functions
-     */
     protected function normalizeNewName(
         ?string $newName
     ): string {

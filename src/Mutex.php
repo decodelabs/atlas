@@ -11,7 +11,7 @@ namespace DecodeLabs\Atlas;
 
 interface Mutex
 {
-    public function getName(): string;
+    public string $name { get; }
 
     public function lock(
         ?int $timeout = null

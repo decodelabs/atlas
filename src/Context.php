@@ -24,9 +24,6 @@ use Stringable;
 
 class Context
 {
-    /**
-     * Create a new local Mutex
-     */
     public function newMutex(
         string $name,
         string $dir
@@ -34,9 +31,6 @@ class Context
         return new LocalMutex($name, $dir);
     }
 
-    /**
-     * Create a new empty temp file
-     */
     public function newTempFile(): File
     {
         if (!$resource = tmpfile()) {
@@ -48,9 +42,6 @@ class Context
         return new LocalFile($resource);
     }
 
-    /**
-     * Create a new temp file
-     */
     public function createTempFile(
         ?string $data
     ): File {
@@ -59,18 +50,12 @@ class Context
         return $file;
     }
 
-    /**
-     * Create a new empty memory file
-     */
     public function newMemoryFile(
         string $key = 'temp'
     ): MemoryFile {
         return MemoryFile::create($key);
     }
 
-    /**
-     * Create a new memory file with data
-     */
     public function createMemoryFile(
         ?string $data,
         string $key = 'temp'
@@ -81,9 +66,6 @@ class Context
     }
 
 
-    /**
-     * Get node, return file or dir depending on what's on disk
-     */
     public function get(
         string|Stringable|Dir|File $path
     ): Dir|File {
@@ -98,9 +80,6 @@ class Context
         }
     }
 
-    /**
-     * Get existing node, return file or dir depending on what's on disk
-     */
     public function getExisting(
         string $path
     ): Dir|File|null {
@@ -111,9 +90,6 @@ class Context
         }
     }
 
-    /**
-     * Check if modified time is within $seconds
-     */
     public function hasChanged(
         string|Stringable|Dir|File $path,
         int $seconds = 30
@@ -121,9 +97,6 @@ class Context
         return $this->get($path)->hasChanged($seconds);
     }
 
-    /**
-     * Set file permissions on file or dir
-     */
     public function setPermissions(
         string|Stringable|Dir|File $path,
         int $permissions
@@ -131,9 +104,6 @@ class Context
         return $this->get($path)->setPermissions($permissions);
     }
 
-    /**
-     * Set file permissions on file or dir recursively
-     */
     public function setPermissionsRecursive(
         string|Stringable|Dir|File $path,
         int $permissions
@@ -149,9 +119,6 @@ class Context
         return $node;
     }
 
-    /**
-     * Set owner for file or dir
-     */
     public function setOwner(
         string|Stringable|Dir|File $path,
         int $owner
@@ -159,9 +126,6 @@ class Context
         return $this->get($path)->setOwner($owner);
     }
 
-    /**
-     * Set group for file or dir
-     */
     public function setGroup(
         string|Stringable|Dir|File $path,
         int $group
@@ -169,9 +133,6 @@ class Context
         return $this->get($path)->setGroup($group);
     }
 
-    /**
-     * Copy file or dir to $destinationPath
-     */
     public function copy(
         string|Stringable|Dir|File $path,
         string $destinationPath
@@ -179,9 +140,6 @@ class Context
         return $this->get($path)->copy($destinationPath);
     }
 
-    /**
-     * Copy file or dir to $destinationDir, rename basename to $newName if set
-     */
     public function copyTo(
         string|Stringable|Dir|File $path,
         string $destinationDir,
@@ -190,9 +148,6 @@ class Context
         return $this->get($path)->copyTo($destinationDir, $newName);
     }
 
-    /**
-     * Rename basename of file or dir
-     */
     public function rename(
         string|Stringable|Dir|File $path,
         string $newName
@@ -200,9 +155,6 @@ class Context
         return $this->get($path)->renameTo($newName);
     }
 
-    /**
-     * Move file or dir to $destinationPath
-     */
     public function move(
         string|Stringable|Dir|File $path,
         string $destinationPath
@@ -210,9 +162,6 @@ class Context
         return $this->get($path)->move($destinationPath);
     }
 
-    /**
-     * Move file or dir to $destinationDir, rename basename to $newName if set
-     */
     public function moveTo(
         string|Stringable|Dir|File $path,
         string $destinationDir,
@@ -221,9 +170,6 @@ class Context
         return $this->get($path)->moveTo($destinationDir, $newName);
     }
 
-    /**
-     * Delete file or dir
-     */
     public function delete(
         string|Stringable|Dir|File $path
     ): void {
@@ -232,9 +178,6 @@ class Context
 
 
 
-    /**
-     * Load file from $path, open if $mode is set
-     */
     public function file(
         string|Stringable|File $path,
         string|Mode|null $mode = null
@@ -250,9 +193,6 @@ class Context
         return new LocalFile((string)$path, $mode);
     }
 
-    /**
-     * Load file from $path, open if $mode is set
-     */
     public function gzFile(
         string|Stringable|File $path,
         string|Mode $mode
@@ -267,9 +207,6 @@ class Context
     }
 
 
-    /**
-     * Load existing file from $path, open if $mode is set
-     */
     public function existingFile(
         string|Stringable|File $path,
         string|Mode|null $mode = null
@@ -299,9 +236,6 @@ class Context
         return $file;
     }
 
-    /**
-     * Create a new file with $data
-     */
     public function createFile(
         string|Stringable|File $path,
         mixed $data
@@ -309,18 +243,12 @@ class Context
         return $this->file($path)->putContents($data);
     }
 
-    /**
-     * Get contents of file at $path
-     */
     public function getContents(
         string|Stringable|File $path
     ): string {
         return $this->file($path)->getContents();
     }
 
-    /**
-     * Check file last modified within $seconds
-     */
     public function hasFileChanged(
         string|Stringable|File $path,
         int $seconds = 30
@@ -328,9 +256,6 @@ class Context
         return $this->file($path)->hasChanged($seconds);
     }
 
-    /**
-     * Check file last modified within $time
-     */
     public function hasFileChangedIn(
         string|Stringable|File $path,
         DateInterval|string|Stringable|int $timeout
@@ -338,9 +263,6 @@ class Context
         return $this->file($path)->hasChangedIn($timeout);
     }
 
-    /**
-     * Set permissions of file
-     */
     public function setFilePermissions(
         string|Stringable|File $path,
         int $permissions
@@ -350,9 +272,6 @@ class Context
         return $file;
     }
 
-    /**
-     * Set owner of file
-     */
     public function setFileOwner(
         string|Stringable|File $path,
         int $owner
@@ -362,9 +281,6 @@ class Context
         return $file;
     }
 
-    /**
-     * Set group of file
-     */
     public function setFileGroup(
         string|Stringable|File $path,
         int $group
@@ -374,9 +290,6 @@ class Context
         return $file;
     }
 
-    /**
-     * Copy file to $destinationPath
-     */
     public function copyFile(
         string|Stringable|File $path,
         string $destinationPath
@@ -385,9 +298,6 @@ class Context
         return $file->copy($destinationPath);
     }
 
-    /**
-     * Copy file to $destinationDir, rename basename to $newName if set
-     */
     public function copyFileTo(
         string|Stringable|File $path,
         string $destinationDir,
@@ -397,9 +307,6 @@ class Context
         return $file->copyTo($destinationDir, $newName);
     }
 
-    /**
-     * Rename basename of file
-     */
     public function renameFile(
         string|Stringable|File $path,
         string $newName
@@ -409,9 +316,6 @@ class Context
         return $file;
     }
 
-    /**
-     * Move file to $destinationPath
-     */
     public function moveFile(
         string|Stringable|File $path,
         string $destinationPath
@@ -421,9 +325,6 @@ class Context
         return $file;
     }
 
-    /**
-     * Move file to $destinationDir, rename basename to $newName if set
-     */
     public function moveFileTo(
         string|Stringable|File $path,
         string $destinationDir,
@@ -434,9 +335,6 @@ class Context
         return $file;
     }
 
-    /**
-     * Delete file
-     */
     public function deleteFile(
         string|Stringable|File $path
     ): void {
@@ -445,9 +343,6 @@ class Context
 
 
 
-    /**
-     * Load dir from path
-     */
     public function dir(
         string|Stringable|Dir $path
     ): Dir {
@@ -458,9 +353,6 @@ class Context
         return new LocalDir((string)$path);
     }
 
-    /**
-     * Load existing dir from path
-     */
     public function existingDir(
         string|Stringable|Dir $path
     ): ?Dir {
@@ -477,9 +369,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Ensure directory at $path exists with $permissions
-     */
     public function createDir(
         string|Stringable|Dir $path,
         ?int $permissions = null
@@ -487,17 +376,11 @@ class Context
         return $this->dir($path)->ensureExists($permissions);
     }
 
-    /**
-     * Create system level temp dir
-     */
     public function createTempDir(): Dir
     {
         return $this->createDir(sys_get_temp_dir() . 'decodelabs/temp/' . uniqid('x', true));
     }
 
-    /**
-     * Check last modified of dir within $seconds
-     */
     public function hasDirChanged(
         string|Stringable|Dir $path,
         int $seconds = 30
@@ -505,9 +388,6 @@ class Context
         return $this->dir($path)->hasChanged($seconds);
     }
 
-    /**
-     * Check dir last modified within $time
-     */
     public function hasDirChangedIn(
         string|Stringable|Dir $path,
         DateInterval|string|Stringable|int $timeout
@@ -515,9 +395,6 @@ class Context
         return $this->dir($path)->hasChangedIn($timeout);
     }
 
-    /**
-     * Set permissions on dir
-     */
     public function setDirPermissions(
         string|Stringable|Dir $path,
         int $permissions
@@ -527,9 +404,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Set permissions on dir recursively
-     */
     public function setDirPermissionsRecursive(
         string|Stringable|Dir $path,
         int $permissions
@@ -539,9 +413,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Set owner of dir
-     */
     public function setDirOwner(
         string|Stringable|Dir $path,
         int $owner
@@ -551,9 +422,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Set owner of dir recursively
-     */
     public function setDirOwnerRecursive(
         string|Stringable|Dir $path,
         int $owner
@@ -563,9 +431,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Set group of dir
-     */
     public function setDirGroup(
         string|Stringable|Dir $path,
         int $group
@@ -575,9 +440,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Set group of dir recursively
-     */
     public function setDirGroupRecursive(
         string|Stringable|Dir $path,
         int $group
@@ -591,8 +453,6 @@ class Context
 
 
     /**
-     * Scan all children as File or Dir objects
-     *
      * @return Generator<string, Dir|File>
      */
     public function scan(
@@ -603,8 +463,6 @@ class Context
     }
 
     /**
-     * List all children as File or Dir objects
-     *
      * @return array<string, Dir|File>
      */
     public function list(
@@ -615,8 +473,6 @@ class Context
     }
 
     /**
-     * Scan all children as names
-     *
      * @return Generator<string>
      */
     public function scanNames(
@@ -627,8 +483,6 @@ class Context
     }
 
     /**
-     * List all children as names
-     *
      * @return array<string>
      */
     public function listNames(
@@ -639,8 +493,6 @@ class Context
     }
 
     /**
-     * Scan all children as paths
-     *
      * @return Generator<string, string>
      */
     public function scanPaths(
@@ -651,8 +503,6 @@ class Context
     }
 
     /**
-     * List all children as paths
-     *
      * @return array<string, string>
      */
     public function listPaths(
@@ -662,9 +512,6 @@ class Context
         return $this->dir($path)->listPaths($filter);
     }
 
-    /**
-     * Count all children
-     */
     public function countContents(
         string|Stringable|Dir $path,
         ?callable $filter = null
@@ -674,8 +521,6 @@ class Context
 
 
     /**
-     * Scan all files as File objects
-     *
      * @return Generator<string, File>
      */
     public function scanFiles(
@@ -686,8 +531,6 @@ class Context
     }
 
     /**
-     * List all files as File objects
-     *
      * @return array<string, File>
      */
     public function listFiles(
@@ -698,8 +541,6 @@ class Context
     }
 
     /**
-     * Scan all files as names
-     *
      * @return Generator<string>
      */
     public function scanFileNames(
@@ -710,8 +551,6 @@ class Context
     }
 
     /**
-     * List all files as names
-     *
      * @return array<string>
      */
     public function listFileNames(
@@ -722,8 +561,6 @@ class Context
     }
 
     /**
-     * Scan all files as paths
-     *
      * @return Generator<string, string>
      */
     public function scanFilePaths(
@@ -734,8 +571,6 @@ class Context
     }
 
     /**
-     * List all files as paths
-     *
      * @return array<string, string>
      */
     public function listFilePaths(
@@ -745,9 +580,6 @@ class Context
         return $this->dir($path)->listFilePaths($filter);
     }
 
-    /**
-     * Count all files
-     */
     public function countFiles(
         string|Stringable|Dir $path,
         ?callable $filter = null
@@ -757,8 +589,6 @@ class Context
 
 
     /**
-     * Scan all dirs as Dir objects
-     *
      * @return Generator<string, Dir>
      */
     public function scanDirs(
@@ -769,8 +599,6 @@ class Context
     }
 
     /**
-     * List all dirs as Dir objects
-     *
      * @return array<string, Dir>
      */
     public function listDirs(
@@ -781,8 +609,6 @@ class Context
     }
 
     /**
-     * Scan all dirs as names
-     *
      * @return Generator<string>
      */
     public function scanDirNames(
@@ -793,8 +619,6 @@ class Context
     }
 
     /**
-     * List all dirs as names
-     *
      * @return array<string>
      */
     public function listDirNames(
@@ -805,8 +629,6 @@ class Context
     }
 
     /**
-     * Scan all dirs as paths
-     *
      * @return Generator<string, string>
      */
     public function scanDirPaths(
@@ -817,8 +639,6 @@ class Context
     }
 
     /**
-     * List all dirs as paths
-     *
      * @return array<string, string>
      */
     public function listDirPaths(
@@ -828,9 +648,6 @@ class Context
         return $this->dir($path)->listDirPaths($filter);
     }
 
-    /**
-     * Count all dirs
-     */
     public function countDirs(
         string|Stringable|Dir $path,
         ?callable $filter = null
@@ -840,8 +657,6 @@ class Context
 
 
     /**
-     * Scan all children recursively as File or Dir objects
-     *
      * @return Generator<string, Dir|File>
      */
     public function scanRecursive(
@@ -852,8 +667,6 @@ class Context
     }
 
     /**
-     * List all children recursively as File or Dir objects
-     *
      * @return array<string, Dir|File>
      */
     public function listRecursive(
@@ -864,8 +677,6 @@ class Context
     }
 
     /**
-     * Scan all children recursively as names
-     *
      * @return Generator<string>
      */
     public function scanNamesRecursive(
@@ -876,8 +687,6 @@ class Context
     }
 
     /**
-     * List all children recursively as names
-     *
      * @return array<string>
      */
     public function listNamesRecursive(
@@ -888,8 +697,6 @@ class Context
     }
 
     /**
-     * Scan all children recursively as paths
-     *
      * @return Generator<string, string>
      */
     public function scanPathsRecursive(
@@ -900,8 +707,6 @@ class Context
     }
 
     /**
-     * List all children recursively as paths
-     *
      * @return array<string, string>
      */
     public function listPathsRecursive(
@@ -911,9 +716,6 @@ class Context
         return $this->dir($path)->listPathsRecursive($filter);
     }
 
-    /**
-     * Count all children recursively
-     */
     public function countContentsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
@@ -923,8 +725,6 @@ class Context
 
 
     /**
-     * Scan all files recursively as File objects
-     *
      * @return Generator<string, File>
      */
     public function scanFilesRecursive(
@@ -935,8 +735,6 @@ class Context
     }
 
     /**
-     * List all files recursively as File objects
-     *
      * @return array<string, File>
      */
     public function listFilesRecursive(
@@ -947,8 +745,6 @@ class Context
     }
 
     /**
-     * Scan all files recursively as names
-     *
      * @return Generator<string>
      */
     public function scanFileNamesRecursive(
@@ -959,8 +755,6 @@ class Context
     }
 
     /**
-     * List all files recursively as names
-     *
      * @return array<string>
      */
     public function listFileNamesRecursive(
@@ -971,8 +765,6 @@ class Context
     }
 
     /**
-     * Scan all files recursively as paths
-     *
      * @return Generator<string, string>
      */
     public function scanFilePathsRecursive(
@@ -983,8 +775,6 @@ class Context
     }
 
     /**
-     * List all files recursively as paths
-     *
      * @param string|Stringable|Dir $path
      * @return array<string, string>
      */
@@ -995,9 +785,6 @@ class Context
         return $this->dir($path)->listFilePathsRecursive($filter);
     }
 
-    /**
-     * Count all files recursively
-     */
     public function countFilesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
@@ -1007,8 +794,6 @@ class Context
 
 
     /**
-     * Scan all dirs recursively as Dir objects
-     *
      * @return Generator<string, Dir>
      */
     public function scanDirsRecursive(
@@ -1019,8 +804,6 @@ class Context
     }
 
     /**
-     * List all dirs recursively as Dir objects
-     *
      * @return array<string, Dir>
      */
     public function listDirsRecursive(
@@ -1031,8 +814,6 @@ class Context
     }
 
     /**
-     * Scan all dirs recursively as names
-     *
      * @return Generator<string>
      */
     public function scanDirNamesRecursive(
@@ -1043,8 +824,6 @@ class Context
     }
 
     /**
-     * List all dirs recursively as names
-     *
      * @return array<string>
      */
     public function listDirNamesRecursive(
@@ -1055,8 +834,6 @@ class Context
     }
 
     /**
-     * Scan all dirs recursively as paths
-     *
      * @return Generator<string, string>
      */
     public function scanDirPathsRecursive(
@@ -1067,8 +844,6 @@ class Context
     }
 
     /**
-     * List all dirs recursively as paths
-     *
      * @return array<string, string>
      */
     public function listDirPathsRecursive(
@@ -1078,9 +853,6 @@ class Context
         return $this->dir($path)->listDirPathsRecursive($filter);
     }
 
-    /**
-     * Count all dirs recursively
-     */
     public function countDirsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
@@ -1093,9 +865,6 @@ class Context
 
 
 
-    /**
-     * Copy dir to $destinationPath
-     */
     public function copyDir(
         string|Stringable|Dir $path,
         string $destinationPath
@@ -1104,9 +873,6 @@ class Context
         return $dir->copy($destinationPath);
     }
 
-    /**
-     * Copy dir to $destinationDir, rename basename to $newName if set
-     */
     public function copyDirTo(
         string|Stringable|Dir $path,
         string $destinationDir,
@@ -1116,9 +882,6 @@ class Context
         return $dir->copyTo($destinationDir, $newName);
     }
 
-    /**
-     * Rename basename of dir
-     */
     public function renameDir(
         string|Stringable|Dir $path,
         string $newName
@@ -1128,9 +891,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Move dir to $destinationPath
-     */
     public function moveDir(
         string|Stringable|Dir $path,
         string $destinationPath
@@ -1140,9 +900,6 @@ class Context
         return $dir;
     }
 
-    /**
-     * Move dir to $destinationDir, rename basename to $newName if set
-     */
     public function moveDirTo(
         string|Stringable|Dir $path,
         string $destinationDir,
@@ -1153,27 +910,18 @@ class Context
         return $dir;
     }
 
-    /**
-     * Delete dir and contents
-     */
     public function deleteDir(
         string|Stringable|Dir $path
     ): void {
         $this->dir($path)->delete();
     }
 
-    /**
-     * Delete contents of dir
-     */
     public function emptyOut(
         string|Stringable|Dir $path
     ): Dir {
         return $this->dir($path)->emptyOut();
     }
 
-    /**
-     * Merge contents of dir into $destination dir
-     */
     public function merge(
         string|Stringable|Dir $path,
         string $destination
@@ -1184,8 +932,6 @@ class Context
 
 
     /**
-     * Normalize node input
-     *
      * @param class-string $type
      */
     protected function normalizeInput(

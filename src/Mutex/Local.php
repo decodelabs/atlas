@@ -25,9 +25,6 @@ class Local implements
 
     protected LocalFile $file;
 
-    /**
-     * Init with name and path
-     */
     public function __construct(
         string $name,
         string $dir
@@ -37,9 +34,6 @@ class Local implements
     }
 
 
-    /**
-     * Create file and lock it
-     */
     protected function acquireLock(
         bool $blocking
     ): bool {
@@ -51,18 +45,12 @@ class Local implements
         return $this->file->lockExclusive(!$blocking);
     }
 
-    /**
-     * Release file and delete it
-     */
     protected function releaseLock(): void
     {
         $this->file->unlock()->close()->delete();
     }
 
 
-    /**
-     * Export for dump inspection
-     */
     public function glitchDump(): iterable
     {
         yield 'properties' => [

@@ -37,20 +37,20 @@ trait GzTrait
         int $offset,
         int $flags
     ): int {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return -1;
         }
 
-        return gzseek($this->resource, $offset, $flags);
+        return gzseek($this->ioResource, $offset, $flags);
     }
 
     protected function ftell(): int|false
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return false;
         }
 
-        return gztell($this->resource);
+        return gztell($this->ioResource);
     }
 
     /**
@@ -59,20 +59,20 @@ trait GzTrait
     protected function fread(
         int $length
     ): string|false {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return false;
         }
 
-        return gzread($this->resource, $length);
+        return gzread($this->ioResource, $length);
     }
 
     protected function fgetc(): string|false
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return false;
         }
 
-        return gzgetc($this->resource);
+        return gzgetc($this->ioResource);
     }
 
     /**
@@ -81,51 +81,48 @@ trait GzTrait
     protected function fgets(
         ?int $length = null
     ): string|false {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return false;
         }
 
-        return gzgets($this->resource, $length);
+        return gzgets($this->ioResource, $length);
     }
 
     protected function fwrite(
         string $data,
         ?int $length = null
     ): int|false {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return false;
         }
 
-        return gzwrite($this->resource, $data, $length);
+        return gzwrite($this->ioResource, $data, $length);
     }
 
     protected function feof(): bool
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return true;
         }
 
-        return gzeof($this->resource);
+        return gzeof($this->ioResource);
     }
 
     protected function fclose(): bool
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return false;
         }
 
-        return gzclose($this->resource);
+        return gzclose($this->ioResource);
     }
 
 
 
-    /**
-     * Attempt to shared lock file
-     */
     public function lock(
         bool $nonBlocking = false
     ): bool {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot lock file, file not open',
                 data: $this
@@ -135,13 +132,10 @@ trait GzTrait
         return true;
     }
 
-    /**
-     * Attempt to exclusive lock file
-     */
     public function lockExclusive(
         bool $nonBlocking = false
     ): bool {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot lock file, file not open',
                 data: $this
@@ -151,9 +145,6 @@ trait GzTrait
         return true;
     }
 
-    /**
-     * Unlock file
-     */
     public function unlock(): File
     {
         return $this;

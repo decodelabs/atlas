@@ -24,7 +24,11 @@ use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Glitch\Proxy;
 use Throwable;
 
+/**
+ * @implements Channel<resource>
+ */
 class Local extends Stream implements
+    Channel,
     File,
     GzOpenable,
     Dumpable
@@ -35,8 +39,6 @@ class Local extends Stream implements
     use LocalTrait;
 
     /**
-     * Init with file path, if mode is set, open file
-     *
      * @param string|resource $stream
      */
     public function __construct(
@@ -45,10 +47,7 @@ class Local extends Stream implements
     ) {
         if (is_resource($stream)) {
             parent::__construct($stream, null);
-
-            if ($this->resource !== null) {
-                $this->path = stream_get_meta_data($this->resource)['uri'];
-            }
+            $this->path = stream_get_meta_data($stream)['uri'];
         } else {
             $stream = (string)$stream;
             parent::__construct($stream, null);
@@ -60,20 +59,14 @@ class Local extends Stream implements
         }
     }
 
-    /**
-     * Ensure file is closed
-     */
     public function __destruct()
     {
         $this->close();
     }
 
-    /**
-     * Does this file exist on disk?
-     */
     public function exists(): bool
     {
-        if ($this->resource) {
+        if ($this->ioResource) {
             return true;
         }
 
@@ -84,50 +77,35 @@ class Local extends Stream implements
 
 
 
-    /**
-     * Is this a file?
-     */
     public function isFile(): bool
     {
         return true;
     }
 
-    /**
-     * Is this a dir?
-     */
     public function isDir(): bool
     {
         return false;
     }
 
 
-    /**
-     * Can this file be read from disk
-     */
     public function isOnDisk(): bool
     {
         return $this->exists();
     }
 
 
-    /**
-     * Is the resource still accessible?
-     */
     public function isReadable(): bool
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return is_readable($this->path);
         }
 
         return parent::isReadable();
     }
 
-    /**
-     * Is the resource still writable?
-     */
     public function isWritable(): bool
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return is_writable($this->path);
         }
 
@@ -137,8 +115,6 @@ class Local extends Stream implements
 
 
     /**
-     * Get parent Dir object
-     *
      * @return LocalDir
      */
     public function getParent(): ?Dir
@@ -147,9 +123,6 @@ class Local extends Stream implements
     }
 
 
-    /**
-     * Get size of file in bytes
-     */
     public function getSize(): ?int
     {
         if (!$this->exists()) {
@@ -163,9 +136,6 @@ class Local extends Stream implements
         return $output;
     }
 
-    /**
-     * Get hash of file contents
-     */
     public function getHash(
         string $type
     ): ?string {
@@ -182,9 +152,6 @@ class Local extends Stream implements
         return $output;
     }
 
-    /**
-     * Get hash of file contents
-     */
     public function getRawHash(
         string $type
     ): ?string {
@@ -203,9 +170,6 @@ class Local extends Stream implements
 
 
 
-    /**
-     * Write content to file
-     */
     public function putContents(
         mixed $data
     ): File {
@@ -228,7 +192,7 @@ class Local extends Stream implements
             $data->setPosition(0);
         }
 
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             $closeAfter = true;
             $this->open('w');
         }
@@ -255,14 +219,11 @@ class Local extends Stream implements
         return $this;
     }
 
-    /**
-     * Read contents of file
-     */
     public function getContents(): string
     {
         $closeAfter = false;
 
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             $closeAfter = true;
             $this->open('r');
         }
@@ -285,9 +246,6 @@ class Local extends Stream implements
         return $output;
     }
 
-    /**
-     * Read contents of file and add to Buffer
-     */
     public function bufferContents(): Buffer
     {
         return new Buffer($this->getContents());
@@ -296,9 +254,6 @@ class Local extends Stream implements
 
 
 
-    /**
-     * Open file for reading and writing
-     */
     public function open(
         string|Mode $mode
     ): File {
@@ -306,22 +261,23 @@ class Local extends Stream implements
             $mode = $mode->getValue();
         }
 
-        if ($this->resource !== null) {
-            if ($this->mode === $mode) {
+        if ($this->ioResource !== null) {
+            if ($this->ioMode === $mode) {
                 return $this;
             }
 
             $this->close();
         }
 
-        $this->mode = $mode;
+        // @phpstan-ignore-next-line
+        $this->ioMode = $mode;
 
         $isWrite =
-            strstr($this->mode, 'x') ||
-            strstr($this->mode, 'w') ||
-            strstr($this->mode, 'c') ||
-            strstr($this->mode, 'a') ||
-            strstr($this->mode, '+');
+            strstr($mode, 'x') ||
+            strstr($mode, 'w') ||
+            strstr($mode, 'c') ||
+            strstr($mode, 'a') ||
+            strstr($mode, '+');
 
         if (
             $isWrite &&
@@ -349,7 +305,8 @@ class Local extends Stream implements
             );
         }
 
-        $this->resource = $resource;
+        // @phpstan-ignore-next-line
+        $this->ioResource = $resource;
         return $this;
     }
 
@@ -371,17 +328,11 @@ class Local extends Stream implements
     }
 
 
-    /**
-     * Has this file been opened?
-     */
     public function isOpen(): bool
     {
-        return $this->resource !== null;
+        return $this->ioResource !== null;
     }
 
-    /**
-     * Is this file a symbolic link?
-     */
     public function isLink(): bool
     {
         return is_link($this->path);
@@ -389,13 +340,10 @@ class Local extends Stream implements
 
 
 
-    /**
-     * Attempt to shared lock file
-     */
     public function lock(
         bool $nonBlocking = false
     ): bool {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot lock file, file not open',
                 data: $this
@@ -403,19 +351,16 @@ class Local extends Stream implements
         }
 
         if ($nonBlocking) {
-            return flock($this->resource, LOCK_SH | LOCK_NB);
+            return flock($this->ioResource, LOCK_SH | LOCK_NB);
         } else {
-            return flock($this->resource, LOCK_SH);
+            return flock($this->ioResource, LOCK_SH);
         }
     }
 
-    /**
-     * Attempt to exclusive lock file
-     */
     public function lockExclusive(
         bool $nonBlocking = false
     ): bool {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot lock file, file not open',
                 data: $this
@@ -423,23 +368,20 @@ class Local extends Stream implements
         }
 
         return flock(
-            $this->resource,
+            $this->ioResource,
             $nonBlocking ?
                 LOCK_EX | LOCK_NB :
                 LOCK_EX
         );
     }
 
-    /**
-     * Unlock file
-     */
     public function unlock(): File
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return $this;
         }
 
-        if (!flock($this->resource, LOCK_UN)) {
+        if (!flock($this->ioResource, LOCK_UN)) {
             throw Exceptional::Io(
                 message: 'Unable to unlock file',
                 data: $this
@@ -451,9 +393,6 @@ class Local extends Stream implements
 
 
 
-    /**
-     * Copy file to $destinationPath
-     */
     public function copy(
         string $path
     ): File {
@@ -475,7 +414,7 @@ class Local extends Stream implements
         $target = new self($path, 'w');
         $closeAfter = false;
 
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             $closeAfter = true;
             $this->open('r');
         }
@@ -499,9 +438,6 @@ class Local extends Stream implements
 
 
 
-    /**
-     * Move file to $destinationPath
-     */
     public function move(
         string $path
     ): File {
@@ -533,9 +469,6 @@ class Local extends Stream implements
     }
 
 
-    /**
-     * Delete file from filesystem
-     */
     public function delete(): void
     {
         $exists = $this->exists();
@@ -553,13 +486,10 @@ class Local extends Stream implements
     }
 
 
-    /**
-     * Seek file pointer to offset
-     */
     public function setPosition(
         int $offset
     ): File {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot seek file, file not open',
                 data: $this
@@ -577,21 +507,18 @@ class Local extends Stream implements
     }
 
 
-    /**
-     * Move file pointer to offset
-     */
     public function movePosition(
         int $offset,
         bool $fromEnd = false
     ): File {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot seek file, file not open',
                 data: $this
             );
         }
 
-        if (0 !== fseek($this->resource, $offset, $fromEnd ? SEEK_END : SEEK_CUR)) {
+        if (0 !== fseek($this->ioResource, $offset, $fromEnd ? SEEK_END : SEEK_CUR)) {
             throw Exceptional::Io(
                 message: 'Failed to seek file',
                 data: $this
@@ -605,20 +532,17 @@ class Local extends Stream implements
         int $offset,
         int $flags
     ): int {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return -1;
         }
 
-        return fseek($this->resource, $offset, $flags);
+        return fseek($this->ioResource, $offset, $flags);
     }
 
 
-    /**
-     * Get location of file pointer
-     */
     public function getPosition(): int
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot ftell file, file not open',
                 data: $this
@@ -639,16 +563,14 @@ class Local extends Stream implements
 
     protected function ftell(): int|false
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             return false;
         }
 
-        return ftell($this->resource);
+        return ftell($this->ioResource);
     }
 
     /**
-     * Seek and read
-     *
      * @param int<1, max> $length
      */
     public function readFrom(
@@ -659,19 +581,16 @@ class Local extends Stream implements
         return $this->read($length);
     }
 
-    /**
-     * Ensure all data is written to file
-     */
     public function flush(): File
     {
-        if ($this->resource === null) {
+        if (!is_resource($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Cannot flush file, file not open',
                 data: $this
             );
         }
 
-        if (false === fflush($this->resource)) {
+        if (false === fflush($this->ioResource)) {
             throw Exceptional::Io(
                 message: 'Failed to flush file',
                 data: $this
@@ -682,15 +601,13 @@ class Local extends Stream implements
     }
 
     /**
-     * Truncate a file to $size bytes
-     *
      * @param int<0, max> $size
      */
     public function truncate(
         int $size = 0
     ): File {
-        if ($this->resource !== null) {
-            ftruncate($this->resource, $size);
+        if (is_resource($this->ioResource)) {
+            ftruncate($this->ioResource, $size);
         } else {
             $this->open('w');
             $this->close();
@@ -700,15 +617,12 @@ class Local extends Stream implements
     }
 
 
-    /**
-     * Export for dump inspection
-     */
     public function glitchDump(): iterable
     {
         yield 'definition' => Proxy::normalizePath($this->path);
 
         yield 'metaList' => [
-            'resource' => $this->resource,
+            'ioResource' => $this->ioResource,
             'exists' => $this->exists(),
             'readable' => $this->isReadable(),
             'writable' => $this->isWritable(),

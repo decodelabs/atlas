@@ -17,8 +17,9 @@ use Stringable;
  */
 interface Node extends Stringable
 {
-    public function getPath(): string;
-    public function getName(): string;
+    public string $path { get; }
+    public string $name { get; }
+
     public function exists(): bool;
 
     public function isFile(): bool;

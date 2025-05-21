@@ -19,6 +19,8 @@ interface File extends
     Node,
     Channel
 {
+    public ?string $ioMode { get; }
+
     public function getSize(): ?int;
     public function isOnDisk(): bool;
 
@@ -50,7 +52,6 @@ interface File extends
 
     public function isOpen(): bool;
     public function isLink(): bool;
-    public function getIoMode(): ?string;
 
     public function lock(
         bool $nonBlocking = false
