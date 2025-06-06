@@ -12,8 +12,8 @@ namespace DecodeLabs\Atlas\Mutex;
 use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\Mutex;
 use DecodeLabs\Atlas\MutexTrait;
-
-use DecodeLabs\Glitch\Dumpable;
+use DecodeLabs\Nuance\Dumpable;
+use DecodeLabs\Nuance\Entity\NativeObject as NuanceEntity;
 
 class Local implements
     Mutex,
@@ -51,16 +51,18 @@ class Local implements
     }
 
 
-    public function glitchDump(): iterable
+    public function toNuanceEntity(): NuanceEntity
     {
-        yield 'properties' => [
-            '*name' => $this->name,
-            '*file' => $this->file
-        ];
+        $entity = new NuanceEntity($this);
 
-        yield 'metaList' => [
+        $entity->setProperty('name', $this->name);
+        $entity->setProperty('file', $this->file, 'protected');
+
+        $entity->meta = [
             'counter' => $this->counter,
             'locked' => $this->isLocked()
         ];
+
+        return $entity;
     }
 }

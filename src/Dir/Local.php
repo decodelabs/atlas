@@ -16,8 +16,9 @@ use DecodeLabs\Atlas\Mode;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Glitch\Dumpable;
-use DecodeLabs\Glitch\Proxy;
+use DecodeLabs\Monarch;
+use DecodeLabs\Nuance\Dumpable;
+use DecodeLabs\Nuance\Entity\NativeObject as NuanceEntity;
 use DirectoryIterator;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -481,13 +482,17 @@ class Local implements
     }
 
 
-    public function glitchDump(): iterable
+    public function toNuanceEntity(): NuanceEntity
     {
-        yield 'definition' => Proxy::normalizePath($this->path);
+        $entity = new NuanceEntity($this);
 
-        yield 'metaList' => [
+        $entity->definition = Monarch::$paths->prettify($this->path);
+
+        $entity->meta = [
             'exists' => $this->exists(),
             'permissions' => $this->getPermissionsOct() . ' : ' . $this->getPermissionsString()
         ];
+
+        return $entity;
     }
 }

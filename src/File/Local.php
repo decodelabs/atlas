@@ -20,8 +20,9 @@ use DecodeLabs\Deliverance\Channel;
 use DecodeLabs\Deliverance\Channel\Buffer;
 use DecodeLabs\Deliverance\Channel\Stream;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Glitch\Dumpable;
-use DecodeLabs\Glitch\Proxy;
+use DecodeLabs\Monarch;
+use DecodeLabs\Nuance\Dumpable;
+use DecodeLabs\Nuance\Entity\NativeObject as NuanceEntity;
 use Throwable;
 
 /**
@@ -617,16 +618,20 @@ class Local extends Stream implements
     }
 
 
-    public function glitchDump(): iterable
+    public function toNuanceEntity(): NuanceEntity
     {
-        yield 'definition' => Proxy::normalizePath($this->path);
+        $entity = new NuanceEntity($this);
 
-        yield 'metaList' => [
+        $entity->definition = Monarch::$paths->prettify($this->path);
+
+        $entity->meta = [
             'ioResource' => $this->ioResource,
             'exists' => $this->exists(),
             'readable' => $this->isReadable(),
             'writable' => $this->isWritable(),
             'permissions' => $this->getPermissionsOct() . ' : ' . $this->getPermissionsString()
         ];
+
+        return $entity;
     }
 }
