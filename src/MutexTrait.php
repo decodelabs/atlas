@@ -14,7 +14,7 @@ namespace DecodeLabs\Atlas;
  */
 trait MutexTrait
 {
-    protected(set) string $name;
+    public protected(set) string $name;
     protected int $counter = 0;
 
     public function __construct(

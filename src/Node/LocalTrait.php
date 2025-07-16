@@ -25,7 +25,7 @@ trait LocalTrait
 {
     use NodeTrait;
 
-    protected(set) string $path = '';
+    public protected(set) string $path = '';
 
     public function isLink(): bool
     {
