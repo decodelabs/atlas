@@ -11,23 +11,21 @@
     "require": {
         "php": "^8.4",
 
-        "decodelabs/coercion": "^0.3.3",
-        "decodelabs/deliverance": "^0.3.3",
-        "decodelabs/enumerable": "^0.2.7",
-        "decodelabs/exceptional": "^0.6.1",
-        "decodelabs/monarch": "^0.1.4",
-        "decodelabs/nuance": "^0.1.2",
-        "decodelabs/veneer": "^0.12.8"
+        "decodelabs/coercion": "^0.3.5",
+        "decodelabs/deliverance": "^0.3.4",
+        "decodelabs/enumerable": "^0.2.8",
+        "decodelabs/exceptional": "^0.6.3",
+        "decodelabs/nuance": "^0.1.9"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.7"
     },
     "autoload": {
         "psr-4": {
-            "DecodeLabs\\Atlas\\": "src/"
+            "DecodeLabs\\Atlas\\": "src/Atlas/"
         },
-        "files": [
-            "src/Context.php"
+        "classmap": [
+            "src/Atlas.php"
         ]
     },
     "extra": {

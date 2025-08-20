@@ -36,11 +36,11 @@ Atlas::get('/path/to/dir_or_file')
 
 Atlas::createDir('some/dir/path', 0770);
 
-Atlas::file('my/file')
+Atlas::getFile('my/file')
     ->renameTo('file.txt')
     ->setOwner('user');
 
-Atlas::gzFile('my/file.gz', 'w')
+Atlas::getGzFile('my/file.gz', 'w')
     ->write('hello world')
     ->close();
 ```

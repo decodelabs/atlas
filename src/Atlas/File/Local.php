@@ -20,9 +20,9 @@ use DecodeLabs\Deliverance\Channel;
 use DecodeLabs\Deliverance\Channel\Buffer;
 use DecodeLabs\Deliverance\Channel\Stream;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Monarch;
 use DecodeLabs\Nuance\Dumpable;
 use DecodeLabs\Nuance\Entity\NativeObject as NuanceEntity;
+use DecodeLabs\Nuance\PrettyPath;
 use Throwable;
 
 /**
@@ -621,8 +621,7 @@ class Local extends Stream implements
     public function toNuanceEntity(): NuanceEntity
     {
         $entity = new NuanceEntity($this);
-
-        $entity->definition = Monarch::$paths->prettify($this->path);
+        $entity->definition = new PrettyPath($this->path);
 
         $entity->meta = [
             'ioResource' => $this->ioResource,

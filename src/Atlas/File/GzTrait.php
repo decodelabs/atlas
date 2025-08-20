@@ -54,7 +54,7 @@ trait GzTrait
     }
 
     /**
-     * @param int<0, max> $length
+     * @param int<0,max> $length
      */
     protected function fread(
         int $length
@@ -76,7 +76,7 @@ trait GzTrait
     }
 
     /**
-     * @param int<0, max>|null $length
+     * @param int<0,max>|null $length
      */
     protected function fgets(
         ?int $length = null

@@ -16,9 +16,9 @@ use DecodeLabs\Atlas\Mode;
 use DecodeLabs\Atlas\Node;
 use DecodeLabs\Atlas\Node\LocalTrait;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Monarch;
 use DecodeLabs\Nuance\Dumpable;
 use DecodeLabs\Nuance\Entity\NativeObject as NuanceEntity;
+use DecodeLabs\Nuance\PrettyPath;
 use DirectoryIterator;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -485,8 +485,7 @@ class Local implements
     public function toNuanceEntity(): NuanceEntity
     {
         $entity = new NuanceEntity($this);
-
-        $entity->definition = Monarch::$paths->prettify($this->path);
+        $entity->definition = new PrettyPath($this->path);
 
         $entity->meta = [
             'exists' => $this->exists(),

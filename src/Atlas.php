@@ -7,31 +7,32 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Atlas;
+namespace DecodeLabs;
 
 use DateInterval;
-use DecodeLabs\Atlas;
+use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\Dir\Local as LocalDir;
+use DecodeLabs\Atlas\File;
 use DecodeLabs\Atlas\File\GzLocal as GzFile;
 use DecodeLabs\Atlas\File\GzOpenable;
 use DecodeLabs\Atlas\File\Local as LocalFile;
 use DecodeLabs\Atlas\File\Memory as MemoryFile;
+use DecodeLabs\Atlas\Mode;
 use DecodeLabs\Atlas\Mutex\Local as LocalMutex;
-use DecodeLabs\Exceptional;
-use DecodeLabs\Veneer;
+use DecodeLabs\Atlas\Node;
 use Generator;
 use Stringable;
 
-class Context
+class Atlas
 {
-    public function newMutex(
+    public static function newMutex(
         string $name,
         string $dir
     ): LocalMutex {
         return new LocalMutex($name, $dir);
     }
 
-    public function newTempFile(): File
+    public static function newTempFile(): File
     {
         if (!$resource = tmpfile()) {
             throw Exceptional::Runtime(
@@ -42,73 +43,73 @@ class Context
         return new LocalFile($resource);
     }
 
-    public function createTempFile(
+    public static function createTempFile(
         ?string $data
     ): File {
-        $file = $this->newTempFile();
+        $file = self::newTempFile();
         $file->write($data);
         return $file;
     }
 
-    public function newMemoryFile(
+    public static function newMemoryFile(
         string $key = 'temp'
     ): MemoryFile {
         return MemoryFile::create($key);
     }
 
-    public function createMemoryFile(
+    public static function createMemoryFile(
         ?string $data,
         string $key = 'temp'
     ): MemoryFile {
-        $file = $this->newMemoryFile($key);
+        $file = self::newMemoryFile($key);
         $file->write($data);
         return $file;
     }
 
 
-    public function get(
+    public static function get(
         string|Stringable|Dir|File $path
     ): Dir|File {
-        if ($node = $this->normalizeInput($path, Node::class)) {
+        if ($node = self::normalizeInput($path, Node::class)) {
             return $node;
         }
 
         if (is_dir((string)$path)) {
-            return $this->dir($path);
+            return self::getDir($path);
         } else {
-            return $this->file($path);
+            return self::getFile($path);
         }
     }
 
-    public function getExisting(
+    public static function getExisting(
         string $path
     ): Dir|File|null {
         if (is_dir($path)) {
-            return $this->existingDir($path);
+            return self::getExistingDir($path);
         } else {
-            return $this->existingFile($path);
+            return self::getExistingFile($path);
         }
     }
 
-    public function hasChanged(
+    public static function hasChanged(
         string|Stringable|Dir|File $path,
         int $seconds = 30
     ): bool {
-        return $this->get($path)->hasChanged($seconds);
+        return self::get($path)->hasChanged($seconds);
     }
 
-    public function setPermissions(
+    public static function setPermissions(
         string|Stringable|Dir|File $path,
         int $permissions
     ): Dir|File {
-        return $this->get($path)->setPermissions($permissions);
+        return self::get($path)->setPermissions($permissions);
     }
 
-    public function setPermissionsRecursive(
+    public static function setPermissionsRecursive(
         string|Stringable|Dir|File $path,
         int $permissions
     ): Dir|File {
-        $node = $this->get($path);
+        $node = self::get($path);
 
         if ($node instanceof Dir) {
             $node->setPermissionsRecursive($permissions);
@@ -119,70 +120,70 @@ class Context
         return $node;
     }
 
-    public function setOwner(
+    public static function setOwner(
         string|Stringable|Dir|File $path,
         int $owner
     ): Dir|File {
-        return $this->get($path)->setOwner($owner);
+        return self::get($path)->setOwner($owner);
     }
 
-    public function setGroup(
+    public static function setGroup(
         string|Stringable|Dir|File $path,
         int $group
     ): Dir|File {
-        return $this->get($path)->setGroup($group);
+        return self::get($path)->setGroup($group);
     }
 
-    public function copy(
+    public static function copy(
         string|Stringable|Dir|File $path,
         string $destinationPath
     ): Dir|File {
-        return $this->get($path)->copy($destinationPath);
+        return self::get($path)->copy($destinationPath);
     }
 
-    public function copyTo(
+    public static function copyTo(
         string|Stringable|Dir|File $path,
         string $destinationDir,
         ?string $newName = null
     ): Dir|File {
-        return $this->get($path)->copyTo($destinationDir, $newName);
+        return self::get($path)->copyTo($destinationDir, $newName);
     }
 
-    public function rename(
+    public static function rename(
         string|Stringable|Dir|File $path,
         string $newName
     ): Dir|File {
-        return $this->get($path)->renameTo($newName);
+        return self::get($path)->renameTo($newName);
     }
 
-    public function move(
+    public static function move(
         string|Stringable|Dir|File $path,
         string $destinationPath
     ): Dir|File {
-        return $this->get($path)->move($destinationPath);
+        return self::get($path)->move($destinationPath);
     }
 
-    public function moveTo(
+    public static function moveTo(
         string|Stringable|Dir|File $path,
         string $destinationDir,
         ?string $newName = null
     ): Dir|File {
-        return $this->get($path)->moveTo($destinationDir, $newName);
+        return self::get($path)->moveTo($destinationDir, $newName);
     }
 
-    public function delete(
+    public static function delete(
         string|Stringable|Dir|File $path
     ): void {
-        $this->get($path)->delete();
+        self::get($path)->delete();
     }
 
 
 
-    public function file(
+    public static function getFile(
         string|Stringable|File $path,
         string|Mode|null $mode = null
     ): File {
-        if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
+        if (($node = self::normalizeInput($path, File::class)) instanceof File) {
             if ($mode !== null) {
                 $node->open($mode);
             }
@@ -193,11 +194,11 @@ class Context
         return new LocalFile((string)$path, $mode);
     }
 
-    public function gzFile(
+    public static function getGzFile(
         string|Stringable|File $path,
         string|Mode $mode
     ): File {
-        $node = $this->normalizeInput($path, File::class);
+        $node = self::normalizeInput($path, File::class);
 
         if ($node instanceof GzOpenable) {
             return $node->gzOpen($mode);
@@ -207,11 +208,11 @@ class Context
     }
 
 
-    public function existingFile(
+    public static function getExistingFile(
         string|Stringable|File $path,
         string|Mode|null $mode = null
     ): ?File {
-        if (($node = $this->normalizeInput($path, File::class)) instanceof File) {
+        if (($node = self::normalizeInput($path, File::class)) instanceof File) {
             if (!$node->exists()) {
                 return null;
             }
@@ -236,127 +237,127 @@ class Context
         return $file;
     }
 
-    public function createFile(
+    public static function createFile(
         string|Stringable|File $path,
         mixed $data
     ): File {
-        return $this->file($path)->putContents($data);
+        return self::getFile($path)->putContents($data);
     }
 
-    public function getContents(
+    public static function getContents(
         string|Stringable|File $path
     ): string {
-        return $this->file($path)->getContents();
+        return self::getFile($path)->getContents();
     }
 
-    public function hasFileChanged(
+    public static function hasFileChanged(
         string|Stringable|File $path,
         int $seconds = 30
     ): bool {
-        return $this->file($path)->hasChanged($seconds);
+        return self::getFile($path)->hasChanged($seconds);
     }
 
-    public function hasFileChangedIn(
+    public static function hasFileChangedIn(
         string|Stringable|File $path,
         DateInterval|string|Stringable|int $timeout
     ): bool {
-        return $this->file($path)->hasChangedIn($timeout);
+        return self::getFile($path)->hasChangedIn($timeout);
     }
 
-    public function setFilePermissions(
+    public static function setFilePermissions(
         string|Stringable|File $path,
         int $permissions
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         $file->setPermissions($permissions);
         return $file;
     }
 
-    public function setFileOwner(
+    public static function setFileOwner(
         string|Stringable|File $path,
         int $owner
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         $file->setOwner($owner);
         return $file;
     }
 
-    public function setFileGroup(
+    public static function setFileGroup(
         string|Stringable|File $path,
         int $group
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         $file->setGroup($group);
         return $file;
     }
 
-    public function copyFile(
+    public static function copyFile(
         string|Stringable|File $path,
         string $destinationPath
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         return $file->copy($destinationPath);
     }
 
-    public function copyFileTo(
+    public static function copyFileTo(
         string|Stringable|File $path,
         string $destinationDir,
         ?string $newName = null
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         return $file->copyTo($destinationDir, $newName);
     }
 
-    public function renameFile(
+    public static function renameFile(
         string|Stringable|File $path,
         string $newName
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         $file->renameTo($newName);
         return $file;
     }
 
-    public function moveFile(
+    public static function moveFile(
         string|Stringable|File $path,
         string $destinationPath
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         $file->move($destinationPath);
         return $file;
     }
 
-    public function moveFileTo(
+    public static function moveFileTo(
         string|Stringable|File $path,
         string $destinationDir,
         ?string $newName = null
     ): File {
-        $file = $this->file($path);
+        $file = self::getFile($path);
         $file->moveTo($destinationDir, $newName);
         return $file;
     }
 
-    public function deleteFile(
+    public static function deleteFile(
         string|Stringable|File $path
     ): void {
-        $this->file($path)->delete();
+        self::getFile($path)->delete();
     }
 
 
 
-    public function dir(
+    public static function getDir(
         string|Stringable|Dir $path
     ): Dir {
-        if (($node = $this->normalizeInput($path, Dir::class)) instanceof Dir) {
+        if (($node = self::normalizeInput($path, Dir::class)) instanceof Dir) {
             return $node;
         }
 
         return new LocalDir((string)$path);
     }
 
-    public function existingDir(
+    public static function getExistingDir(
         string|Stringable|Dir $path
     ): ?Dir {
-        if (($node = $this->normalizeInput($path, Dir::class)) instanceof Dir) {
+        if (($node = self::normalizeInput($path, Dir::class)) instanceof Dir) {
             return $node->exists() ? $node : null;
         }
 
@@ -369,82 +370,82 @@ class Context
         return $dir;
     }
 
-    public function createDir(
+    public static function createDir(
         string|Stringable|Dir $path,
         ?int $permissions = null
     ): Dir {
-        return $this->dir($path)->ensureExists($permissions);
+        return self::getDir($path)->ensureExists($permissions);
     }
 
-    public function createTempDir(): Dir
+    public static function createTempDir(): Dir
     {
-        return $this->createDir(sys_get_temp_dir() . 'decodelabs/temp/' . uniqid('x', true));
+        return self::createDir(sys_get_temp_dir() . 'decodelabs/temp/' . uniqid('x', true));
     }
 
-    public function hasDirChanged(
+    public static function hasDirChanged(
         string|Stringable|Dir $path,
         int $seconds = 30
     ): bool {
-        return $this->dir($path)->hasChanged($seconds);
+        return self::getDir($path)->hasChanged($seconds);
     }
 
-    public function hasDirChangedIn(
+    public static function hasDirChangedIn(
         string|Stringable|Dir $path,
         DateInterval|string|Stringable|int $timeout
     ): bool {
-        return $this->dir($path)->hasChangedIn($timeout);
+        return self::getDir($path)->hasChangedIn($timeout);
     }
 
-    public function setDirPermissions(
+    public static function setDirPermissions(
         string|Stringable|Dir $path,
         int $permissions
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->setPermissions($permissions);
         return $dir;
     }
 
-    public function setDirPermissionsRecursive(
+    public static function setDirPermissionsRecursive(
         string|Stringable|Dir $path,
         int $permissions
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->setPermissionsRecursive($permissions);
         return $dir;
     }
 
-    public function setDirOwner(
+    public static function setDirOwner(
         string|Stringable|Dir $path,
         int $owner
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->setOwner($owner);
         return $dir;
     }
 
-    public function setDirOwnerRecursive(
+    public static function setDirOwnerRecursive(
         string|Stringable|Dir $path,
         int $owner
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->setOwnerRecursive($owner);
         return $dir;
     }
 
-    public function setDirGroup(
+    public static function setDirGroup(
         string|Stringable|Dir $path,
         int $group
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->setGroup($group);
         return $dir;
     }
 
-    public function setDirGroupRecursive(
+    public static function setDirGroupRecursive(
         string|Stringable|Dir $path,
         int $group
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->setGroupRecursive($group);
         return $dir;
     }
@@ -455,409 +456,409 @@ class Context
     /**
      * @return Generator<string, Dir|File>
      */
-    public function scan(
+    public static function scan(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scan($filter);
+        return self::getDir($path)->scan($filter);
     }
 
     /**
      * @return array<string, Dir|File>
      */
-    public function list(
+    public static function list(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->list($filter);
+        return self::getDir($path)->list($filter);
     }
 
     /**
      * @return Generator<string>
      */
-    public function scanNames(
+    public static function scanNames(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanNames($filter);
+        return self::getDir($path)->scanNames($filter);
     }
 
     /**
      * @return array<string>
      */
-    public function listNames(
+    public static function listNames(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listNames($filter);
+        return self::getDir($path)->listNames($filter);
     }
 
     /**
      * @return Generator<string, string>
      */
-    public function scanPaths(
+    public static function scanPaths(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanPaths($filter);
+        return self::getDir($path)->scanPaths($filter);
     }
 
     /**
      * @return array<string, string>
      */
-    public function listPaths(
+    public static function listPaths(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listPaths($filter);
+        return self::getDir($path)->listPaths($filter);
     }
 
-    public function countContents(
+    public static function countContents(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): int {
-        return $this->dir($path)->countContents($filter);
+        return self::getDir($path)->countContents($filter);
     }
 
 
     /**
      * @return Generator<string, File>
      */
-    public function scanFiles(
+    public static function scanFiles(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanFiles($filter);
+        return self::getDir($path)->scanFiles($filter);
     }
 
     /**
      * @return array<string, File>
      */
-    public function listFiles(
+    public static function listFiles(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listFiles($filter);
+        return self::getDir($path)->listFiles($filter);
     }
 
     /**
      * @return Generator<string>
      */
-    public function scanFileNames(
+    public static function scanFileNames(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanFileNames($filter);
+        return self::getDir($path)->scanFileNames($filter);
     }
 
     /**
      * @return array<string>
      */
-    public function listFileNames(
+    public static function listFileNames(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listFileNames($filter);
+        return self::getDir($path)->listFileNames($filter);
     }
 
     /**
      * @return Generator<string, string>
      */
-    public function scanFilePaths(
+    public static function scanFilePaths(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanFilePaths($filter);
+        return self::getDir($path)->scanFilePaths($filter);
     }
 
     /**
      * @return array<string, string>
      */
-    public function listFilePaths(
+    public static function listFilePaths(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listFilePaths($filter);
+        return self::getDir($path)->listFilePaths($filter);
     }
 
-    public function countFiles(
+    public static function countFiles(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): int {
-        return $this->dir($path)->countFiles($filter);
+        return self::getDir($path)->countFiles($filter);
     }
 
 
     /**
      * @return Generator<string, Dir>
      */
-    public function scanDirs(
+    public static function scanDirs(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanDirs($filter);
+        return self::getDir($path)->scanDirs($filter);
     }
 
     /**
      * @return array<string, Dir>
      */
-    public function listDirs(
+    public static function listDirs(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listDirs($filter);
+        return self::getDir($path)->listDirs($filter);
     }
 
     /**
      * @return Generator<string>
      */
-    public function scanDirNames(
+    public static function scanDirNames(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanDirNames($filter);
+        return self::getDir($path)->scanDirNames($filter);
     }
 
     /**
      * @return array<string>
      */
-    public function listDirNames(
+    public static function listDirNames(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listDirNames($filter);
+        return self::getDir($path)->listDirNames($filter);
     }
 
     /**
      * @return Generator<string, string>
      */
-    public function scanDirPaths(
+    public static function scanDirPaths(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanDirPaths($filter);
+        return self::getDir($path)->scanDirPaths($filter);
     }
 
     /**
      * @return array<string, string>
      */
-    public function listDirPaths(
+    public static function listDirPaths(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listDirPaths($filter);
+        return self::getDir($path)->listDirPaths($filter);
     }
 
-    public function countDirs(
+    public static function countDirs(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): int {
-        return $this->dir($path)->countDirs($filter);
+        return self::getDir($path)->countDirs($filter);
     }
 
 
     /**
      * @return Generator<string, Dir|File>
      */
-    public function scanRecursive(
+    public static function scanRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanRecursive($filter);
+        return self::getDir($path)->scanRecursive($filter);
     }
 
     /**
      * @return array<string, Dir|File>
      */
-    public function listRecursive(
+    public static function listRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listRecursive($filter);
+        return self::getDir($path)->listRecursive($filter);
     }
 
     /**
      * @return Generator<string>
      */
-    public function scanNamesRecursive(
+    public static function scanNamesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanNamesRecursive($filter);
+        return self::getDir($path)->scanNamesRecursive($filter);
     }
 
     /**
      * @return array<string>
      */
-    public function listNamesRecursive(
+    public static function listNamesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listNamesRecursive($filter);
+        return self::getDir($path)->listNamesRecursive($filter);
     }
 
     /**
      * @return Generator<string, string>
      */
-    public function scanPathsRecursive(
+    public static function scanPathsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanPathsRecursive($filter);
+        return self::getDir($path)->scanPathsRecursive($filter);
     }
 
     /**
      * @return array<string, string>
      */
-    public function listPathsRecursive(
+    public static function listPathsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listPathsRecursive($filter);
+        return self::getDir($path)->listPathsRecursive($filter);
     }
 
-    public function countContentsRecursive(
+    public static function countContentsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): int {
-        return $this->dir($path)->countContentsRecursive($filter);
+        return self::getDir($path)->countContentsRecursive($filter);
     }
 
 
     /**
      * @return Generator<string, File>
      */
-    public function scanFilesRecursive(
+    public static function scanFilesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanFilesRecursive($filter);
+        return self::getDir($path)->scanFilesRecursive($filter);
     }
 
     /**
      * @return array<string, File>
      */
-    public function listFilesRecursive(
+    public static function listFilesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listFilesRecursive($filter);
+        return self::getDir($path)->listFilesRecursive($filter);
     }
 
     /**
      * @return Generator<string>
      */
-    public function scanFileNamesRecursive(
+    public static function scanFileNamesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanFileNamesRecursive($filter);
+        return self::getDir($path)->scanFileNamesRecursive($filter);
     }
 
     /**
      * @return array<string>
      */
-    public function listFileNamesRecursive(
+    public static function listFileNamesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listFileNamesRecursive($filter);
+        return self::getDir($path)->listFileNamesRecursive($filter);
     }
 
     /**
      * @return Generator<string, string>
      */
-    public function scanFilePathsRecursive(
+    public static function scanFilePathsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanFilePathsRecursive($filter);
+        return self::getDir($path)->scanFilePathsRecursive($filter);
     }
 
     /**
      * @param string|Stringable|Dir $path
      * @return array<string, string>
      */
-    public function listFilePathsRecursive(
+    public static function listFilePathsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listFilePathsRecursive($filter);
+        return self::getDir($path)->listFilePathsRecursive($filter);
     }
 
-    public function countFilesRecursive(
+    public static function countFilesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): int {
-        return $this->dir($path)->countFilesRecursive($filter);
+        return self::getDir($path)->countFilesRecursive($filter);
     }
 
 
     /**
      * @return Generator<string, Dir>
      */
-    public function scanDirsRecursive(
+    public static function scanDirsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanDirsRecursive($filter);
+        return self::getDir($path)->scanDirsRecursive($filter);
     }
 
     /**
      * @return array<string, Dir>
      */
-    public function listDirsRecursive(
+    public static function listDirsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listDirsRecursive($filter);
+        return self::getDir($path)->listDirsRecursive($filter);
     }
 
     /**
      * @return Generator<string>
      */
-    public function scanDirNamesRecursive(
+    public static function scanDirNamesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanDirNamesRecursive($filter);
+        return self::getDir($path)->scanDirNamesRecursive($filter);
     }
 
     /**
      * @return array<string>
      */
-    public function listDirNamesRecursive(
+    public static function listDirNamesRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listDirNamesRecursive($filter);
+        return self::getDir($path)->listDirNamesRecursive($filter);
     }
 
     /**
      * @return Generator<string, string>
      */
-    public function scanDirPathsRecursive(
+    public static function scanDirPathsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): Generator {
-        return $this->dir($path)->scanDirPathsRecursive($filter);
+        return self::getDir($path)->scanDirPathsRecursive($filter);
     }
 
     /**
      * @return array<string, string>
      */
-    public function listDirPathsRecursive(
+    public static function listDirPathsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): array {
-        return $this->dir($path)->listDirPathsRecursive($filter);
+        return self::getDir($path)->listDirPathsRecursive($filter);
     }
 
-    public function countDirsRecursive(
+    public static function countDirsRecursive(
         string|Stringable|Dir $path,
         ?callable $filter = null
     ): int {
-        return $this->dir($path)->countDirsRecursive($filter);
+        return self::getDir($path)->countDirsRecursive($filter);
     }
 
 
@@ -865,68 +866,68 @@ class Context
 
 
 
-    public function copyDir(
+    public static function copyDir(
         string|Stringable|Dir $path,
         string $destinationPath
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         return $dir->copy($destinationPath);
     }
 
-    public function copyDirTo(
+    public static function copyDirTo(
         string|Stringable|Dir $path,
         string $destinationDir,
         ?string $newName = null
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         return $dir->copyTo($destinationDir, $newName);
     }
 
-    public function renameDir(
+    public static function renameDir(
         string|Stringable|Dir $path,
         string $newName
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->renameTo($newName);
         return $dir;
     }
 
-    public function moveDir(
+    public static function moveDir(
         string|Stringable|Dir $path,
         string $destinationPath
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->move($destinationPath);
         return $dir;
     }
 
-    public function moveDirTo(
+    public static function moveDirTo(
         string|Stringable|Dir $path,
         string $destinationDir,
         ?string $newName = null
     ): Dir {
-        $dir = $this->dir($path);
+        $dir = self::getDir($path);
         $dir->moveTo($destinationDir, $newName);
         return $dir;
     }
 
-    public function deleteDir(
+    public static function deleteDir(
         string|Stringable|Dir $path
     ): void {
-        $this->dir($path)->delete();
+        self::getDir($path)->delete();
     }
 
-    public function emptyOut(
+    public static function emptyOut(
         string|Stringable|Dir $path
     ): Dir {
-        return $this->dir($path)->emptyOut();
+        return self::getDir($path)->emptyOut();
     }
 
-    public function merge(
+    public static function merge(
         string|Stringable|Dir $path,
         string $destination
     ): Dir {
-        return $this->dir($path)->mergeInto($destination);
+        return self::getDir($path)->mergeInto($destination);
     }
 
 
@@ -934,7 +935,7 @@ class Context
     /**
      * @param class-string $type
      */
-    protected function normalizeInput(
+    protected static function normalizeInput(
         string|Stringable|Dir|File &$path,
         string $type
     ): Dir|File|null {
@@ -983,9 +984,3 @@ class Context
         return null;
     }
 }
-
-// Register the Veneer facade
-Veneer\Manager::getGlobalManager()->register(
-    Context::class,
-    Atlas::class
-);
