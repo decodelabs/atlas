@@ -15,6 +15,8 @@ Atlas provides an easy and accessible interface to file system interaction. Read
 
 ## Installation
 
+This package requires PHP 8.4 or higher.
+
 Install via Composer:
 
 ```bash
