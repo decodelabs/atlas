@@ -48,7 +48,11 @@ class Local extends Stream implements
     ) {
         if (is_resource($stream)) {
             parent::__construct($stream, null);
-            $this->path = stream_get_meta_data($stream)['uri'];
+
+            $this->path = stream_get_meta_data($stream)['uri'] ?? throw Exceptional::Io(
+                message: 'Unable to get stream meta data',
+                data: $stream
+            );
         } else {
             $stream = (string)$stream;
             parent::__construct($stream, null);
