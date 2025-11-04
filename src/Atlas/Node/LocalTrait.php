@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package Atlas
- * @license http://opensource.org/licenses/MIT
+ * Atlas
+ * @license https://opensource.org/licenses/MIT
  */
 
 declare(strict_types=1);
