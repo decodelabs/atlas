@@ -2,12 +2,19 @@
     "name": "decodelabs/atlas",
     "description": "Easy filesystem and io functions",
     "type": "library",
-    "keywords": [ "filesystem", "io", "file", "directory" ],
+    "keywords": [
+        "filesystem",
+        "io",
+        "file",
+        "directory"
+    ],
     "license": "MIT",
-    "authors": [ {
+    "authors": [
+        {
             "name": "Tom Wright",
             "email": "tom@inflatablecookie.com"
-        } ],
+        }
+    ],
     "require": {
         "php": "^8.4",
 
@@ -18,6 +25,7 @@
         "decodelabs/nuance": "^0.2"
     },
     "require-dev": {
+        "decodelabs/chorus": "^0.1",
         "decodelabs/phpstan-decodelabs": "^0.7"
     },
     "autoload": {
@@ -39,3 +47,5 @@
         }
     }
 }
+
+
